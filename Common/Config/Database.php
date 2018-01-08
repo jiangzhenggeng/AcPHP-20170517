@@ -11,59 +11,59 @@
 // + Author: AcPHP http://www.jiangzg.com/ <2992265870@qq.com/jiangzg>
 // + Release Date: 2015年11月8日 上午12:08:32
 // +--------------------------------------------------------------------------------------
-return array (
-		// +----------------------------------------------------------------------------------
-		// + 数据库默认配置
-		// +----------------------------------------------------------------------------------
-		'DEFAULT' => array (
-				// 表前缀
-				'TABLE_PREFIX' => 'ac_',
-				// 数据连接类型
-				'DB_TYPE' => 'mysqli',
-				// 主机地址
-				'DB_HOST' => 'qdm158444482.my3w.com',
-				// 账号
-				'DB_USER' => 'qdm158444482',
-				// 密码
-				'DB_PASSWORD' => 'jzg597567953',
-				// 目标数据库
-				'DB_SELECT' => 'qdm158444482_db',				
-				// 数据库应用编码
-				'CHARSET' => 'utf8',
-				
-				// 是否开启缓存
-				'cache' => FALSE ,
-				//缓冲器
-				'storage' => 'file' ,
-				//开启读写分离
-				'separate'=>FALSE,
-				//读服务器
-				'readserver'=>'readserver',
-		),
-		'exam4test' => array (
-				// 表前缀
-				'TABLE_PREFIX' => 'ex_',
-				// 数据连接类型
-				'DB_TYPE' => 'mysqli',
-				// 主机地址
-                'DB_HOST' => '120.27.152.240',
-                // 账号
-                'DB_USER' => 'jiangzg',
-                // 密码
-                'DB_PASSWORD' => 'wsdvcesSVddu20sdv156IL2sdVD_mysql',
-                // 目标数据库
-                'DB_SELECT' => 'exam4',
-				// 数据库应用编码
-				'CHARSET' => 'utf8',
-				
-				// 是否开启缓存
-				'cache' => FALSE ,
-				//缓冲器
-				'storage' => 'file' ,
-				//开启读写分离
-				'separate'=>FALSE,
-				//读服务器
-				'readserver'=>'readserver',
-		) 
+return array(
+    // +----------------------------------------------------------------------------------
+    // + 数据库默认配置
+    // +----------------------------------------------------------------------------------
+    'DEFAULT' => array(
+        // 表前缀
+        'TABLE_PREFIX' => 'ac_',
+        // 数据连接类型
+        'DB_TYPE' => 'mysqli',
+        // 主机地址
+        'DB_HOST' => 'qdm158444482.my3w.com',
+        // 账号
+        'DB_USER' => 'qdm158444482',
+        // 密码
+        'DB_PASSWORD' => 'jzg597567953',
+        // 目标数据库
+        'DB_SELECT' => 'qdm158444482_db',
+        // 数据库应用编码
+        'CHARSET' => 'utf8',
+
+        // 是否开启缓存
+        'cache' => FALSE,
+        //缓冲器
+        'storage' => 'file',
+        //开启读写分离
+        'separate' => FALSE,
+        //读服务器
+        'readserver' => 'readserver',
+    ),
+    'exam4test' => array(
+        // 表前缀
+        'TABLE_PREFIX' => 'ex_',
+        // 数据连接类型
+        'DB_TYPE' => 'mysqli',
+        // 主机地址
+        'DB_HOST' => '120.27.152.240',
+        // 账号
+        'DB_USER' => 'jiangzg',
+        // 密码
+        'DB_PASSWORD' => 'wsdvcesSVddu20sdv156IL2sdVD_mysql',
+        // 目标数据库
+        'DB_SELECT' => 'exam4',
+        // 数据库应用编码
+        'CHARSET' => 'utf8',
+
+        // 是否开启缓存
+        'cache' => FALSE,
+        //缓冲器
+        'storage' => 'file',
+        //开启读写分离
+        'separate' => FALSE,
+        //读服务器
+        'readserver' => 'readserver',
+    )
 );
 
