@@ -1,0 +1,65 @@
+
+<style>
+#question-essayques-box{
+	width: 802px;
+	white-space: normal;
+}
+#question-essayques-box label{
+	display:inline-block;
+	margin:5px;
+}
+#question-essayques-box input[type=text]{
+	width:100px;
+}
+</style>
+<tbody>	
+	<tr>
+		<th align="center">答案</th>
+		<td align="center">
+			<textarea name="question[answer]" id="answer" placeholder="详细答案" style="width:800px;height:120px;">{$analysis['answer']}</textarea>
+		</td>
+	</tr>
+	<tr>
+		<th align="center">得分点</th>
+		<td align="center">
+			<div id="question-essayques-box"><!-- 得分点容器 -->
+			{loop $analysis['pointer'] $k $v}
+			{php $pointer_sub_answer='id'.rand().rand();}
+			<label id="{$pointer_sub_answer}">
+				<input name="question[pointer][]" value="{$v}" type="text" />
+				<button type="button" onClick="deleteSubQuestionPointer('#{$pointer_sub_answer}')" class="ac-btn ac-sub ac-white">移除</button>
+			</label>
+			{/loop}
+			</div>
+			<button type="button" class="ac-btn ac-add add-option" onClick="addSubQuestionPointer('#question-essayques-box')">增加得分点</button>
+		</td>
+	</tr>
+	
+	<tr>
+		<th align="center">解析</th>
+		<td align="center" style="white-space: inherit;">
+			<script name="question[analysis]" id="analysis"  placeholder="解析" type="text/plain" style="width:800px;height:200px;">{$analysis['analysis']}</script>
+		</td>
+	</tr>
+</tbody>
+<script>
+crateueditor('analysis','simple');
+crateueditor('answer','simple');
+
+function addSubQuestionPointer(selecter){
+	var pointer_sub_answer = 'blank-sub-answer-'+randomID();
+	var pointer = '\
+		<label id="'+pointer_sub_answer+'"><input name="question[pointer][]" type="text" />\
+		<button type="button" onClick="deleteSubQuestionPointer(\'#'+pointer_sub_answer+'\')" class="ac-btn ac-sub ac-white">移除</button>\
+		</label>';
+	$(selecter).append(pointer);
+}
+
+function deleteSubQuestionPointer(selecter){
+	var selecter = $(selecter);
+	var layerAlert = parent.layer.alert('你确定删除吗', {icon: 2},function(){
+		selecter.remove();
+		parent.layer.close(layerAlert);
+	});
+}
+</script>

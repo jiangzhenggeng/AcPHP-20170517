@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<input name="name" type="notnull" action="both" msg="有问题" />
+	<input name="email" type="email"  msg="不是正确的EMAIL格式" />
+	<input name="price" type="currency" msg="价格必须是金钱格式" />
+	<input name="code" type="vcode" msg="验证码输入错误!" />
+	<input name="name" type="regex" value="/^abc/i" msg="不能匹配！" />
+</form>

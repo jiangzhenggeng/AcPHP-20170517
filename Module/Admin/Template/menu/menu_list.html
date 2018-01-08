@@ -1,0 +1,54 @@
+{include file="common/header.html"}
+<style>.ac-hidden{display: table-cell;}</style>
+<div class="ac-main">	
+	<div class="ac-warp">
+		<div class="ac-content" id="ac-content">
+			<div class="ac-nav">
+				<a href="{U('admin/index/main')}">主页</a>
+				<span>&raquo;</span>
+				<a href="{U('lists')}">菜单管理</a>
+			</div>
+			<div class="ac-content-inner">
+				<div class="ac-table-view">
+					<div class="ac-table-card">
+						<ul>
+							<li class="on"><a href="{U('lists')}">菜单管理</a></li>
+							<li><a href="{U('add')}">添加菜单</a></li>
+							<li><a href="{U('repair')}">修复菜单数据</a></li>
+						</ul>
+						<div class="ac-table-right-card">
+							<a class="btn ac-back">返回</a>
+						</div>
+					</div>
+					<div class="ac-table-body">
+						<form action="{U('listorder')}" method="post" id="postForm">
+							<table id="menu-tree-table" class="ac-table-basic" cellpadding="8" cellspacing="0">
+								<tr>
+									<th width="15" align="center"><input type="checkbox" id="chkall" onclick="selectcheckbox(this.form)" value="check"></th>
+									<th width="40" align="center">编号</th>
+									<th width="40" align="center">排序</th>
+									<th width="40" align="center">分组</th>
+									<th width="150" align="center">菜单名称</th>
+									<th width="60" align="center">显示状态</th>
+									<th width="40" align="center">类型</th>
+									<th width="40" align="center">完整路径</th>
+									<th width="150" align="center">描述</th>
+									<th width="80" align="center">操作</th>
+								</tr>
+								{$menu}
+							</table>
+							<div class="ac-btn-group">
+								<input type="submit" value=" 排序 " class="ac-btn" />
+								<input type="submit" value=" 分组 " onClick="$('#postForm').attr('action','{U('group')}')" class="ac-btn" />
+								<input type="button" value=" 全部展开 " onClick="expandAll(this,$('#menu-tree-table tr'))" flag="none" class="ac-btn" />
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+<script>clickOpenMenuTree($('#menu-tree-table'),'priv_id');</script>
+{include file="common/footer.html"}

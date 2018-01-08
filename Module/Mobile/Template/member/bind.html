@@ -1,0 +1,54 @@
+{include file="login/header.html"}
+<header class="mui-bar mui-bar-nav">
+	<a href="{U('baseinfo')}" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+	<h1 class="mui-title">登录账号管理</h1>
+</header>
+<div class="mui-content">
+	<form id="form-data" class="mui-input-group" style="margin-top:30px">
+		<ul class="mui-table-view mui-table-view-chevron">
+			<li class="mui-table-view-cell mui-media">
+				{if isset($type1)}
+					<a class="mui-navigate-right">
+						<img class="mui-media-object mui-pull-left" src="{$figureurl1}">
+						<div class="mui-media-body">{$oauthname1}<p class="mui-ellipsis">绑定qq账号登录更便捷</p></div>
+					</a>
+				{else}
+					<a class="mui-navigate-right">
+						<img class="mui-media-object mui-pull-left" src="{@get_unbind_logo(1)}">
+						<div class="mui-media-body">QQ<p class="mui-ellipsis">绑定qq账号登录更便捷</p></div>
+					</a>
+				{/if}
+			</li>
+			<li class="mui-table-view-cell mui-media">
+				{if isset($type2)}
+					<a class="mui-navigate-right">
+						<img class="mui-media-object mui-pull-left" src="{$figureurl2}">
+						<div class="mui-media-body">{$oauthname2}<p class="mui-ellipsis">绑定微博账号登录更便捷</p></div>
+					</a>
+				{else}
+					<a class="mui-navigate-right">
+						<img class="mui-media-object mui-pull-left" src="{@get_unbind_logo(2)}">
+						<div class="mui-media-body">微博<p class="mui-ellipsis">绑定微博账号登录更便捷</p></div>
+					</a>
+				{/if}
+			</li>
+			<li class="mui-table-view-cell mui-media">
+				{if isset($type3)}
+				<a class="mui-navigate-right">
+					<img class="mui-media-object mui-pull-left" src="{$figureurl3}">
+					<div class="mui-media-body">{$oauthname3}<p class="mui-ellipsis">绑定微信账号登录更便捷</p></div>
+				</a>
+				{else}
+				<a class="mui-navigate-right">
+					<img class="mui-media-object mui-pull-left" src="{@get_unbind_logo(3)}">
+					<div class="mui-media-body">微信<p class="mui-ellipsis">绑定微信账号登录更便捷</p></div>
+				</a>
+				{/if}
+			</li>
+		</ul>
+	</form>
+	<div class="mui-content-padded">
+		<button id='submit-data' type="button" class="mui-btn mui-btn-block mui-btn-primary" onclick="window.location='{U('baseinfo')}'">返回</button>
+	</div>
+</div>
+{include file="login/footer.html"}

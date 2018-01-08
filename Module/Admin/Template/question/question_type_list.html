@@ -1,0 +1,61 @@
+{include file="common/header.html"}
+<div class="ac-main">	
+	<div class="ac-warp">
+		<div class="ac-content" id="ac-content">
+			<div class="ac-nav">
+				<a href="{U('admin/index/main')}">主页</a>
+				<span>&raquo;</span>
+				<a href="{U('lists')}">试题模型管理</a>
+			</div>
+			<div class="ac-content-inner">
+				<div class="ac-table-view">
+					<div class="ac-table-card">
+						<ul>
+							<li class="on"><a href="{U('lists')}">试题模型管理</a></li>
+							<li><a href="{U('add')}">添加试题模型</a></li>
+						</ul>
+						<div class="ac-table-right-card">
+							<a class="btn ac-back">返回</a>
+						</div>
+					</div>
+					<div class="ac-table-search">
+						
+					</div>
+					<div class="ac-table-body">
+						<form action="{U('listorder')}" method="post">
+							<table class="ac-table-basic" cellpadding="8" cellspacing="0">
+								<tr>
+									<th width="15" align="center"><input type="checkbox" id="chkall" onclick="selectcheckbox(this.form)" value="check"></th>
+									<th width="40" align="center">编号</th>
+									<th width="160" align="center">模型名称</th>
+									<th width="150">模型文件</th>
+									<th>模型描述</th>
+									<th width="200" align="center">操作</th>
+								</tr>
+								{loop $question_type $k $v}
+								<tr>
+									<td align="center"><input type="checkbox" name="checkbox[]" value="{$v['typeid']}"></td>
+									<td align="center">{$v['typeid']}</td>
+									<td align="left">{$v['typename']}</td>
+									<td align="left">{$v['modelclass']}</td>
+									<td align="left">{cutStr($v['description'],50)}</td>
+									<td align="center">
+										<a href="{U('edit',array('typeid'=>$v['typeid']))}">编辑</a> |
+										<a href="{U('delete',array('typeid'=>$v['typeid']))}" data-delete>删除</a>
+									</td>
+								</tr>
+								{/loop}
+							</table>
+							<div class="ac-btn-group">
+								<input type="submit" value=" 排序 " class="ac-btn" />
+								<div class="ac-page">{$page}</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+{include file="common/footer.html"}

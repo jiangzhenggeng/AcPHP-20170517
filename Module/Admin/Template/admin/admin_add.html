@@ -1,0 +1,101 @@
+{include file="common/header.html"}
+<div class="ac-main">	
+	<div class="ac-warp">
+		<div class="ac-content" id="ac-content">
+			<div class="ac-nav">
+				<a href="{U('admin/index/main')}">主页</a>
+				<span>&raquo;</span>
+				<a href="{U('lists')}">管理员管理</a>
+				<span>&raquo;</span>
+				<a href="{U('add')}">添加管理员</a>
+			</div>
+			<div class="ac-content-inner">
+				<div class="ac-table-view">
+					<div class="ac-table-card">
+						<ul>
+							<li><a href="{U('lists')}">管理员管理</a></li>
+							<li class="on"><a href="{U('add')}">添加管理员</a></li>
+						</ul>
+						<div class="ac-table-right-card">
+							<a class="btn ac-back">返回</a>
+						</div>
+					</div>
+					<div class="ac-table-search">
+						
+					</div>
+					<div class="ac-table-body">
+						<form action="{U('add',array('query'=>'insert'))}" method="post">
+							<input type="hidden" name="query" value="insert" />
+							<input type="hidden" name="token" value="{$token}" />
+							<table class="ac-table-basic ac-table-basic-query" cellpadding="8" cellspacing="0">
+								<tr>
+									<th align="center">账号</th>
+									<td align="center">
+										<input type="text" name="admin[admin_name]" id="admin_name" placeholder="管理员账号" />
+									</td>
+								</tr>
+								<tr>
+									<th align="center">管理员密码</th>
+									<td align="center">
+										<input type="password" name="admin[password]" id="password" placeholder="管理员密码" />
+									</td>
+								</tr>
+								<tr>
+									<th align="center">重复密码</th>
+									<td align="center">
+										<input type="password" name="admin[repassword]" id="repassword" placeholder="重复管理员密码" />
+									</td>
+								</tr>
+								<tr>
+									<th align="center">从属组</th>
+									<td align="center">
+										<select name="admin[group_id]" id="group_id">
+											<option value="0">---选择从属组---</option>
+											{loop $admin_group $k $v}
+											<option value="{$v['group_id']}">{$v['group_name']}</option>
+											{/loop}
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th align="center">邮箱</th>
+									<td align="center">
+										<input type="text" name="admin[email]" id="email" placeholder="管理员邮箱" />
+									</td>
+								</tr>
+								<tr>
+									<th align="center">姓名</th>
+									<td align="center">
+										<input type="text" name="admin[realname]" id="realname" placeholder="姓名" />
+									</td>
+								</tr>
+								<tr>
+									<th align="center">允许连续登录次数</th>
+									<td align="center">
+										<input type="text" name="admin[allowcount]" id="allowcount" placeholder="允许连续登录次数" />
+									</td>
+								</tr>
+								<tr>
+									<th align="center">启用状态</th>
+									<td align="center">
+										<label><input type="radio" name="admin[isshow]" value="1" id="isshow_yes" checked />启用</label>
+										<label><input type="radio" name="admin[isshow]" value="0" id="isshow_no" />禁用</label>
+									</td>
+								</tr>
+								<tr>
+									<th></th>
+									<td align="center">
+										<input type="submit" value=" 确定 " class="ac-btn" />
+										<input type="reset" value=" 重填 " class="ac-btn" />
+									</td>
+								</tr>
+							</table>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+{include file="common/footer.html"}

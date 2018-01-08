@@ -1,0 +1,57 @@
+{include file="common/header.html"}
+<div class="ac-main">	
+	<div class="ac-warp">
+		<div class="ac-content" id="ac-content">
+			<div class="ac-nav">
+				<a href="{U('admin/index/main')}">主页</a>
+				<span>&raquo;</span>
+				<a href="{U('subject/lists')}">科目管理</a>
+				<span>&raquo;</span>
+				<a href="{U('lists',array('subjectid'=>$subject['subjectid']))}">章节管理[{cutStr($subject['subjectname'],20)}]</a>
+			</div>
+			<div class="ac-content-inner">
+				<div class="ac-table-view">
+					<div class="ac-table-card">
+						<ul>
+							<li><a href="{U('subject/lists')}">科目管理</a></li>
+							<li class="on"><a href="{U('lists',array('subjectid'=>$subject['subjectid']))}">章节管理[{cutStr($subject['subjectname'],20)}]</a></li>
+							<li><a href="{U('repair',array('subjectid'=>$subject['subjectid']))}">修复[{cutStr($subject['subjectname'],20)}]章节数据</a></li>
+							<li><a href="{U('subject/statisticalQuestion',array('subjectid'=>$subject['subjectid']))}">统计试题</a></li>
+						</ul>
+						<div class="ac-table-right-card">
+							<a class="btn ac-back">返回</a>
+						</div>
+					</div>
+					<div class="ac-table-search">
+						
+					</div>
+					<div class="ac-table-body">
+						<form action="{U('listorder')}" method="post">
+							<table id="subject-tree-table" class="ac-table-basic" cellpadding="8" cellspacing="0">
+								<tr>
+									<th width="15" align="center"><input type="checkbox" id="chkall" onclick="selectcheckbox(this.form)" value="check"></th>
+									<th width="40" align="center">排序</th>
+									<th width="40" align="center">编号</th>
+									<th width="380" align="center">章节名称</th>
+									<th width="90" align="center">题量/总数</th>
+									<th align="center" width="160">章节关键词</th>
+									<th align="center">章节描述</th>
+									<th width="180" align="center">操作</th>
+								</tr>
+								{$subject_tree}
+							</table>
+							<div class="ac-btn-group">
+								<input type="submit" value=" 排序 " class="ac-btn" />
+								<input type="button" value=" 全部展开 " onClick="expandAll(this,$('#subject-tree-table tr'))" flag="none" class="ac-btn" />
+								<div class="ac-page">{$page}</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+<script>clickOpenMenuTree($('#subject-tree-table'),'treeid');</script>
+{include file="common/footer.html"}

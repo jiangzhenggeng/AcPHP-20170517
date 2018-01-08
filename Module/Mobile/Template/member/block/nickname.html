@@ -1,0 +1,59 @@
+{include file="login/header.html"}
+<style>
+	.mui-content-padded {
+		margin-top:0;
+	}
+	.mui-content>.mui-card:first-child{
+		margin: 40px 15px;
+	}
+</style>
+<header class="mui-bar mui-bar-nav">
+	<a href="{U('baseinfo')}" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+	<h1 class="mui-title">修改昵称</h1>
+</header>
+<div class="mui-content">
+	<div class="mui-card">
+		<form id="form-data" class="mui-input-group">
+			<div class="mui-input-row">
+				<input id="nickname" name="nickname" type="text" value="{$member['nickname']}" class="mui-input-clear mui-input mui-icon-locked" placeholder="昵称" autocomplete="off">
+			</div>
+		</form>
+	</div>
+	<div class="mui-content-padded">
+		<button id='submit-data' type="button" class="mui-btn mui-btn-block mui-btn-primary">修改昵称</button>
+	</div>
+</div>
+<script>
+$('#submit-data') .click(function(){
+	var l = $('#nickname').val().toString().replace(/\s/g,'').length;
+	if( l=='' ){
+		dialog.toast({message:'请正确填写昵称'});
+		return false;
+	}
+	$.ajax({
+		url:"{U('mobile/member/nickname',array('query'=>'insert'))}",
+		data:{query:'insert',nickname:$('#nickname').val()},
+		accepts:'json',
+		success: function(replayData,status){
+			if(replayData.status=='success'){
+				dialog.toast({message:replayData.message},function(){
+					window.location = '{U("Mobile/Member/baseinfo")}';
+				});
+			}else if(replayData.status=='error'){
+				dialog.toast({message:replayData.message});
+			}else{
+				dialog.toast({message:'系统错误'});
+			}
+		},
+		complete: function(status){
+			if(status=='timeout'){
+				dialog.toast({message:'提交数据超时'});
+			}else if(status=='error'){
+				dialog.toast({message:'系统错误'});
+			}
+		},
+		timeout:10000
+	});
+});
+</script>
+{include file="login/footer.html"}

@@ -1,0 +1,20 @@
+<tbody id="query-answer">	
+	<tr>
+		<th align="center">答案</th>
+		<td align="center">
+			<section class="query-answer-select">
+				<label><input name="question[answer]" type="radio" value="1" />对</label>
+				<label><input name="question[answer]" type="radio" value="2" />错</label>
+			</section>
+		</td>
+	</tr>
+	<tr>
+		<th align="center">解析</th>
+		<td align="center" style="white-space: inherit;">
+			<script name="question[analysis]" id="analysis"  placeholder="解析" type="text/plain" style="width:800px;height:200px;"></script>
+		</td>
+	</tr>
+</tbody>
+<script>
+crateueditor('analysis','simple');
+</script>

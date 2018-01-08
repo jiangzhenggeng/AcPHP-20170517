@@ -1,0 +1,127 @@
+.pc-header {
+  border-top: 4px solid #354b66;
+  width: 100%;
+  display: block;
+  background: #fff;
+  height: 60px;
+  border-bottom: 1px solid #cecfcf;
+  box-shadow: 0 0 5px #cecfcf;
+}
+.pc-logo {
+  height: 60px;
+}
+.pc-logo img {
+  height: 100%;
+}
+.pc-header-right {
+  width: 880px;
+  height: 60px;
+}
+.pc-header-nav {
+  display: block;
+}
+.pc-header-nav li {
+  display: block;
+  float: left;
+  line-height: 60px;
+  text-align: center;
+  min-width: 80px;
+  font-size: 16px;
+  position: relative;
+}
+.pc-header-nav li a {
+  display: block;
+}
+.pc-header-nav li.on a span {
+  border: 1px solid #354B66;
+  border-radius: 2px;
+  line-height: 24px;
+  padding: 7px 10px;
+}
+.pc-header-user-warp {
+  height: 30px;
+  margin-top: 12px;
+}
+.pc-header-user-face {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid #354B66;
+  overflow: hidden;
+  text-align: center;
+  line-height: 26px;
+  position: relative;
+}
+.pc-header-user-face .pc-header-subject {
+  line-height: 30px;
+  font-size: 16px;
+  text-align: center;
+  cursor: pointer;
+}
+.pc-header-user-face a {
+  display: block;
+}
+.pc-header-user-face img {
+  width: 70%;
+}
+.pc-header-user-warp .subject-list {
+  overflow: visible;
+  position: relative;
+}
+.subject-list .show-subject-list {
+  position: absolute;
+  top: 100%;
+  width: 160px;
+  left: -102px;
+  margin-left: 15px;
+  top: 47px;
+  text-align: left;
+  display: none;
+}
+.subject-list .show-subject-list .arrow-up {
+  position: absolute;
+  top: -10px;
+  width: 100%;
+}
+.subject-list .show-subject-list .arrow-up i {
+  border: 8px solid #f7f7f7;
+  display: block;
+  width: 0;
+  height: 0;
+  top: -5px;
+  left: 50%;
+  border-left-color: transparent;
+  border-top-color: transparent;
+  border-right-color: transparent;
+  position: absolute;
+  margin-left: 16px;
+}
+.subject-list .show-subject-list a {
+  line-height: 32px;
+  display: block;
+  height: 32px;
+  overflow: hidden;
+  padding: 0 10px;
+  text-align: left;
+  border-bottom: 1px solid #e6e9e9;
+}
+.subject-list .show-subject-list a:hover {
+  background-color: #f7f7f7;
+}
+.subject-list .show-subject-list dt {
+  background-color: #f7f7f7;
+}
+.subject-list .show-subject-list .list-info {
+  overflow: hidden;
+  border: 1px solid #dcdfdf;
+  border-radius: 6px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  background: #ffffff;
+  box-shadow: 0 0 15px 1px #dcdfdf;
+}
+
+.subject-list .list-info .tips{
+  padding: 10px;
+  text-align: center;
+}

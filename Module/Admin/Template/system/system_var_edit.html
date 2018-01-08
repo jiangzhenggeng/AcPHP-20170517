@@ -1,0 +1,80 @@
+{include file="common/header.html"}
+<div class="ac-main">	
+	<div class="ac-warp">
+		<div class="ac-content" id="ac-content">
+			<div class="ac-nav">
+				<a href="{U('admin/index/main')}">主页</a>
+				<span>&raquo;</span>
+				<a href="{U('variable',['data'=>'lists'])}">系统变量表</a>
+				<span>&raquo;</span>
+				<a href="{U('variable',['data'=>'create'])}">新建系统变量</a>
+			</div>
+			<div class="ac-content-inner">
+				<div class="ac-table-view">
+					<div class="ac-table-card">
+						<ul>
+							<li><a href="{U('variable',['data'=>'lists'])}">系统变量表</a></li>
+							<li><a href="{U('variable',['data'=>'create'])}">新建系统变量</a></li>
+							<li class="on"><a href="{U()}">编辑系统变量</a></li>
+						</ul>
+						<div class="ac-table-right-card">
+							<a class="btn ac-back">返回</a>
+						</div>
+					</div>
+					<div class="ac-table-search">
+						
+					</div>
+					<div class="ac-table-body">
+						<form action="{U('variable',['data'=>'edit'])}" method="post">
+							<input type="hidden" name="var_id" value="{$system_var['var_id']}" />
+							<input type="hidden" name="query" value="insert" />
+							<input type="hidden" name="token" value="{$token}" />
+							<table class="ac-table-basic ac-table-basic-query" cellpadding="8" cellspacing="0">
+								<tr>
+									<th align="center">名称</th>
+									<td align="center">
+										<input type="text" value="{$system_var['cfg_name']}" name="system_var[cfg_name]" id="cfg_name" placeholder="名称" />
+									</td>
+								</tr>
+								<tr>
+									<th align="center">键名</th>
+									<td align="center">
+										<input type="text" value="{$system_var['cfg_key']}" name="system_var[cfg_key]" value="cfg_" id="cfg_key" placeholder="键名" />
+									</td>
+								</tr>
+								<tr>
+									<th align="center">键值</th>
+									<td align="center">
+										<textarea name="system_var[cfg_value]" id="cfg_value" placeholder="键值">{$system_var['cfg_value']}</textarea>
+									</td>
+								</tr>
+								<tr>
+									<th align="center">描述</th>
+									<td align="center">
+										<textarea name="system_var[description]" id="description" placeholder="简单描述">{$system_var['description']}</textarea>
+									</td>
+								</tr>
+								<tr>
+									<th align="center">启用状态</th>
+									<td align="center">
+										<label><input type="radio" name="system_var[isshow]" value="1" id="isshow_yes" {if $system_var['isshow']==1}checked{/if} />启用</label>
+										<label><input type="radio" name="system_var[isshow]" value="0" id="isshow_no" {if $system_var['isshow']==0}checked{/if} />禁用</label>
+									</td>
+								</tr>
+								<tr>
+									<th></th>
+									<td align="center">
+										<input type="submit" value=" 确定 " class="ac-btn" />
+										<input type="reset" value=" 重填 " class="ac-btn" />
+									</td>
+								</tr>
+							</table>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+{include file="common/footer.html"}

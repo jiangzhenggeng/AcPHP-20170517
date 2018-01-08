@@ -1,0 +1,17 @@
+<div class="ac-view-row">
+	<div class="ac-view-col"><label>答案：</label></div>
+	<div class="ac-view-col" id="answer"></div>
+</div>
+<div class="ac-view-row">
+	<div class="ac-view-col"><label>解析：</label><span id="analysis"></span></div>
+</div>
+<script>
+function infusionAdditionData(data){
+	var answerHtml = '' ,k = 1;
+	for(var i in data.answer){
+		answerHtml += '<span>（'+k+++'）'+data.answer[i].answer+'&nbsp;&nbsp;</span>';
+	}
+	$('#answer').html(answerHtml);
+	$('#analysis').html(data.analysis==''?'<font color=red>没有解析</font>':data.analysis);
+}
+</script>

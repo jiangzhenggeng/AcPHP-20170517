@@ -1,0 +1,71 @@
+{include file="common/header.html"}
+<div class="ac-main">	
+	<div class="ac-warp">
+		<div class="ac-content" id="ac-content">
+			<div class="ac-nav">
+				<a href="{U('admin/index/main')}">主页</a>
+				<span>&raquo;</span>
+				<a href="{U('lists')}">试题模型管理</a>
+				<span>&raquo;</span>
+				<a href="{U('add')}">添加试题模型</a>
+			</div>
+			<div class="ac-content-inner">
+				<div class="ac-table-view">
+					<div class="ac-table-card">
+						<ul>
+							<li><a href="{U('lists')}">试题模型管理</a></li>
+							<li class="on"><a href="{U('add')}">添加试题模型</a></li>
+						</ul>
+						<div class="ac-table-right-card">
+							<a class="btn ac-back">返回</a>
+						</div>
+					</div>
+					<div class="ac-table-search">
+						
+					</div>
+					<div class="ac-table-body">
+						<form action="{U('add',array('query'=>'insert'))}" method="post">
+							<input type="hidden" name="query" value="insert" />
+							<input type="hidden" name="token" value="{$token}" />
+							<table class="ac-table-basic ac-table-basic-query" cellpadding="8" cellspacing="0">
+								<tr>
+									<th align="center">模型名称</th>
+									<td align="center">
+										<input type="text" name="question_type[typename]" id="typename" placeholder="模型名称" />
+									</td>
+								</tr>
+								<tr>
+									<th align="center">模型类文件</th>
+									<td align="center">
+										<input type="text" name="question_type[modelclass]" id="modelclass" placeholder="模型类文件" />
+									</td>
+								</tr>
+								<tr>
+									<th align="center">图标</th>
+									<td align="center">
+										<input type="text" name="question_type[icon]" id="icon" placeholder="图标" />
+									</td>
+								</tr>
+								<tr>
+									<th align="center">模型描述</th>
+									<td align="center">
+										<textarea name="question_type[description]" id="description" placeholder="模型描述"></textarea>
+									</td>
+								</tr>
+								<tr>
+									<th></th>
+									<td align="center">
+										<input type="submit" value=" 确定 " class="ac-btn" />
+										<input type="reset" value=" 重填 " class="ac-btn" />
+									</td>
+								</tr>
+							</table>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+{include file="common/footer.html"}

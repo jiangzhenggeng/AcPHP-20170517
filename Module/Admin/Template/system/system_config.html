@@ -1,0 +1,208 @@
+{include file="common/header.html"}
+<style>
+.button{
+	background: #E8E8E8;
+	border: 1px solid #D6D6D6;
+	padding: 5px 8px;
+	border-radius: 3px;
+}
+</style>
+<script>
+$(function(){
+	$('table').on('click','.qq.sub',function(){
+		$(this).parent().parent().remove();
+	}).on('click','.qq.add',function(){
+		var k = Math.random().toString().replace('0.','');
+		var _ = '<tr><th align="center">客服QQ</th><td>'+
+				'<input type="text" value="" placeholder="客服" name="system[qq]['+k+'][name]" id="qq-name" style="width:143px;">'+
+				'\r\nQQ：<input type="text" placeholder="QQ" value="" name="system[qq]['+k+'][number]" id="qq-number" style="width:143px;">'+
+				'\r\n<input class="button qq sub" type="button" value=" - " />'+
+				'\r\n<input class="button qq add" type="button" value=" + " /></td></tr>';
+		$(this).parent().parent().after(_);
+	})
+	
+	.on('click','.tel.sub',function(){
+		$(this).parent().parent().remove();
+	}).on('click','.tel.add',function(){
+		var k = Math.random().toString().replace('0.','');
+		var _ = '<tr><th align="center">客服电话</th><td>'+
+				'<input type="text" value="" placeholder="客服" name="system[tel]['+k+'][name]" id="tel-name" style="width:143px;">'+
+				'\r\n电话：<input type="text" placeholder="电话" value="" name="system[tel]['+k+'][number]" id="tel-number" style="width:143px;">'+
+				'\r\n<input class="button tel sub" type="button" value=" - " />'+
+				'\r\n<input class="button tel add" type="button" value=" + " /></td></tr>';
+		$(this).parent().parent().after(_);
+	});
+});
+</script>
+
+<div class="ac-main">	
+	<div class="ac-warp">
+		<div class="ac-content" id="ac-content">
+			<div class="ac-nav">
+				<a href="{U('admin/index/main')}">主页</a>
+				<span>&raquo;</span>
+				<a href="{U('setting')}">系统配置</a>
+			</div>
+			<div class="ac-content-inner">
+				<div class="ac-table-view">
+					<div class="ac-table-card">
+						<ul>
+							<li class="on"><a href="{U('setting')}">系统配置</a></li>
+						</ul>
+						<div class="ac-table-right-card">
+							<a class="btn ac-back">返回</a>
+						</div>
+					</div>
+					<div class="ac-table-search">
+						
+					</div>
+					<div class="ac-table-body">
+						<form action="{U('setting',['query'=>'insert'])}" method="post">
+							<input type="hidden" name="query" value="insert" />
+							<input type="hidden" name="token" value="{$token}" />
+							<input type="hidden" name="cfgid" value="{$cfgid}" />
+							<table class="ac-table-basic ac-table-basic-query" cellpadding="8" cellspacing="0">
+								<tr>
+									<th align="center">网站标题</th>
+									<td align="center">
+										<input type="text" name="system[title]" value="{if isset($system['title'])}{$system['title']}{/if}" id="title" placeholder="网站标题" />
+									</td>
+								</tr>
+								<tr>
+									<th align="center">网站关键词</th>
+									<td align="center">
+										<textarea name="system[keywords]" id="keywords" placeholder="网站关键词">{if isset($system['keywords'])}{$system['keywords']}{/if}</textarea>
+									</td>
+								</tr>
+								<tr>
+									<th align="center">网站描述</th>
+									<td align="center">
+										<textarea name="system[description]" id="description" placeholder="网站描述">{if isset($system['description'])}{$system['description']}{/if}</textarea>
+									</td>
+								</tr>
+								
+								<tr>
+									<th align="center">开启网站</th>
+									<td>
+									<label><input type="radio" name="system[ison]" id="ison" value="1" {if (isset($system['ison']) and $system['ison']==1) || !isset($system['ison'])}checked{/if}>是</label>
+									<label><input type="radio" name="system[ison]" id="ison" value="0" {if isset($system['ison']) and $system['ison']==0}checked{/if}>否</label></td>
+								</tr>
+								
+								<tr>
+									<th align="center">公司名称</th>
+									<td><input name="system[organization]" id="organization" value="{if isset($system['organization'])}{$system['organization']}{/if}" type="text" placeholder="公司名称"></td>
+								</tr>
+								
+								{if isset($system['tel'])}
+								{loop $system['tel'] $k $v}
+								<tr>
+									<th align="center">客服电话</th>
+									<td>
+										<input type="text" value="{$v['name']}" name="system[tel][{$k}][name]" placeholder="客服" id="tel-name" style="width:143px;">
+										电话：<input type="text" value="{$v['number']}" name="system[tel][{$k}][number]" placeholder="电话" id="tel-number" style="width:143px;">
+										<input class="button tel sub" type="button" value=" - " />
+										<input class="button tel add" type="button" value=" + " />
+									</td>
+								</tr>
+								{/loop}
+								{else}
+								<tr>
+									<th align="center">客服电话</th>
+									<td>
+										<input type="text" name="system[tel][0][name]" placeholder="客服" id="tel-name" style="width:143px;">
+										电话：<input type="text" name="system[tel][0][number]" id="tel-number" placeholder="电话" style="width:143px;">
+										<input class="button tel sub" type="button" value=" - " />
+										<input class="button tel add" type="button" value=" + " />
+									</td>
+								</tr>
+								{/if}
+								
+								{if isset($system['qq'])}
+								{loop $system['qq'] $k $v}
+								<tr>
+									<th align="center">客服QQ</th>
+									<td>
+										<input type="text" value="{$v['name']}" name="system[qq][{$k}][name]" placeholder="客服" id="qq-name" style="width:143px;">
+										QQ：<input type="text" value="{$v['number']}" name="system[qq][{$k}][number]" placeholder="QQ" id="qq-number" style="width:143px;">
+										<input class="button qq sub" type="button" value=" - " />
+										<input class="button qq add" type="button" value=" + " />
+									</td>
+								</tr>
+								{/loop}
+								{else}
+								<tr>
+									<th align="center">客服QQ</th>
+									<td>
+										<input type="text" name="system[qq][0][name]" id="qq-name" placeholder="客服" style="width:143px;">
+										QQ：<input type="text" name="system[qq][0][number]" id="qq-number" placeholder="QQ" style="width:143px;">
+										<input class="button qq sub" type="button" value=" - " />
+										<input class="button qq add" type="button" value=" + " />
+									</td>
+								</tr>
+								{/if}
+								
+								<tr>
+									<th align="center">备案信息</th>
+									<td><textarea name="system[put_records]" id="put_records" placeholder="备案信息">{if isset($system['put_records'])}{$system['put_records']}{/if}</textarea></td>
+								</tr>
+								<tr>
+									<th></th>
+									<td align="center">
+										<input type="submit" value=" 确定 " class="ac-btn" />
+										<input type="reset" value=" 重填 " class="ac-btn" />
+									</td>
+								</tr>
+							</table>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+
+<script>
+$('#dataform').submit(function(){
+	if( $('#username').val().length<6 ){
+		alert('用户名不得小于6大于20个字符！');
+		return false;
+	}
+	if( !/^[\w\d]{6,20}$/.test( $('#username').val() ) ){
+		alert('用户名只能为数字和字母！');
+		return false;
+	}
+	if( $('#realname').val()!='' ){
+		if( $('#realname').val().length<2 || $('#realname').val().length>4 ){
+			alert('姓名只能为2-4个字符！');
+			return false;
+		}
+	}
+	if( $('#password').val().length<6 ){
+		alert('密码不得小于6个字符！');
+		return false;
+	}
+	
+	if( $('#password').val()!=$('#repassword').val() ){
+		alert('两次密码输入不一样！');
+		return false;
+	}
+	if( $('#roleid').val()=='0' ){
+		alert('清选择角色！');
+		return false;
+	}
+	
+	if( $('#tel').val().length!=11 || (!/^[\d]{11}$/.test( $('#tel').val()) ) ){
+		alert('清正确填写电话号码！');
+		return false;
+	}
+	if( $('#email').val()!='' ){
+		if( $('#email').val().length<6 || (!/^[\w\-\d]{2,30}@[\w\d]{2,6}\.[\w\d]{2,6}$/.test( $('#email').val()) ) ){
+			alert('清正确填写邮箱！');
+			return false;
+		}
+	}
+	return true;
+});
+</script>
+{include file="common/footer.html"}

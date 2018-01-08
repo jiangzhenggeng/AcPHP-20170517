@@ -1,0 +1,31 @@
+<nav class="mui-bar mui-bar-tab m-bar-footer">
+    <a class="mui-tab-item" onClick="positionPrev()">
+        <span class="mui-icon mui-icon-prev-ques"></span>
+        <span class="mui-tab-label">上一题</span>
+    </a>
+    {if !App::getConfig('exam','examModel',false) && App::getConfig('exam','allowComment',true)}
+    <a class="mui-tab-item" onClick="commentQuestion()">
+        <span class="mui-icon mui-icon-chatbubble"></span>
+        <span class="mui-tab-label">评论</span>
+    </a>
+    {/if}
+    <a class="mui-tab-item" onClick="openSheet()">
+        <div class="m-look-sheet">
+            <div class="m-look-sheet-mask"></div>
+            <div data-show-look-sheet class="m-look-sheet-inner">
+                <span class="mui-icon mui-icon-look-sheet"></span>
+                <span class="mui-tab-label">答题卡</span>
+            </div>
+        </div>
+    </a>
+    {if !App::getConfig('exam','examModel',false) && App::getConfig('exam','allowShowFavorite',true)}
+    <a class="mui-tab-item" onClick="favoriteQuestion()">
+        <span class="mui-icon mui-icon-collect"></span>
+        <span class="mui-tab-label">收藏</span>
+    </a>
+    {/if}
+    <a class="mui-tab-item" onClick="positionNext()">
+        <span class="mui-icon mui-icon-next-ques"></span>
+        <span class="mui-tab-label">下一题</span>
+    </a>
+</nav>

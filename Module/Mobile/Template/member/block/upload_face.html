@@ -1,0 +1,16 @@
+{include file="member/header.html"}
+<script>
+    var b = $('#{$formid}',window.parent.document);
+    {if !$result}
+        parent.dialog.alert({
+            btnText:'确定',
+            title:'错误信息',
+            message:'上传头像错误'
+        });
+    {else}
+        b.next().find('img').add(b.next()).attr('src',"{$file_info['url']}");
+    {/if}
+    b.remove();
+</script>
+
+{include file="member/footer.html"}

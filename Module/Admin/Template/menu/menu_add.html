@@ -1,0 +1,103 @@
+{include file="common/header.html"}
+<div class="ac-main">	
+	<div class="ac-warp">
+		<div class="ac-content" id="ac-content">
+			<div class="ac-nav">
+				<a href="{U('admin/index/main')}">主页</a>
+				<span>&raquo;</span>
+				<a href="{U('lists')}">菜单管理</a>
+				<span>&raquo;</span>
+				<a href="{U('add')}">添加菜单</a>
+			</div>
+			<div class="ac-content-inner">
+				<div class="ac-table-view">
+					<div class="ac-table-card">
+						<ul>
+							<li><a href="{U('lists')}">菜单管理</a></li>
+							<li class="on"><a href="{U('add')}">添加菜单</a></li>
+						</ul>
+						<div class="ac-table-right-card">
+							<a class="btn ac-back">返回</a>
+						</div>
+					</div>
+					<div class="ac-table-body">
+						<form action="{U('add',array('query'=>'insert'))}" method="post">
+							<input type="hidden" name="query" value="insert" />
+							<input type="hidden" name="token" value="{$token}" />
+							<table class="ac-table-basic ac-table-basic-query" cellpadding="8" cellspacing="0">
+								<tr>
+									<th align="center">菜单名称</th>
+									<td align="center">
+										<input type="text" name="menu[priv_name]" id="priv_name" placeholder="菜单名称" />
+									</td>
+								</tr>
+								<tr>
+									<th align="center">模块</th>
+									<td align="center">
+										<input type="text" name="menu[module]" id="module" placeholder="模块" />
+									</td>
+								</tr>
+								<tr>
+									<th align="center">控制器</th>
+									<td align="center">
+										<input type="text" name="menu[controller]" id="controller" placeholder="控制器" />
+									</td>
+								</tr>
+								<tr>
+									<th align="center">方法名</th>
+									<td align="center">
+										<input type="text" name="menu[action]" id="action" placeholder="方法名" />
+									</td>
+								</tr>
+								<tr>
+									<th align="center">附加校验数据</th>
+									<td align="center">
+										<input type="text" name="menu[data]" id="data" placeholder="附加校验数据" />
+									</td>
+								</tr>
+								<tr>
+									<th align="center">上级菜单</th>
+									<td align="center">
+										<select name="menu[parentid]" id="parentid">
+											<option value="0">---选择上级菜单---</option>
+											{$menu}
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th align="center">菜单类型</th>
+									<td align="center">
+										<label><input type="radio" name="menu[type]" value="1" id="type_yes" />自动</label>
+										<label><input type="radio" name="menu[type]" value="0" id="type_no" checked />非自动</label>
+									</td>
+								</tr>
+								<tr>
+									<th align="center">显示状态</th>
+									<td align="center">
+										<label><input type="radio" name="menu[ismenu]" value="1" id="ismenu_yes" checked />显示</label>
+										<label><input type="radio" name="menu[ismenu]" value="0" id="ismenu_no" />不显示</label>
+									</td>
+								</tr>
+								<tr>
+									<th align="center">菜单描述</th>
+									<td align="center">
+										<textarea name="menu[description]" id="description" placeholder="菜单描述"></textarea>
+									</td>
+								</tr>
+								<tr>
+									<th></th>
+									<td align="center">
+										<input type="submit" value=" 确定 " class="ac-btn" />
+										<input type="reset" value=" 重填 " class="ac-btn" />
+									</td>
+								</tr>
+							</table>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+{include file="common/footer.html"}

@@ -1,0 +1,72 @@
+{include file="common/header.html"}
+<link href="{__PUBLIC__}Mobile/css/home.css" rel="stylesheet" />
+<div id="offCanvasWrapper" class="mui-off-canvas-wrap mui-draggable">
+	<div class="mui-inner-wrap">
+		<!-- off-canvas backdrop -->
+		<div class="mui-off-canvas-backdrop"></div>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" href="{U('/mobile/index/init')}"></a>
+			<h1 class="mui-title">{$major['majorname']}</h1>
+			{if !ac_login()}
+				<a href="{U('login/login')}" class="mui-icon mui-icon-member mui-pull-right"></a>
+			{else}
+				<a href="{U('member/center')}" class="header-face mui-pull-right"><img src="{@get_face()}" /></a>
+			{/if}
+		</header>
+
+		<div class="offCanvasContentScroll">
+			<div class="m-body-box">
+				<div class="mui-content">
+
+					<div class="line-practice">
+						<div class="title">在线考试
+							{if $member_major['buyed']!=1}
+								<a href="{@U('pay/buyMajor',array('majorid'=>$majorid))}">点击进行购买</a>
+								{if count($member_major)>0}
+									{if $member_major['test']==1}
+										<span>试用截止：{date('Y-m-d H:i:s',$member_major['endtime'])}</span>
+									{elseif $member_major['test']==-1}
+										<span>试用结束：{date('Y-m-d H:i:s',$member_major['endtime'])}</span>
+									{/if}
+								{/if}
+							{else}
+								<a href="javascript:;">已购买</a>
+							{/if}
+						</div>
+						<ul class="mui-table-view chapter-list-ul" style="margin-top:10px;">
+							{if !empty($synthesis_paper)}
+								{loop $synthesis_paper $k $v}
+								<li class="mui-table-view-cell mui-media">
+									<a href="{U('exam/examTips',['majorid'=>$v['majorid'],'synid'=>$v['synid']])}">
+										<div class="mui-media-body">
+											【{@date('m-d H:i:s',$v['starttime'])}】
+											{if $v['starttime'] + $v['totaltime'] * 60<C_TIME}
+												<font color="red">(考试结束,查看试卷)</font>
+											{elseif $v['starttime']>$time}
+												<font color="green">(正在考试)</font>
+											{else}
+												(未开始)
+											{/if}
+											<div>{$v['papername']}</div>
+											<p class="mui-ellipsis">{$v['description']}</p>
+										</div>
+									</a>
+								</li>
+								{/loop}
+							{else}
+								<li class="mui-table-view-cell mui-media">
+									<div style="text-align: center;color: red;">没有发布试卷</div>
+								</li>
+							{/if}
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		{include file="index/bottom_bar.html"}
+	</div>
+	
+	{include file="common/menu.html"}
+	
+</div>
+{include file="common/footer.html"}

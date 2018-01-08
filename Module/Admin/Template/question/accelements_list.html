@@ -1,0 +1,47 @@
+{include file="common/header.html"}
+<div class="ac-main">	
+	<div class="ac-warp">
+		<div class="ac-content" id="ac-content">
+			<div class="ac-nav">
+				<a href="{U('admin/index/main')}">主页</a>
+				<span>&raquo;</span>
+				<a href="{U('lists')}">会计分录元素管理</a>
+			</div>
+			<div class="ac-content-inner">
+				<div class="ac-table-view">
+					<div class="ac-table-card">
+						<ul>
+							<li class="on"><a href="{U('lists')}">会计分录元素管理</a></li>
+							<li><a href="{U('add')}">添加分录元素</a></li>
+							<li><a href="{U('repair')}">修复分录元素数据</a></li>
+						</ul>
+					</div>
+					
+					<div class="ac-table-body">
+						<form action="{U('listorder')}" method="post">
+							<table id="acc-tree-table" class="ac-table-basic" cellpadding="8" cellspacing="0">
+								<tr>
+									<th width="15" align="center"><input type="checkbox" id="chkall" onclick="selectcheckbox(this.form)" value="check"></th>
+									<th width="30">ID</th>
+									<th width="40" align="center">排序</th>
+									<th width="350" align="center">名称</th>
+									<th width="120" align="center">编号</th>
+									<th>描述</th>
+									<th width="260">管理操作</th>
+								</tr>
+								{$accelements}
+							</table>
+							<div class="ac-btn-group">
+								<input type="submit" value=" 排序 " class="ac-btn" />
+								<input type="button" value=" 全部展开 " onClick="expandAll(this,$('#acc-tree-table tr'))" flag="none" class="ac-btn" />
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+<script>clickOpenMenuTree($('#acc-tree-table'),'accelementsid');</script>
+{include file="common/footer.html"}

@@ -1,0 +1,88 @@
+{include file="common/header.html"}
+<style>
+.subjectid-box{ display:none;}
+</style>
+<div class="ac-main ac-no-break">	
+	<div class="ac-warp">
+		<div class="ac-content" id="ac-content">
+			<div class="ac-nav">
+				<a href="{U('admin/index/main')}">主页</a>
+				<span>&raquo;</span>
+				<a href="{U('lists')}">试题管理</a>
+				<span>&raquo;</span>
+				<a href="{U('add',array('query'=>'subjectselect'))}">添加试题</a>
+			</div>
+			<div class="ac-content-inner">
+				<div class="ac-table-view">
+					<div class="ac-table-card">
+						<ul>
+							<li><a href="{U('lists')}">试题管理</a></li>
+							<li class="on"><a href="{U('add',array('query'=>'subjectselect'))}">添加试题</a></li>
+						</ul>
+						<div class="ac-table-right-card">
+							<a class="btn ac-back">返回</a>
+						</div>
+					</div>
+					<div class="ac-table-search">
+						
+					</div>
+					<div class="ac-table-body">
+						<form action="{U('add',array('query'=>'showaddpage'))}" method="post">
+							<input type="hidden" name="query" value="showaddpage" />
+							<input type="hidden" name="token" value="{$token}" />
+							<table class="ac-table-basic ac-table-basic-query" cellpadding="8" cellspacing="0">
+								<tr>
+									<th colspan="2" style="text-align:center;">选择科目</th>
+								</tr>
+								<tr>
+									<th align="center">所有科目</th>
+									<td align="center">
+										<section class="ac-subject-list-box">
+											<section>
+											{loop $subject $k $v}
+												<label><input name="subjectid" type="radio" value="{$v['subjectid']}" />{$v['subjectname']}</label>
+											{/loop}
+											</section>
+										</section>									
+									</td>
+								</tr>
+								<tr style="display:none;" class="subjectid-box-tr">
+									<th align="center">选择添加题型</th>
+									<td align="center">
+										<section class="ac-subject-list-box">
+											{loop $subject $k $v}
+												<section class="subjectid-box" id="subjectid{$v['subjectid']}">
+													{loop $v['question_type'] $k2 $v2}
+													<label><input name="typeid" type="radio" value="{$v2['typeid']}" />{$v2['typename']}</label>
+													{/loop}
+												</section>
+											{/loop}
+										</section>									
+									</td>
+								</tr>
+								<tr>
+									<th></th>
+									<td align="center">
+										<input type="submit" value=" 确定 " class="ac-btn" />
+										<input type="reset" value=" 重填 " class="ac-btn" />
+									</td>
+								</tr>
+							</table>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+<script>
+$('input[name=subjectid]').click(function(){
+	$('.subjectid-box-tr').css('display','table-row');
+	if($(this).get(0).checked){
+		$('.subjectid-box').css('display','none');
+		$('#subjectid'+$(this).val() ).css('display','block');
+	}
+});
+</script>
+{include file="common/footer.html"}

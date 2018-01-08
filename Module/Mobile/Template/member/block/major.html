@@ -1,0 +1,67 @@
+{include file="login/header.html"}
+<style>
+	.mui-content-padded {
+		margin-top:0;
+	}
+</style>
+<header class="mui-bar mui-bar-nav">
+	<a href="{U('baseinfo')}" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+	<h1 class="mui-title">修改专业</h1>
+	<a id='done' class="mui-btn mui-btn-link mui-pull-right mui-btn-blue mui-disabled">确认</a>
+</header>
+<div class="mui-content">
+	<form id="major">
+		<input name="query" type="hidden" value="insert">
+		<div id='list' class="mui-indexed-list">
+			<div class="mui-indexed-list-inner">
+				<ul class="mui-table-view">
+					{loop $major $k $v}
+					<li class="mui-table-view-cell mui-indexed-list-item mui-checkbox mui-left">
+						<label style="margin:0;padding:0">
+							<input name="majorid_array[]" value="{$v['majorid']}" type="checkbox" {if in_array($v['majorid'],$majorid_array)}checked{/if} />{$v['majorname']}</label></li>
+					{/loop}
+				</ul>
+			</div>
+		</div>
+	</form>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+var done = $('#done');
+done.click(function () {
+	if($(this).hasClass('mui-disabled')){
+		dialog.toast({message:'请选择专业'});
+		return;
+	}
+	$.ajax({
+		url:"{@U()}",
+		data:$('#major').serialize(),
+		accepts:'json',
+		success: function(replayData,status){
+			if(replayData.status=='success'){
+				dialog.toast({message:replayData.message},function(){
+					window.location = "{@$url}";
+				});
+				return;
+			}
+			dialog.alert({message:replayData.message});
+		}
+	});
+});
+
+
+$('.mui-indexed-list-inner').on('change', 'input', function() {
+	var isChecked = false;
+	$('.mui-indexed-list-inner').find('input[type="checkbox"]:checked').each(function(index, element) {
+		if($(this).prop('checked')){
+			isChecked = true;
+		}
+	});
+	if(isChecked){
+		done.removeClass("mui-disabled");
+	}else{
+		done.addClass("mui-disabled");
+	}
+});
+</script>
+{include file="login/footer.html"}

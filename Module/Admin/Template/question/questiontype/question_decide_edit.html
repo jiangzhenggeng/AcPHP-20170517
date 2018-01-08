@@ -1,0 +1,20 @@
+<tbody id="query-answer">	
+	<tr>
+		<th align="center">答案</th>
+		<td align="center">
+			<section class="query-answer-select">
+				<label><input name="question[answer]" type="radio" value="1" {if $decide_answer['answer']==1}checked{/if} />对</label>
+				<label><input name="question[answer]" type="radio" value="2" {if $decide_answer['answer']==2}checked{/if} />错</label>
+			</section>
+		</td>
+	</tr>
+	<tr>
+		<th align="center">解析</th>
+		<td align="center" style="white-space: inherit;">
+			<script name="question[analysis]" id="analysis"  placeholder="解析" type="text/plain" style="width:800px;height:200px;">{$decide_answer['analysis']}</script>
+		</td>
+	</tr>
+</tbody>
+<script>
+crateueditor('analysis','simple');
+</script>

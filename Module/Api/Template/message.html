@@ -1,0 +1,67 @@
+{include file="header.html"}
+<style>
+	.ac-table-view{
+		background: #fff;
+		border: 1px solid #e6e6e6;
+		border-radius: 5px;
+		margin: auto 10px;
+		text-align: center;
+		font-size: 14px;
+		padding: 10px;
+	}
+	.ac-info-tips-content{
+		text-align: left;
+		margin: 15px;
+	}
+</style>
+<div class="ac-main">	
+	<div class="ac-warp">
+		<div class="ac-content" id="ac-content">
+			<div class="ac-content-inner ac-message">
+				<div class="ac-table-view">
+					<div class="ac-table-body">
+						<div class="ac-info-tips-icon">
+							<img src="{__IMG__}admin/iconfont-tishi.png" />
+							<div class="ac-info-tips-content">
+								<p>{if $msg==''}操作成功{else}{$msg}{/if}，将在 <font id="time">{$time}</font> 秒后跳转到上一个链接地址。</p>
+							</div>
+							<div class="ac-back-page" style="text-align: right">
+								{if $url==''}
+									<a class="ac-back-query" href="javascript:window.history.back();" tabindex="1">返回上一页</a>
+								{else}
+									<a class="ac-back-query" href="{$url}" tabindex="1">跳转到地址</a>
+								{/if}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+<script>
+var time = $('#time');
+function reloadUrl(){
+	var t_val = parseInt(time.html());
+	if(t_val>0){
+		time.html(--t_val);
+		setTimeout(reloadUrl,1000);
+	}else{
+		{if $url==''}
+			window.history.back();
+		{else}
+			window.location = '{$url}';
+		{/if}
+	}
+}
+setTimeout(reloadUrl,1000);
+if(top.location == location){  
+	$('.ac-nav').remove();
+}
+var message = $('.ac-message.ac-content-inner');
+var marTop = $(window).height()/2 - message.height()/2 - 50;
+message.css('margin-top',marTop);
+
+</script>
+{include file="footer.html"}

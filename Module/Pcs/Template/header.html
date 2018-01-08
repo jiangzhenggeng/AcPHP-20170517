@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta property="qc:admins" content="2552012146211672763757" />
+	<meta charset="utf-8">
+	<title>新财会题库-最具影响力的会计免费题库！-管理中心</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="keywords" content="新财会,会计免费题库,会计从业资格考试,会计从业资格考试题库,会计从业考试题库,会计初级考试试题,会计职称考试试题,会计从业资格考试试题,会计基础模拟试题,会计电算化考试试题">
+	<meta name="description" content="新财会,会计免费题库,会计从业资格考试,会计从业资格考试题库,会计从业考试题库,会计初级考试试题,会计职称考试试题,会计从业资格考试试题,会计基础模拟试题,会计电算化考试试题 删除">
+	<link href="{__CSS__}common.css" rel="stylesheet" />
+	<link href="{__CSS__}header.css" rel="stylesheet" />
+	<link href="{__CSS__}tiku.css" rel="stylesheet" />
+	<script type="text/javascript" src="{__JS__}jquery-1.11.3.min.js"></script>
+	<script type="text/javascript" src="{__JS__}jquery.cookie.js"></script>
+	<script type="text/javascript" src="{__JS__}global.js"></script>
+	<script type="text/javascript" src="{__JS__}layer/layer.js"></script>
+</head>
+<body>
+
+<header class="pc-clear">
+	<div class="pc-header">
+		<div class="pc-main pc-clear">
+			<div class="pc-logo pc-left">
+				<img src="{__IMG__}admin/logo.gif">
+			</div>
+			<div class="pc-header-right pc-right pc-pos-re">
+				<div class="pc-right-inner pc-clear">
+					<div class="pc-header-nav-warp pc-left">
+						<ul class="pc-header-nav pc-clear">
+							<li class="on"><a href="#"><span>题库</span></a></li>
+							<li><a href="#"><span>资讯</span></a></li>
+							<li><a href="#"><span>大纲</span></a></li>
+							<li><a href="#"><span>问答</span></a></li>
+							<li><a href="#"><span>帮助</span></a></li>
+							<li><a href="#"><span>合作</span></a></li>
+							<li><a href="#"><span>案例</span></a></li>
+						</ul>
+					</div>
+					<div class="pc-header-user-warp pc-right">
+						<div class="pc-header-user-face pc-left pc-mr-10 subject-list">
+							<div class="pc-header-subject"><a href="{U('major/init')}">科</a></div>
+							<div class="show-subject-list">
+								<div class="arrow-up"><i></i></div>
+								<div class="list-info">
+									<div class="tips">
+										<span>正在加载中...</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="pc-left">
+							{if !ac_login()}
+							<div class="pc-header-user-face">
+								<a href="{U('login/init')}" target="_blank"><img src="{__IMG__}member/icon-user-default.png"></a>
+							</div>
+							{else}
+							<div class="pc-header-user-face">
+								<a href="{U('login/init')}" target="_blank"><img src="{get_member_infor('facepicture')}" style="width: 100%"></a>
+							</div>
+							<div><a href="{U('login/logout')}">退出</a></div>
+							{/if}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</header>
+<script>
+	$(function () {
+		var timer = null;
+		$('.subject-list').hover(function () {
+			if(timer) clearTimeout(timer);
+
+			$(this).find('.show-subject-list').show();
+			if($(this).find('.list-info ul').length){
+				return;
+			}
+
+			var _this = $(this);
+
+			$.get('{U("index/getmajorlist")}',function (replayDate) {
+				var html
+				if(replayDate.status=='success' && replayDate.data){
+					html = newTplEngine($('#tpl-major-header-list').html(),{data:replayDate.data});
+				}else{
+					html = '<div class="tips">\
+								<span>你还没有购买专业<a href="#" class="green">购买</a></span>\
+							</div>';
+				}
+				_this.find('.list-info').html(html);
+			},'json');
+		},function () {
+			var _this = $(this);
+			timer = setTimeout(function () {
+				_this.find('.show-subject-list').hide();
+			},150);
+		});
+	});
+</script>
+
+<script id="tpl-major-header-list" type="text/html">
+	<ul>
+		<% for(var i in data){ %>
+		<li>
+			<dl>
+				<dt><a href="{U('index/changemajor')}?majorid=<%=data[i].majorid%>"><%=data[i].majorname%></a></dt>
+				<% for(var j in data[i].subject){ %>
+					<% var subject = data[i].subject[j];%>
+					<dd><a href="{U('index/changesubject')}?majorid=<%=data[i].majorid%>&subjectid=<%=subject.subjectid%>"><%=subject.subjectname%></a></dd>
+				<% } %>
+			</dl>
+		</li>
+		<% } %>
+	</ul>
+</script>
+
+
+
+
+
+
+
+
+
+

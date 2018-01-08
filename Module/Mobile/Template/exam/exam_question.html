@@ -1,0 +1,63 @@
+{include file="common/header.html"}
+<script type="text/javascript" src="{__PUBLIC__}Mobile/js/doQuestion.js"></script>
+<script>document.write('<style>.m-question-show-row{width:'+(window.W*{@count($question)})+'px;}</style>');</script>
+<script>document.write('<style>.window-width{width:'+window.W+'px;}.window-height{height:'+window.H+'px;min-height:'+window.H+'px;}</style>');</script>
+<script>document.write('<style>.m-question-show-cell,.m-question-show-row{height:'+(window.H-94)+'px;}</style>');</script>
+<script>
+$.cookie('window_width', window.W, { expires:9999999, path: '/' });
+</script>
+
+<header class="mui-bar mui-bar-nav">
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" onClick="window.history.back()"></a>
+	<h1 class="mui-title m-a-left">
+		{$subject['subjectname']}
+		<span id="daojishi-timer">
+			<script>
+				$(function () {
+					daoJiShiTimer({
+						warp:'#daojishi-timer',
+						intDiff:"{php echo ($exam_me_subject['starttime']+$exam_me_subject['totaltime']*60)-time()}",
+						callback:function (w) {
+							automaticScoring('#questionForm');
+							$('.m-answer-sheet').addClass('sheet-show');
+						},
+						autoExec:function (w) {
+							automaticScoring('#questionForm',{
+								'auto_save':true
+							});
+						}
+					});
+				});
+			</script>
+		</span>
+	</h1>
+	<div class="mui-pull-right">
+		<a href="{U('login/init')}" class="mui-icon mui-icon-nighttime mui-pull-left"></a>
+		<a href="{U('login/init')}" class="mui-icon mui-icon-share mui-pull-left"></a>
+	</div>
+</header>
+<div class="mui-content" id="mui-content">
+	<form id="questionForm" action="{U('saveRecord')}">
+		<div class="m-question-show-warp">
+			{if count($question)}
+				<div class="m-question-show-row">
+					{loop $question $k $v}
+					<div data-ajax='{"questionid":"{$v["questionid"]}","meid":"{$meid}"{if isset($v["optionid"])},"optionid":"{$v["optionid"]}"{/if}}' class="m-question-show-cell window-width"><div class="swiper-sub-warp"></div></div>
+					{/loop}
+				</div>
+			{else}
+				<div class="tc" style="text-align: center; margin-top: 80px;color: red;">没有试题</div>
+			{/if}
+		</div>
+		<input type="hidden" name="synid" value="{$synid}">
+	</form>
+</div>
+
+<!-- 操作按钮 -->
+{include file="common/question_up_next.html"}
+<!-- 答题卡 -->
+{php $sheetNoSubmit = true}
+{include file="common/question_sheet.html"}
+<!-- 加载试题模板 -->
+{include file="common/question_tpl.html"}
+{include file="common/footer.html"}

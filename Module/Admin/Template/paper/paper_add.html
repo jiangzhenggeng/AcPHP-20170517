@@ -1,0 +1,151 @@
+{include file="common/header.html"}
+<div class="ac-main">	
+	<div class="ac-warp">
+		<div class="ac-content" id="ac-content">
+			<div class="ac-nav">
+				<a href="{U('paper/index/main')}">主页</a>
+				<span>&raquo;</span>
+				<a href="{U('lists')}">试卷管理</a>
+				<span>&raquo;</span>
+				<a href="{U('add')}">创建试卷</a>
+			</div>
+			<div class="ac-content-inner">
+				<div class="ac-table-view">
+					<div class="ac-table-card">
+						<ul>
+							<li><a href="{U('lists')}">试卷管理</a></li>
+							<li class="on"><a href="{U('add')}">创建试卷</a></li>
+						</ul>
+						<div class="ac-table-right-card">
+							<a class="btn ac-back">返回</a>
+						</div>
+					</div>
+					<div class="ac-table-search">
+						
+					</div>
+					<div class="ac-table-body">
+						<form action="{U('add',array('query'=>'insert'))}" method="post">
+							<input type="hidden" name="query" value="insert" />
+							<input type="hidden" name="token" value="{$token}" />
+							<table class="ac-table-basic ac-table-basic-query" cellpadding="8" cellspacing="0">
+							
+								<tr>
+									<th align="center">考区</th>
+									<td align="center">
+										{loop $exam_area $k $v}
+											<label><input type="checkbox" name="paper_area[areaid][]" value="{$v['areaid']}">{$v['areaname']}</label>
+										{/loop}
+									</td>
+								</tr>
+								<tr>
+									<th align="center">名称</th>
+									<td align="center">
+										<input type="text" name="paper[papername]" id="papername" placeholder="试卷名称" />
+									</td>
+								</tr>
+								<tr>
+									<th align="center">科目</th>
+									<td align="center">
+										<select name="paper[subjectid]" id="subjectid">
+											<option value="0">---选择科目---</option>
+											{loop $subject $k $v}
+											<option value="{$v['subjectid']}">{$v['subjectname']}</option>
+											{/loop}
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th align="center">抽题规则</th>
+									<td align="center">
+										<select name="paper[ruleid]" id="ruleid">
+											<option value="0">---选择抽题规则---</option>
+											{loop $rule $k $v}
+											<option value="{$v['ruleid']}" subjectid="{$v['subjectid']}">{$v['rulename']}</option>
+											{/loop}
+										</select>
+										<a target="_blank" href="{U('Paperrule/edit')}" class="ac-btn">编辑规则</a>
+										<script>
+										$('#ruleid').change(function(){
+											$(this).next().attr('href',"{U('Paperrule/edit')}?ruleid="+$(this).val() );
+										}).next().click(function(){
+											if(parseInt($(this).prev().val())==0){
+												layer.msg('请选择规则', {icon:2});
+												return false;
+											}
+										});
+										</script>
+									</td>
+								</tr>
+								<tr>
+									<th align="center">难度</th>
+									<td align="center">
+										<select name="paper[difficulty]" id="difficulty">
+											<option value="1">简单</option>
+											<option value="2">中难</option>
+											<option value="3">难</option>
+										</select>
+									</td>
+								</tr>
+								
+								<tr>
+									<th align="center">总分</th>
+									<td align="center">
+										<input type="text" value="100" name="paper[totalscore]" id="totalscore" placeholder="试卷总分" />
+									</td>
+								</tr>
+								<tr>
+									<th align="center">及格分数</th>
+									<td align="center">
+										<input type="text" value="60" name="paper[passscore]" id="passscore" placeholder="及格分数" />
+									</td>
+								</tr>
+								
+								<tr>
+									<th align="center">考试时间</th>
+									<td align="center">
+										<input type="text" value="60" name="paper[totaltime]" id="totaltime" placeholder="考试时间" />
+									</td>
+								</tr>
+								
+								<tr>
+									<th align="center">考试时间</th>
+									<td align="center">
+										<input type="text" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" name="paper[starttime]" id="starttime" class="laydate-icon" placeholder="开始考试时间" />
+									</td>
+								</tr>
+								
+								<tr>
+									<th align="center">简单描述</th>
+									<td align="center">
+										<textarea name="paper[description]" id="description" placeholder="简单描述"></textarea>
+									</td>
+								</tr>
+								<tr>
+									<th></th>
+									<td align="center">
+										<input type="submit" value=" 确定 " class="ac-btn" />
+										<input type="reset" value=" 重填 " class="ac-btn" />
+									</td>
+								</tr>
+							</table>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+<script>
+$('#subjectid').change(function(){
+	var subjectid = $(this).val();
+	$('#ruleid').find('option').each(function(index, element) {
+		if(subjectid!=$(this).attr('subjectid') && parseInt($(this).attr('value'))!=0){
+			$(this).hide();
+		}else{
+			$(this).show();
+		}
+	});
+});
+</script>
+{include file="common/footer.html"}

@@ -1,0 +1,29 @@
+{include file="common/header.html"}
+<script type="text/javascript" src="{__PUBLIC__}Mobile/js/doQuestion.js?{@time()}"></script>
+<header class="mui-bar mui-bar-nav">
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" href="{@U('Index/major',['majorid'=>$majorid])}"></a>
+	<h1 class="mui-title m-a-left">在线做题</h1>
+	<div class="mui-pull-right">
+		<a href="{U('login/init')}" class="mui-icon mui-icon-nighttime mui-pull-left"></a>
+		<a href="{U('login/init')}" class="mui-icon mui-icon-share mui-pull-left"></a>
+	</div>
+</header>
+<div class="mui-content" id="mui-content">
+	<form id="questionForm" action="{U('saveRecord')}">
+		<div class="m-question-show-warp">
+			<div class="m-question-show-row">
+				{loop $question $k $v}
+				<div data-ajax='{"questionid":"{$v["questionid"]}"{if isset($v["optionid"])},"optionid":"{$v["optionid"]}"{/if}}' class="m-question-show-cell window-width"><div class="swiper-sub-warp"></div></div>
+				{/loop}
+			</div>
+		</div>
+	</form>
+</div>
+
+<!-- 操作按钮 -->
+{include file="common/question_up_next.html"}
+<!-- 答题卡 -->
+{include file="common/question_sheet.html"}
+<!-- 加载试题模板 -->
+{include file="common/question_tpl.html"}
+{include file="common/footer.html"}

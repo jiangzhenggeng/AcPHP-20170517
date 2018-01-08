@@ -1,0 +1,128 @@
+{include file="common/header.html"}
+<style>
+.button{
+	background: #E8E8E8;
+	border: 1px solid #D6D6D6;
+	padding: 5px 8px;
+	border-radius: 3px;
+}
+</style>
+
+<div class="ac-main">	
+	<div class="ac-warp">
+		<div class="ac-content" id="ac-content">
+			<div class="ac-nav">
+				<a href="{U('admin/index/main')}">主页</a>
+				<span>&raquo;</span>
+				<a href="{U('setting')}">系统配置</a>
+			</div>
+			<div class="ac-content-inner">
+				<div class="ac-table-view">
+					<div class="ac-table-card">
+						<ul>
+							<li class="on"><a href="{U('setting')}">系统配置</a></li>
+						</ul>
+						<div class="ac-table-right-card">
+							<a class="btn ac-back">返回</a>
+						</div>
+					</div>
+					<div class="ac-table-search">
+						
+					</div>
+					<div class="ac-table-body">
+						<form action="{U('emailconfig',['query'=>'insert'])}" method="post">
+							<input type="hidden" name="query" value="insert" />
+							<input type="hidden" name="token" value="{$token}" />
+							<input type="hidden" name="cfgid" value="{$cfgid}" />
+							<table class="ac-table-basic ac-table-basic-query" cellpadding="8" cellspacing="0">
+								<tr>
+									<th align="center">服务器</th>
+									<td align="center">
+										<input type="text" name="email[host]" value="{if isset($email['host'])}{$email['host']}{/if}" id="host" placeholder="服务器" />
+									</td>
+								</tr>
+								<tr>
+									<th align="center">端口</th>
+									<td><input name="email[port]" id="port" value="{if isset($email['port'])}{$email['port']}{/if}" type="text" placeholder="端口"></td>
+								</tr>
+								<tr>
+									<th align="center">编码</th>
+									<td><input name="email[charset]" id="charset" value="{if isset($email['charset'])}{$email['charset']}{/if}" type="text" placeholder="编码"></td>
+								</tr>
+								<tr>
+									<th align="center">用户名</th>
+									<td><input name="email[username]" id="username" value="{if isset($email['username'])}{$email['username']}{/if}" type="text" placeholder="用户名"></td>
+								</tr>
+								
+								<tr>
+									<th align="center">密码</th>
+									<td><input name="email[parssword]" id="parssword" value="{if isset($email['parssword'])}{$email['parssword']}{/if}" type="text" placeholder="密码"></td>
+								</tr>
+								
+								<tr>
+									<th align="center">发件人邮箱</th>
+									<td><input name="email[replayto]" id="replayto" value="{if isset($email['replayto'])}{$email['replayto']}{/if}" type="text" placeholder="发件人邮箱"></td>
+								</tr>
+								
+								<tr>
+									<th align="center">发件人名称</th>
+									<td><input name="email[replayname]" id="replayname" value="{if isset($email['replayname'])}{$email['replayname']}{/if}" type="text" placeholder="发件人名称"></td>
+								</tr>
+								
+								<tr>
+									<th align="center">回复邮件人</th>
+									<td><input name="email[from]" id="from" value="{if isset($email['from'])}{$email['from']}{/if}" type="text" placeholder="回复邮件人"></td>
+								</tr>
+								<tr>
+									<th align="center">回复人名称</th>
+									<td><input name="email[fromname]" id="fromname" value="{if isset($email['fromname'])}{$email['fromname']}{/if}" type="text" placeholder="回复人名称"></td>
+								</tr>
+								
+								<tr>
+									<th align="center">测试邮件</th>
+									<td>
+										<input id="test" value="2992265870@qq.com" type="text" placeholder="测试邮件">
+										<input id="testemail" type="button" value=" 发送 " class="ac-btn" />
+									</td>
+								</tr>
+								
+								<tr>
+									<th></th>
+									<td align="center">
+										<input type="submit" value=" 确定 " class="ac-btn" />
+										<input type="reset" value=" 重填 " class="ac-btn" />
+									</td>
+								</tr>
+							</table>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+
+<script>
+$('#testemail').click(function(){
+	var layerHander = layer.msg('邮件发送中...', {icon:16,time: 1000*1000});
+	$.ajax({
+		url:'{U()}',
+		data:{
+			query:'test',
+			testmail:$('#test').val()
+		},
+		dataType:'json',
+		success: function(data){
+			layer.msg(data.message, {icon:1,time: 2*1000})
+		},
+		complete: function(xhr,status){
+			layer.close(layerHander);
+			if(status=='error'){
+				layer.msg('邮件发送失败', {icon:2,time: 2*1000});
+			}
+		}
+	});
+});
+</script>
+{include file="common/footer.html"}

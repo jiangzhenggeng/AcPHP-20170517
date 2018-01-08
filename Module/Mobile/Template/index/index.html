@@ -1,0 +1,43 @@
+{include file="common/header.html"}
+<link href="{__PUBLIC__}Mobile/css/home.css" rel="stylesheet" />
+<div id="offCanvasWrapper" class="mui-off-canvas-wrap mui-draggable">
+	<div class="mui-inner-wrap">
+		<!-- off-canvas backdrop -->
+		<div class="mui-off-canvas-backdrop"></div>
+		
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-icon mui-icon-bars mui-pull-left mui-action-menu"></a>
+			<h1 class="mui-title">新财会在线考试题库</h1>
+			{if !ac_login()}
+				<a href="{U('login/login')}" class="mui-icon mui-icon-member mui-pull-right"></a>
+			{else}
+				<a href="{U('member/center')}" class="header-face mui-pull-right"><img src="{@get_face()}" /></a>
+			{/if}
+		</header>
+		
+		<div class="offCanvasContentScroll">
+			<div class="mui-content index-card">
+				{loop $major $k $v}
+				<div class="mui-card">
+
+					<div class="mui-card-header">{$v['majorname']}</div>
+					<div class="mui-card-content">
+						<div class="mui-card-content-inner">{$v['description']}</div>
+					</div>
+					<div class="mui-card-footer">
+						<a class="mui-card-link" href="{U('index/examInit',['majorid'=>$v['majorid']])}">在线考试</a>
+						<a class="mui-card-link" href="{U('index/major',['majorid'=>$v['majorid']])}">章节练习</a>
+						<a class="mui-card-link" href="{U('index/strong',['majorid'=>$v['majorid']])}">强化练习</a>
+					</div>
+				</div>
+				{/loop}
+			</div>
+		</div>
+			
+		{include file="index/bottom_bar.html"}
+		
+	</div>
+	
+	{include file="common/menu.html"}
+</div>
+{include file="common/footer.html"}

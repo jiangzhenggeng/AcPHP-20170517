@@ -1,0 +1,61 @@
+{include file="common/header.html"}
+<div class="ac-main">	
+	<div class="ac-warp">
+		<div class="ac-content" id="ac-content">
+			<div class="ac-nav">
+				<a href="{U('admin/index/main')}">主页</a>
+				<span>&raquo;</span>
+				<a href="{U()}">信息提示</a>
+			</div>
+			<div class="ac-content-inner ac-message">
+				<div class="ac-table-view">
+					<div class="ac-table-body">
+						<div class="ac-info-tips-line">
+							<h1>信息提示</h1>
+						</div>
+						<div class="ac-info-tips-icon">
+							<img src="{__IMG__}admin/iconfont-tishi.png" />
+							<div class="ac-info-tips-content">
+								<p class="ac-info-tips-title">{if $msg==''}操作成功{else}{$msg}{/if}</p>
+								<p>如果您不做出选择，将在 <font id="time">{$time}</font> 秒后跳转到上一个链接地址。</p>
+							</div>
+							<div class="ac-back-page">
+								{if $url==''}
+									<a class="ac-back-query" href="javascript:window.history.back();" tabindex="1">返回上一页</a>
+								{else}
+									<a class="ac-back-query" href="{$url}" tabindex="1">跳转到地址</a>
+								{/if}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+<script>
+var time = $('#time');
+function reloadUrl(){
+	var t_val = parseInt(time.html());
+	if(t_val>0){
+		time.html(--t_val);
+		setTimeout(reloadUrl,1000);
+	}else{
+		{if $url==''}
+			window.history.back();
+		{else}
+			window.location = '{$url}';
+		{/if}
+	}
+}
+setTimeout(reloadUrl,1000);
+if(top.location == location){  
+	$('.ac-nav').remove();
+}
+var message = $('.ac-message.ac-content-inner');
+var marTop = $(window).height()/2 - message.height()/2 - 50;
+message.css('margin-top',marTop);
+
+</script>
+{include file="common/footer.html"}

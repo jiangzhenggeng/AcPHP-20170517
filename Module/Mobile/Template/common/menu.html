@@ -1,0 +1,149 @@
+<link href="{__PUBLIC__}Mobile/css/aside.css" rel="stylesheet" />
+<aside id="offCanvasSide" class="mui-off-canvas-left">
+	<div class="content-warp">
+		<div class="item-view-row member-face-box">
+			<div class="member-face">
+				<a href="{U('member/center')}"><img src="{@get_face()}" /></a>
+			</div>
+		</div>
+		<div class="item-view-row">
+			<div class="base-info">
+				{if ac_login()}
+					<span class="position">{@get_position()}</span>
+					<span class="sex">{@get_sex()}</span>
+					<span class="zhiye">{@cutStr(get_username(),4,'')}</span>
+				{else}
+					<font>未登录</font>
+				{/if}
+			</div>
+		</div>
+		<div class="item-view-row">
+			<ul class="mui-table-view" id="member-menu-list-bix">
+				<li data-url="" class="mui-table-view-cell">
+					<a href="{@U('Mobile/Member/baseinfo')}" class="mui-icon mui-gerenxinxi">个人信息</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a href="{@U('Mobile/Favorite/view')}" class="mui-icon mui-wodeshouchang">我的收藏</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a href="{@U('Mobile/Meerror/view')}" class="mui-icon mui-wodeshouchang">错题中心</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a href="{@U('Mobile/message/view')}" class="mui-icon mui-xiaoxizhongxin">消息中心</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a href="{@U('Mobile/Meerror/view')}" class="mui-icon mui-tongjizhongxin">统计中心</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a href="{@U('Mobile/order/view')}" class="mui-icon mui-wodedingdan">我的订单</a>
+				</li>
+				<li data-url="{U('mobile/login/loginout')}" class="mui-table-view-cell" id="loginout">
+					<a class="mui-icon mui-icon-logout">退出登录</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	
+	<footer class="copyright">©2016 新财会 黔ICP备14000518号</footer>
+</aside>
+
+<script>
+$(function(){
+	var startPosition = 0;
+	
+	var offCanvasWrapper = $('#offCanvasWrapper');
+	var muiInnerWrap = $('.mui-inner-wrap');
+	var offCanvasSideWindth = $('#offCanvasSide').width();
+	var offCanvasSideRight = $('#offCanvasSide-right');
+	var offCanvasSideRightWindth = offCanvasSideRight.width();
+
+
+	offCanvasWrapper.swipe({
+		preventDefaultEvents:false,
+		//excludedElements:"button, input, select, textarea, .noSwipe",
+		excludedElements:"",
+		swipeStatus: function(event, phase, direction, distance, duration, fingerCount) {
+
+			if(phase=='start'){
+				startPosition = parseFloat(getCss3(muiInnerWrap,'transform').split(',')[4] || 0);
+				muiInnerWrap.removeClass('mui-transitioning');
+				setCss3(muiInnerWrap,'transition-duration','0ms');
+			}
+
+			if(direction=='left' || direction=='right'){
+
+				event.preventDefault();
+
+				if(direction=='left') distance = -1 * distance;
+
+				if(phase=='move'){
+					if(offCanvasSideRightWindth<=0){
+						distance = startPosition+distance<=0?0:startPosition+distance;
+						distance = distance>=offCanvasSideWindth?offCanvasSideWindth:distance;
+					}else{
+						if(direction=='left'){
+							distance = startPosition+distance<=(-offCanvasSideRightWindth)?(-offCanvasSideRightWindth):startPosition+distance;
+						}else{
+							distance = startPosition+distance>=offCanvasSideWindth?offCanvasSideWindth:startPosition+distance;
+						}
+					}
+					setCss3(muiInnerWrap,'transform','translate3d('+distance+'px, 0px, 0px)  translateZ(0px)');
+				}else if(phase=='end' ){
+					muiInnerWrap.addClass('mui-transitioning');
+					setCss3(muiInnerWrap,'transition-duration','250ms');
+					if(direction=='left'){
+						if(startPosition+distance<=-5){
+							offCanvasSideRight.css('z-index',1);
+							if(offCanvasSideRightWindth>0)offCanvasWrapper.addClass('mui-active');
+							setCss3(muiInnerWrap,'transform','translate3d(-'+offCanvasSideRightWindth+'px, 0px, 0px)  translateZ(0px)');
+						}else{
+							offCanvasWrapper.removeClass('mui-active');
+							setCss3(muiInnerWrap,'transform','translate3d(0px, 0px, 0px)  translateZ(0px)');
+						}
+					}else{
+						offCanvasSideRight.css('z-index',-1);
+						if(startPosition+distance>=5){
+							offCanvasWrapper.addClass('mui-active');
+							setCss3(muiInnerWrap,'transform','translate3d('+offCanvasSideWindth+'px, 0px, 0px)  translateZ(0px)');
+						}else{
+							offCanvasWrapper.removeClass('mui-active');
+							setCss3(muiInnerWrap,'transform','translate3d(0px, 0px, 0px)  translateZ(0px)');
+						}
+					}
+				}else {
+					muiInnerWrap.addClass('mui-transitioning');
+					if(startPosition<=30) startPosition = 0;else startPosition=offCanvasSideWindth;
+					setCss3(muiInnerWrap,'transform','translate3d('+startPosition+'px, 0px, 0px)  translateZ(0px)');
+				}
+			}
+		},
+		allowPageScroll:"vertical"
+	});
+	
+	$('.mui-bar .mui-action-menu').click(function(){
+		setCss3(muiInnerWrap,'transition-duration','250ms');
+		offCanvasWrapper.addClass('mui-active');
+		muiInnerWrap.addClass('mui-transitioning').css({'transform':'translate3d('+offCanvasSideWindth+'px, 0px, 0px)  translateZ(0px)'});
+	});
+	$('.mui-off-canvas-backdrop').click(function(){
+		setCss3(muiInnerWrap,'transition-duration','250ms');
+		offCanvasWrapper.removeClass('mui-active');
+		muiInnerWrap.addClass('mui-transitioning').css({'transform':'translate3d(0px, 0px, 0px)  translateZ(0px)'});
+	});
+});
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

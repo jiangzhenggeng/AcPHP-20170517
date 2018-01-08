@@ -1,0 +1,120 @@
+<tbody id="question-radio-box"></tbody>
+
+<tbody>
+	<tr id="add-option">
+		<th align="center"></th>
+		<td align="left">
+			<button onClick="addOptionSelect('#question-radio-box','.query-answer-select')" type="button" class="ac-btn ac-add add-option">增加选项</button>
+		</td>
+	</tr>
+</tbody>
+
+<tbody id="query-answer">
+	<tr>
+		<th align="center">答案</th>
+		<td align="center">
+			<section class="query-answer-select"></section>
+		</td>
+	</tr>
+	<tr>
+		<th align="center">解析</th>
+		<td align="center" style="white-space: inherit;">
+			<script name="question[analysis]" id="analysis"  placeholder="解析" type="text/plain" style="width:800px;height:200px;"></script>
+		</td>
+	</tr>
+</tbody>
+<script>
+crateueditor('analysis','simple');
+
+//修改选项函数
+function changOption(query){
+	var selecterBox = $('#question-radio-box'),
+	selecterAnswer = $('.query-answer-select');
+	var tr = selecterBox.find('tr');
+	
+	if(query=='delete'){
+		selecterAnswer.find('label').last().remove();
+	}else{
+		var optionTarget = String.fromCharCode('A'.charCodeAt()+tr.length-1);
+		selecterAnswer.append('<label><input name="question[answer][]" type="checkbox" value="'+optionTarget+'" />答案'+optionTarget+'</label>');
+	}
+	
+	tr.each(function(index, element) {
+		var optionTarget = String.fromCharCode('A'.charCodeAt()+index);
+		$(this).find('th').html('选项'+optionTarget);
+		$(this).find('textarea').attr({
+			'name':'question[option]['+optionTarget+']',
+			'placeholder':'试题选项'+optionTarget
+		});
+	});
+}
+
+//操作选项
+function deleteOptionSelect(seleter){
+	var trLen = $(seleter).parent().find('tr').length;
+	if(trLen<=1){
+		layer.alert('最少有一个选项', {icon: 2});
+		return;
+	}
+	var layerAlert = parent.layer.alert('你确定删除吗', {icon: 2},function(){
+		$(seleter).remove();
+		parent.layer.close(layerAlert);
+		changOption('delete');
+	});	
+};
+
+//点击添加按钮
+function addOptionSelect(selecterBox,selecterAnswer,answerData){
+	var radio_sub_answer = 'radio-sub-answer-'+randomID();
+	if(typeof answerData=='object'){
+		var optiontext = answerData.optiontext;
+	}else{
+		var optiontext = '';
+	}
+	
+	var option = '\
+		<tr data-option="option" id="'+radio_sub_answer+'">\
+			<th align="center">选项</th>\
+			<td align="center">\
+				<textarea class="ac-w-690">'+optiontext+'</textarea>\
+				<button onClick="deleteOptionSelect(\'#'+radio_sub_answer+'\')" type="button" class="ac-btn ac-sub ac-white delete-option">删除</button>\
+			</td>\
+		</tr>';
+	$(selecterBox).append(option);
+	changOption('add');
+}
+
+//填充答案
+var answerData = {$checked_answer};
+
+for(var i=0;i<answerData.length;i++){
+	addOptionSelect('#question-radio-box','.query-answer-select',answerData[i]);
+}
+var answer = "{$checked_analysis['answer']}";
+
+$('.query-answer-select').find('label').each(function(index, element) {
+	var _this_val = $(this).find('input').val().toUpperCase();
+	
+	for(var i = 0 ; i < answer.length ; i++ ){
+		if(_this_val==answer.charAt(i).toUpperCase()){
+			$(this).find('input').attr('checked',true);
+		}
+	}
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

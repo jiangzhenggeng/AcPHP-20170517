@@ -1,0 +1,75 @@
+{include file="common/header.html"}
+<div class="ac-main">	
+	<div class="ac-warp">
+		<div class="ac-content" id="ac-content">
+			<div class="ac-nav">
+				<a href="{U('admin/index/main')}">主页</a>
+				<span>&raquo;</span>
+				<a href="{U('lists')}">管理会计元素</a>
+				<span>&raquo;</span>
+				<a href="{U('edit',array('accelementsid'=>$accelementsid))}">修改会计元素</a>
+			</div>
+			<div class="ac-content-inner">
+				<div class="ac-table-view">
+					<div class="ac-table-card">
+						<ul>
+							<li><a href="{U('lists')}">管理会计元素</a></li>
+							<li class="on"><a href="{U('edit',array('accelementsid'=>$accelementsid))}">修改会计元素</a></li>
+						</ul>
+						<div class="ac-table-right-card">
+							<a class="btn ac-back">返回</a>
+						</div>
+					</div>
+					<div class="ac-table-search">
+						
+					</div>
+					<div class="ac-table-body">
+						<form action="{U('edit',array('query'=>'insert'))}" method="post">
+							<input type="hidden" name="query" value="insert" />
+							<input type="hidden" name="token" value="{$token}" />
+							<input type="hidden" name="accelementsid" value="{$accelementsid}" />
+							<table class="ac-table-basic ac-table-basic-query" cellpadding="8" cellspacing="0">
+								<tr>
+									<th align="center">名称</th>
+									<td align="center">
+										<input value="{$accelements['accelementsname']}" type="text" name="accelements[accelementsname]" id="accelementsname" placeholder="元素名称" />
+									</td>
+								</tr>
+								<tr>
+									<th align="center">父类</th>
+									<td align="center">
+										<select name="accelements[parentid]" id="parentid">
+											<option value="0">--顶级父类--</option>
+											{$accelements_tree}
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th align="center">编号</th>
+									<td align="center">
+										<input value="{$accelements['number']}" type="text" name="accelements[number]" id="number" placeholder="元素编号" />
+									</td>
+								</tr>
+								<tr>
+									<th align="center">描述</th>
+									<td align="center">
+										<textarea name="accelements[description]" id="description" placeholder="元素描述">{$accelements['description']}</textarea>
+									</td>
+								</tr>
+								<tr>
+									<th></th>
+									<td align="center">
+										<input type="submit" value=" 确定 " class="ac-btn" />
+										<input type="reset" value=" 重填 " class="ac-btn" />
+									</td>
+								</tr>
+							</table>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+{include file="common/footer.html"}

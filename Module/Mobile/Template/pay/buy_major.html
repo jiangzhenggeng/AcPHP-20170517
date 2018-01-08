@@ -1,0 +1,46 @@
+{include file="common/header.html"}
+<style>
+	.mui-bar {  position: relative;}
+	.mui-btn-block{    padding: 6px 12px;}
+</style>
+<header class="mui-bar mui-bar-nav">
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" href="javascrip:window.history.back()"></a>
+	<h1 class="mui-title">支付购买</h1>
+</header>
+
+<div class="ac-main">	
+	<div class="ac-warp">
+		<div class="ac-content" id="ac-content">
+			<div class="ac-content-inner ac-message">
+				<div class="ac-table-view">
+					<div class="ac-table-body">
+						<table cellspacing="0" cellpadding="0" width="100%" class="ac-table-basic pd10">
+							<thead>
+								<tr><td colspan="2" align="center">{$major['majorname']}</td></tr>
+							</thead>
+							<tbody>
+								{php $toal_price = 0;}
+								{loop $subject $k $v}
+								<tr>
+									<td>{$v['subjectname']}</td>
+									<td>￥{$v['price']}</td>
+									{php $toal_price += $v['price'];}
+								</tr>
+								{/loop}
+								<tr>
+									<td>合计</td>
+									<td>￥{@sc_retain_decimal($toal_price)}</td>
+								</tr>
+							</tbody>
+						</table>
+						<div class="mui-content-padded">
+							<a href="{U('pay',['majorid'=>$majorid])}"><button class="mui-btn mui-btn-block mui-btn-primary" type="button">支付</button></a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+{include file="common/footer.html"}

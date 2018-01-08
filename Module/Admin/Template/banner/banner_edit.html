@@ -1,0 +1,146 @@
+{include file="common/header.html"}
+<div class="ac-main">
+	<div class="ac-warp">
+		<div class="ac-content" id="ac-content">
+			<div class="ac-nav">
+				<a href="{U('admin/index/main')}">主页</a>
+				<span>&raquo;</span>
+				<a href="{U('lists')}">banner管理</a>
+				<span>&raquo;</span>
+				<a href="{U('add')}">添加banner</a>
+			</div>
+			<div class="ac-content-inner">
+				<div class="ac-table-view">
+					<div class="ac-table-card">
+						<ul>
+							<li><a href="{U('lists')}">banner管理</a></li>
+							<li><a href="{U('add')}">添加banner</a></li>
+							<li><a href="{U('recycle')}">banner回收站</a></li>
+							<li class="on"><a href="{U('edit',['bannerid'=>$bannerid])}">banner编辑</a></li>
+						</ul>
+						<div class="ac-table-right-card">
+							<a class="btn ac-back">返回</a>
+						</div>
+					</div>
+					<div class="ac-table-search">
+
+					</div>
+					<div class="ac-table-body">
+						<form action="{U('edit',array('query'=>'insert'))}" method="post">
+							<input type="hidden" name="query" value="insert" />
+							<input type="hidden" name="bannerid" value="{$bannerid}" />
+							<table class="ac-table-basic ac-table-basic-query" cellpadding="8" cellspacing="0">
+								<tr>
+									<th align="center">banner名称</th>
+									<td align="center">
+										<input type="text" name="banner[title]" value="{$banner['title']}" id="title" placeholder="banner名称" />
+									</td>
+								</tr>
+								<tr>
+									<th align="center">客户端</th>
+									<td align="center">
+										<select name="banner[client]" id="client">
+											<option value="1" {if $banner['client']==1}selected{/if}>APP</option>
+											<option value="2" {if $banner['client']==2}selected{/if}>移动端</option>
+											<option value="3" {if $banner['client']==3}selected{/if}>PC端</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th align="center">类型</th>
+									<td align="center">
+										<select name="banner[type]" id="type">
+											<option value="1" {if $banner['type']==1}selected{/if}>链接</option>
+											<option value="2" {if $banner['type']==2}selected{/if}>APP-LINK</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th align="center">LINK</th>
+									<td align="center">
+										<input type="text" name="banner[link]" value="{$banner['link']}" id="link" placeholder="链接值" />
+										<span class="tips">根据选择类型填写</span>
+									</td>
+								</tr>
+
+								<tr>
+									<th align="center">图片</th>
+									<td align="center">
+										<input type="text" name="banner[image]" value="{$banner['image']}" id="image" placeholder="banner图地址" />
+										<button type="button" class="ac-btn" onClick="uploadImage('image')">banner图地址</button>
+									</td>
+								</tr>
+
+								<tr>
+									<th align="center">开始时间</th>
+									<td align="center">
+										<input type="text" value="{php echo $banner['starttime']>0?date('Y-m-d H:i:s',$banner['starttime']):''}" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" name="banner[starttime]" id="starttime" class="laydate-icon" placeholder="开始显示时间" />
+									</td>
+								</tr>
+
+								<tr>
+									<th align="center">结束时间</th>
+									<td align="center">
+										<input type="text" value="{php echo $banner['endtime']>0?date('Y-m-d H:i:s',$banner['endtime']):''}" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" name="banner[endtime]" id="endtime" class="laydate-icon" placeholder="结束时间" />
+									</td>
+								</tr>
+
+								<tr>
+									<th align="center">描述</th>
+									<td align="center">
+										<textarea name="banner[description]" id="description" placeholder="banner描述">{$banner['description']}</textarea>
+									</td>
+								</tr>
+								<tr>
+									<th align="center">banner排序</th>
+									<td align="center">
+										<input type="text" name="banner[listorder]" value="{$banner['listorder']}" id="listorder" value="0" placeholder="banner名称" />
+									</td>
+								</tr>
+								<tr>
+									<th></th>
+									<td align="center">
+										<input type="submit" value=" 确定 " class="ac-btn" />
+										<input type="reset" value=" 重填 " class="ac-btn" />
+									</td>
+								</tr>
+							</table>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+{include file="common/ueditor.html"}
+<div id="upload_ue" style="display:none"></div>
+<script>
+	var _editor = UE.getEditor('upload_ue');
+	_editor.ready(function () {
+		//设置编辑器不可用
+		//_editor.setDisabled();  这个地方要注意 一定要屏蔽
+		//隐藏编辑器，因为不会用到这个编辑器实例，所以要隐藏
+		_editor.hide();
+		//侦听图片上传
+		_editor.addListener('beforeinsertimage', function (t, arg) {
+			//将地址赋值给相应的input,只去第一张图片的路径
+			var imgs;
+			for(var a in arg)imgs =arg[a].src;
+			$("#image").attr("value", imgs);
+			if( $("#image-box").length>0 ){
+				$("#image-box").attr("src", imgs);
+			}else{
+				$("#image").after('<img id="image-box" src="'+imgs+'" />');
+			}
+		})
+	});
+	//弹出图片上传的对话框
+	function uploadImage() {
+		var myImage = _editor.getDialog("insertimage");
+		myImage.open();
+	}
+</script>
+
+{include file="common/footer.html"}

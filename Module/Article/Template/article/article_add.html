@@ -1,0 +1,35 @@
+{include file="common/header.html"}
+<div class="ac-main">
+    <div class="ac-warp">
+        <div class="ac-content" id="ac-content">
+            <div class="ac-nav">
+                <a href="{U('admin/index/main')}">主页</a>
+                <span>&raquo;</span>
+                <a href="{U('lists')}">文章管理</a>
+            </div>
+            <div class="ac-content-inner">
+                <div class="ac-table-view">
+                    <div class="ac-table-card">
+                        <ul>
+                            <li ><a href="{U('lists')}">文章管理</a></li>
+                            <li class="on"><a href="{U('')}">添加文章</a></li>
+                        </ul>
+                        <div class="ac-table-right-card">
+                            <a class="btn ac-back">返回</a>
+                        </div>
+                    </div>
+                    <div class="ac-table-search">
+
+                    </div>
+                    <div class="ac-table-body">
+                        <form action="{U('add')}" method="post">
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{include file="common/footer.html"}

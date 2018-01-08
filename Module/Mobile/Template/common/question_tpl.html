@@ -1,0 +1,451 @@
+<!-- 加载试题模板 -->
+<script id="tpl_id_1" type="text/html">
+<div class="mui-content-padded">
+	<div class="mui-icon mui-icon-type-tags"><span><font><%=data.index%></font> / <%=data.total%></span><i><%=data.typename%></i></div>
+	<div class="m-question-body-box"><%=data.question%></div>
+</div>
+<ul class="mui-table-view m-odd-even" data-answer="<%=data.addition.answer%>">
+	<% var _data = data.addition.option; %>
+	<% for(var i in _data){ %>
+	<li class="mui-table-view-cell mui-radio mui-left">
+		<label class="no-padding" data-bind-lock-typeid="<%=data.typeid%>">
+			<input
+				onfocus="this.blur()"
+				<% if(data.addition.user_answer && !window['URL'].allowDo){ %>disabled<% } %>
+				<% if(_data[i].selected){ %>checked<% } %>
+				<% if(window['URL'].disabledAnser){ %>disabled<% } %>
+				value="<%=_data[i].optionname%>"
+				name="answer[<%=data.questionid%>-<%=data.typeid%>][<%=data.addition.uniqueid%>]"
+				type="radio">
+		<p><%=_data[i].optiontext%></p></label>
+	</li>
+	<% } %>
+</ul>
+</script>
+
+<script id="tpl_id_2" type="text/html">
+<div class="mui-content-padded">
+	<div class="mui-icon mui-icon-type-tags"><span><font><%=data.index%></font> / <%=data.total%></span><i><%=data.typename%></i></div>
+	<div class="m-question-body-box"><%=data.question%></div>
+</div>
+<% var ulid = 'answer_'+randomID(); %>
+<ul id="<%=ulid%>" class="mui-table-view m-odd-even" data-answer="<%=data.addition.answer%>">
+	<% var _data = data.addition.option; %>
+	<% for(var i in _data){ %>
+	<li class="mui-table-view-cell mui-checkbox mui-left">
+		<label class="no-padding">
+			<input onfocus="this.blur()"
+			<% if(data.addition.user_answer && !window['URL'].allowDo){ %>disabled<% } %>
+			<% if(_data[i].selected){ %>checked<% } %>
+			<% if(window['URL'].disabledAnser){ %>disabled<% } %>
+			value="<%=_data[i].optionname%>"
+			name="answer[<%=data.questionid%>-<%=data.typeid%>][<%=data.addition.uniqueid%>][]"
+			type="checkbox">
+		<p><%=_data[i].optiontext%></p></label>					
+	</li>
+	<% } %>
+</ul>
+<div class="confirm-answer">
+	<div onClick="lockChangeAnswer.this=this;lockChangeAnswer('#<%=ulid%>',2,true)" class="mui-btn mui-btn-primary">确认</div>
+</div>
+</script>
+
+
+<script id="tpl_id_3" type="text/html">
+<div class="mui-content-padded">
+	<div class="mui-icon mui-icon-type-tags"><span><font><%=data.index%></font> / <%=data.total%></span><i><%=data.typename%></i></div>
+	<div class="m-question-body-box"><%=data.question%></div>
+</div>
+<ul class="mui-table-view m-odd-even" data-answer="<%=data.addition.answer%>">
+	<li class="mui-table-view-cell mui-radio mui-left">
+		<label data-bind-lock-typeid="<%=data.typeid%>" class="no-padding">
+			<input onfocus="this.blur()"
+				<% if(window['URL'].disabledAnser){ %>disabled<% } %>
+				<% if(data.addition.user_answer && !window['URL'].allowDo){ %>disabled<% } %>
+				<% if(data.addition.user_answer==1){ %>checked<% } %>
+				name="answer[<%=data.questionid%>-<%=data.typeid%>][<%=data.addition.uniqueid%>]" value="1" type="radio">
+		<p>对</p></label>					
+	</li>
+	<li class="mui-table-view-cell mui-radio mui-left">
+		<label data-bind-lock-typeid="<%=data.typeid%>" class="no-padding">
+			<input onfocus="this.blur()"
+			<% if(data.addition.user_answer && !window['URL'].allowDo){ %>disabled<% } %>
+			<% if(data.addition.user_answer==2){ %>checked<% } %>
+			<% if(window['URL'].disabledAnser){ %>disabled<% } %> name="answer[<%=data.questionid%>-<%=data.typeid%>][<%=data.addition.uniqueid%>]" value="2" type="radio">
+		<p>错</p></label>					
+	</li>
+</ul>
+</script>
+
+
+
+<script id="tpl_id_4" type="text/html">
+<% if(window.URL['caseShowModel']==1){ %>
+<div class="m-body-height-fix">
+	<div class="mui-content-padded m-question-warp-multiple">
+		<div class="mui-icon mui-icon-type-tags"><span><font><%=data.index%></font> / <%=data.total%></span><i><%=data.typename%></i></div>
+		<div class="m-question-body-box"><%=data.question%></div>
+	</div>
+	<div class="m-question-warp-multiple-bar">答题区</div>
+	<div class="m-sub-question-warp-multiple">
+		<% var addition = data.addition; %>
+		<% for(var i in addition){ %>
+		<div class="sub-question-warp">
+			<div class="mui-content-padded">
+				<div class="mui-icon mui-icon-type-tags"><span><font><%=parseInt(i)+1%></font> / <%=data.addition.length%></span></div>
+				<div class="m-question-body-box"><%=addition[i].optiontext%></div>
+			</div>
+			<% var ulid = 'answer_'+randomID(); %>
+			<ul id="<%=ulid%>" class="mui-table-view m-odd-even" answer="<%=addition[i].answer%>">
+				<% var _data = addition[i].children; %>
+				<% for(var l in _data){ %>
+				<li class="mui-table-view-cell mui-checkbox mui-left">
+					<label class="no-padding">
+						<input onfocus="this.blur()"
+						<% if(addition[i].user_answer && !window['URL'].allowDo){ %>disabled<% } %>
+						<% if(_data[l].selected){ %>checked<% } %>
+						<% if(window['URL'].disabledAnser){ %>disabled<% } %> value="<%=_data[l].optionname%>" name="answer[<%=data.questionid%>-<%=data.typeid%>][<%=addition[i].uniqueid%>][]" type="checkbox">
+					<p><%=_data[l].optiontext%></p></label>					
+				</li>
+				<% } %>
+			</ul>
+			<div class="confirm-answer">
+				<div onClick="lockChangeAnswer.this=this;lockChangeAnswer('#<%=ulid%>',1,null,null,false)" class="mui-btn mui-btn-primary">确认</div>
+			</div>
+		</div>
+		<% } %>
+	</div>
+</div>
+<% }else if(window.URL['caseShowModel']==2){ %>
+
+<div class="mui-content-padded">
+	<div class="mui-icon mui-icon-type-tags"><span><font><%=data.index%></font> / <%=data.total%></span><i><%=data.typename%></i></div>
+	<div class="m-question-body-box"><%=data.question%></div>
+</div>
+<% var addition = data.addition; %>
+<% for(var i in addition){ %>
+<div class="mui-content-padded">
+	<div class="m-question-body-box"><%=addition[i].optiontext%></div>
+</div>
+<% var ulid = 'answer_'+randomID(); %>		
+<ul id="<%=ulid%>" class="mui-table-view m-odd-even" answer="<%=addition[i].answer%>">
+	<% var _data = addition[i].children; %>
+	<% for(var l in _data){ %>
+	<li class="mui-table-view-cell mui-checkbox mui-left">
+		<label class="no-padding">
+			<input onfocus="this.blur()"
+			<% if(addition[i].user_answer && !window['URL'].allowDo){ %>disabled<% } %>
+			<% if(_data[l].selected){ %>checked<% } %>
+			<% if(window['URL'].disabledAnser){ %>disabled<% } %>
+			value="<%=_data[l].optionname%>"
+			name="answer[<%=data.questionid%>-<%=data.typeid%>][<%=addition[i].uniqueid%>][]" type="checkbox">
+		<p><%=_data[l].optiontext%></p></label>					
+	</li>
+	<% } %>
+</ul>
+<% } %>
+
+<div class="confirm-answer">
+	<div onClick="lockChangeAnswer.this=this;lockChangeAnswer('#<%=ulid%>',1,true)" class="mui-btn mui-btn-primary">确认</div>
+</div>
+<% } %>
+</script>
+
+
+<script id="tpl_id_5" type="text/html">
+<div class="mui-content-padded">
+	<div class="mui-icon mui-icon-type-tags"><span><font><%=data.index%></font> / <%=data.total%></span><i><%=data.typename%></i></div>
+	<div class="m-question-body-box"><%=data.question%></div>
+</div>
+<% var ulid = 'answer_'+randomID(); %>	
+<div class="mui-content-padded">
+	<textarea <% if(window['URL'].disabledAnser){ %>disabled<% } %> name="answer[<%=data.questionid%>-<%=data.typeid%>][<%=data.questionid%>]" style="height:160px;" id="<%=ulid%>"></textarea>
+</div>
+<div class="confirm-answer">
+	<div onClick="lockChangeAnswer.this=this;$('#<%=ulid%>').prop('disabled',true)" class="mui-btn mui-btn-primary">确认</div>
+</div>
+</script>
+
+<script id="tpl_id_6" type="text/html">
+<div class="m-body-height-fix question-acc">
+	<div class="mui-content-padded m-question-warp-multiple">
+		<div class="mui-icon mui-icon-type-tags"><span><font><%=data.index%></font> / <%=data.total%></span><i><%=data.typename%></i></div>
+		<div class="m-question-body-box"><%=data.question%></div>
+	</div>
+	<div class="m-question-warp-multiple-bar">答题区</div>
+	<% var ulid = 'answer_'+randomID(); %>
+	<div id="<%=ulid%>" class="m-sub-question-warp-multiple">
+		<% var addition = data.addition.accounting; %>
+		<% for(var i in addition){ %>
+		<ul class="mui-table-view m-odd-even mui-input-group" data-index="第<%=parseInt(i)+1%>个分录">
+			<span data-index="2" data-prefix="answer[<%=data.questionid%>-<%=data.typeid%>][<%=addition[i].uniqueid%>]" class="ul-before-add-acc">+</span>
+			<% if(typeof addition[i].user_answer=='undefined'){ %>
+			<li class="mui-table-view-cell no-padding">
+				<select  onfocus="this.blur()" <% if(window['URL'].disabledAnser){ %>disabled<% } %> name="answer[<%=data.questionid%>-<%=data.typeid%>][<%=addition[i].uniqueid%>][0][a]" class="mui-btn m-acc-a">
+					<%@getAccelementsType()%>
+				</select>
+				<% var getAccelementsId = 'acc_'+randomID(); %>	
+				<select  onfocus="this.blur()"  <% if(window['URL'].disabledAnser){ %>disabled<% } %> id="<%=getAccelementsId%>" name="answer[<%=data.questionid%>-<%=data.typeid%>][<%=addition[i].uniqueid%>][0][b]" class="mui-btn m-acc-b">
+					<%@getAccelements('#'+getAccelementsId)%>
+				</select>
+				<input <% if(window['URL'].disabledAnser){ %>disabled<% } %> name="answer[<%=data.questionid%>-<%=data.typeid%>][<%=addition[i].uniqueid%>][0][c]" type="number" min="0" class="m-acc-c" placeholder="金额">
+			</li>
+			<li class="mui-table-view-cell no-padding">
+				<select  onfocus="this.blur()"  <% if(window['URL'].disabledAnser){ %>disabled<% } %> name="answer[<%=data.questionid%>-<%=data.typeid%>][<%=addition[i].uniqueid%>][1][a]" class="mui-btn m-acc-a">
+					<%@getAccelementsType()%>
+				</select>
+				<% var getAccelementsId = 'acc_'+randomID(); %>	
+				<select  onfocus="this.blur()"  <% if(window['URL'].disabledAnser){ %>disabled<% } %> id="<%=getAccelementsId%>" name="answer[<%=data.questionid%>-<%=data.typeid%>][<%=addition[i].uniqueid%>][1][b]" class="mui-btn m-acc-b">
+					<%@getAccelements('#'+getAccelementsId)%>
+				</select>
+				<input <% if(window['URL'].disabledAnser){ %>disabled<% } %> name="answer[<%=data.questionid%>-<%=data.typeid%>][<%=addition[i].uniqueid%>][1][c]" type="number" min="0" class="m-acc-c" placeholder="金额">
+			</li>
+			<% }else{ %>
+				<% for(var k in addition[i].user_answer){ %>
+				<% var _user_answer_show = addition[i].user_answer[k]; %>
+				<li class="mui-table-view-cell no-padding">
+					<select  onfocus="this.blur()"  <% if(!window['URL'].allowDo){ %>disabled<% } %> <% if(window['URL'].disabledAnser){ %>disabled<% } %> name="answer[<%=data.questionid%>-<%=data.typeid%>][<%=addition[i].uniqueid%>][<%=k%>][a]" class="mui-btn m-acc-a">
+					<%@getAccelementsType(_user_answer_show.a)%>
+					</select>
+					<% var getAccelementsId = 'acc_'+randomID(); %>
+					<select  onfocus="this.blur()"  <% if(!window['URL'].allowDo){ %>disabled<% } %>  <% if(window['URL'].disabledAnser){ %>disabled<% } %> id="<%=getAccelementsId%>" name="answer[<%=data.questionid%>-<%=data.typeid%>][<%=addition[i].uniqueid%>][<%=k%>][b]" class="mui-btn m-acc-b">
+					<%@getAccelements('#'+getAccelementsId,_user_answer_show.b)%>
+					</select>
+					<input <% if(!window['URL'].allowDo){ %>disabled<% } %> value="<%=_user_answer_show.c%>" <% if(window['URL'].disabledAnser){ %>disabled<% } %> name="answer[<%=data.questionid%>-<%=data.typeid%>][<%=addition[i].uniqueid%>][<%=k%>][c]" type="number" min="0" class="m-acc-c" placeholder="金额">
+				</li>
+				<% } %>
+			<% } %>
+		</ul>
+		<% } %>
+		<div class="confirm-answer">
+			<div onClick="lockChangeAnswerBlank('#<%=ulid%>',this)" class="mui-btn mui-btn-primary">确认</div>
+		</div>
+	</div>
+</div>
+</script>
+
+<script id="tpl_id_6_1" type="text/html">
+<li class="mui-table-view-cell no-padding">
+	<select  onfocus="this.blur()"  <% if(window['URL'].disabledAnser){ %>disabled<% } %> name="<%=data%>[a]" class="mui-btn m-acc-a">
+		<%@getAccelementsType()%>
+	</select>
+	<% var getAccelementsId = 'acc_'+randomID(); %>
+	<select  onfocus="this.blur()"  <% if(window['URL'].disabledAnser){ %>disabled<% } %> id="<%=getAccelementsId%>" name="<%=data%>[b]" class="mui-btn m-acc-b">
+		<%@getAccelements('#'+getAccelementsId)%>
+	</select>
+	<input <% if(window['URL'].disabledAnser){ %>disabled<% } %> name="<%=data%>[c]" type="number" min="0" class="m-acc-c" placeholder="金额">
+	<button type="button" class="mui-btn ul-before-sub-acc">-</button>
+</li>
+</script>
+
+
+<script id="tpl_id_7" type="text/html">
+<div class="m-body-height-fix question-blank">
+	<div class="mui-content-padded m-question-warp-multiple">
+		<div class="mui-icon mui-icon-type-tags"><span><font><%=data.index%></font> / <%=data.total%></span><i><%=data.typename%></i></div>
+		<div class="m-question-body-box"><%=data.question%></div>
+	</div>
+	<div class="m-question-warp-multiple-bar">答题区</div>
+	<div class="m-sub-question-warp-multiple">
+		<% var ulid = 'answer_'+randomID(); %>
+		<ul id="<%=ulid%>" class="mui-table-view m-odd-even mui-input-group">
+			<% var addition = data.addition.answer; %>
+			<% for(var i in addition){ %>
+			<li class="mui-table-view-cell no-padding">
+				<div class="mui-input-row">
+					<label>填空<%=parseInt(i)+1%>：</label>
+					<input
+							<% if(addition[i].user_answer){ %>
+								value="<%=addition[i].user_answer%>"
+							<% } %>
+							<% if(addition[i].selected  && !window['URL'].allowDo){ %>disabled<% } %>
+							<% if(window['URL'].disabledAnser){ %>disabled<% } %>
+							name="answer[<%=data.questionid%>-<%=data.typeid%>][<%=addition[i].uniqueid%>]" type="number" min="0" class="mui-input-clear"><span class="mui-icon mui-icon-clear mui-hidden"></span>
+				</div>					
+			</li>
+			<% } %>
+		</ul>
+		<div class="confirm-answer">
+			<div onClick="lockChangeAnswerBlank('#<%=ulid%>',this)" class="mui-btn mui-btn-primary">确认</div>
+		</div>
+	</div>
+</div>
+</script>
+
+<!-- 评论模板 -->
+<script id="tpl_id_comment" type="text/html">
+<% if(data.page==1){ %>
+	<div class="m-comment-box">
+		<ul class="ts-link mui-bar-tab">
+			<li class="mui-tab-item"><a href="javascript:;">参考答案</a></li>
+			<li class="mui-tab-item"><a href="javascript:;">学员评论</a></li>
+			<li class="mui-tab-item"><a href="javascript:;">疑问</a></li>
+		</ul>
+	</div>
+<% } %>
+
+<% if(data.data.length>0){ %>
+	<% if(data.page==1){ %>
+	<div class="m-comment-box">
+		<ul class="mui-table-view m-odd-even mui-input-group">
+	<% } %>
+		<% for(var i in data.data){ %>
+		<li class="mui-table-view-cell no-padding">
+			<div class="mui-content-padded">
+				<div class="m-member-face"><img src="<%=data.data[i].facepicture%>" /></div>
+				<div class="m-comment-content-box">
+					<div class="m-member-name">
+						<div class="m-name-time mui-pull-left">
+							<p class="m-name"><%=data.data[i].nickname%></p>
+							<p class="m-time"><%=data.data[i].addtime%></p>
+						</div>
+						<div class="m-member-query mui-pull-right">
+							<span class="m-likezan mui-icon mui-icon-likezan" onClick="commentLikezan(<%=data.data[i].commentid%>,this)"><%=data.data[i].likezan%></span>
+							<span class="m-replay mui-icon mui-icon-replay" onClick="commentReplay(<%=data.data[i].commentid%>,this)"><%=data.data[i].replay%></span>
+						</div>
+					</div>
+					<div class="m-comment-content-text">
+						<%=data.data[i].description%>
+					</div>
+				</div>
+			</div>				
+		</li>
+	<% } %>
+	<% if(data.page==1){ %></ul></div><% } %>
+<% } %>
+</script>
+
+<!-- 答案模板 -->
+<script id="tpl_id_answer" type="text/html">
+<div class="m-answer-warp">
+	<% if(data.typeid==7 || data.typeid==6){ %>
+		<div class="mui-content-padded">
+			<div class="m-select-analysis-header"><span>参考答案</span></div>
+			<div class="m-select-analysis-body">
+				<% if(data.typeid==7){ %>
+					<section>
+						<% var answer = data.addition.answer; %>
+						<% for(var l in answer ){ %>
+							<label><%=(parseInt(l)+1)%>、<%=answer[l].answer%>；</label>
+						<% } %>
+					</section>
+				<% }else if(data.typeid==6){ %>
+					<section>
+						<% var accounting = data.addition.accounting; %>
+						<% for(var l in accounting ){ %>
+							<% var answer = accounting[l].answer; %>
+							<div><%=(parseInt(l)+1)%>、
+								<% for(var i in answer ){ %>
+									<div>
+										<span><%=(answer[i].a==1)?'借':'&nbsp;&nbsp;贷'%>&nbsp;</span>
+										<span><%=answer[i].accelementsname%>&nbsp;</span>
+										<span><%=answer[i].c%>；</span>
+									</div>
+								<% } %>
+							</div>
+						<% } %>
+					</section>
+				<% } %>
+			</div>
+		</div>
+	<% }else { %>
+		<div class="mui-content-padded m-select-answer-show-warp">
+			<div class="m-select-answer-warp m-select-answer-true-warp">
+				<span class="m-label">参考答案</span>
+				<span class="m-select-answer-value system-answer">
+					<% if(data.typeid==4){ %>
+						<%=data.addition[0].answer.toString().toUpperCase()%>
+					<% }else if(data.typeid==6){ %>
+
+					<% }else if(data.typeid==3){ %>
+						<% if(data.addition.answer==1){ %>对<% } %>
+						<% if(data.addition.answer==2){ %>错<% } %>
+					<% }else { %>
+						<%=data.addition.answer.toString().toUpperCase()%>
+					<% } %>
+				</span>
+			</div>
+			<div class="m-select-answer-warp m-select-answer-my-warp">
+				<span class="m-label">我的答案</span>
+				<span class="m-select-answer-value member-answer">
+					<% if(data.typeid==4 && data.addition[0].user_answer!=null){ %>
+						<% if(data.addition[0].user_answer.toString().toUpperCase()==data.addition[0].answer.toString().toUpperCase()){ %>
+							<font color="green"><%=data.addition[0].user_answer.toString().toUpperCase()%></font>
+						<% }else { %>
+							<font color="red"><%=data.addition[0].user_answer.toString().toUpperCase()%></font>
+						<% } %>
+					<% }else if(data.typeid==6){ %>
+
+					<% }else if(data.typeid==3 && data.addition.user_answer!=null){ %>
+						<% if(data.addition.user_answer==1){ %><font color="<% if(data.addition.user_answer==data.addition.answer){ %>green<% }else{ %>red<% } %>">对</font><% } %>
+						<% if(data.addition.user_answer==2){ %><font color="<% if(data.addition.user_answer==data.addition.answer){ %>green<% }else{ %>red<% } %>">错</font><% } %>
+					<% }else if( data.addition.user_answer!=null){ %>
+						<% if(data.addition.user_answer.toString().toUpperCase()==data.addition.answer.toString().toUpperCase()){ %>
+							<font color="green"><%=data.addition.user_answer.toString().toUpperCase()%></font>
+						<% }else { %>
+							<font color="red"><%=data.addition.user_answer.toString().toUpperCase()%></font>
+						<% } %>
+					<% } %>
+				</span>
+			</div>
+		</div>
+	<% } %>
+	<div class="mui-content-padded m-select-analysis-warp">
+		<div class="m-select-analysis-header">
+			<span>答案分析</span>
+			<div class="m-nandu mui-pull-right">
+				<span>难度</span>
+				<div class="m-xing">
+					<span class="m-xing-1"></span>
+					<span class="m-xing-2" style="width:<%=(data.difficulty*20)%>%"></span>
+				</div>
+			</div>
+		</div>
+		<div class="m-select-analysis-body">
+			<section>
+				<% if(data.typeid==4){ %>
+					<%=data.addition[0].analysis.toString().toUpperCase()%>
+				<% }else { %>
+					<%=data.addition.analysis.toString().toUpperCase()%>
+				<% } %>
+			</section>
+		</div>
+	</div>
+</div>
+</script>
+
+<!-- 提交做题结果报告模板 -->
+<script id="question_result_tpl" type="text/html">
+<div class="m-question-result-show-box">
+<ul>
+	<% for(var i in data){ %>
+	<li>
+		<span><%=data[i].typename%></span>
+		<span>对：<font color="green"><%=data[i].truenumber%></font></span>
+		<span>错：<font color="#fe5341"><%=data[i].falsenumber%></font></span>
+	</li>
+	<% } %>
+</ul>
+</div>
+</script>
+
+<!-- 弹窗列表科目 -->
+<script type="text/html" id="subject_list_open_tpl">
+	<div class="m-question-result-show-box">
+		<ul>
+			<% for(var i in data){ %>
+			<li>
+				<i><%=(parseInt(i)+1)%>、</i>
+				<a href="<%=data[i].url%>"><%=data[i].subjectname%></a>
+			</li>
+			<% } %>
+		</ul>
+	</div>
+</script>
+
+
+
+
+
+
+

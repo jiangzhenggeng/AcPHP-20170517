@@ -1,0 +1,147 @@
+{include file="common/header.html"}
+<style>
+.button{
+	background: #E8E8E8;
+	border: 1px solid #D6D6D6;
+	padding: 5px 8px;
+	border-radius: 3px;
+}
+</style>
+<div class="ac-main">
+	<div class="ac-warp">
+		<div class="ac-content" id="ac-content">
+			<div class="ac-nav"> <a href="{U('admin/index/main')}">主页</a> <span>&raquo;</span> <a href="{U('setting')}">系统配置</a> </div>
+			<div class="ac-content-inner">
+				<div class="ac-table-view">
+					<div class="ac-table-card">
+						<ul>
+							<li class="on"><a href="{U('setting')}">系统配置</a></li>
+						</ul>
+						<div class="ac-table-right-card"> <a class="btn ac-back">返回</a> </div>
+					</div>
+					<div class="ac-table-search"> </div>
+					<div class="ac-table-body">
+						<form action="{U('uploadconfig',['query'=>'insert'])}" method="post">
+							<input type="hidden" name="query" value="insert" />
+							<input type="hidden" name="token" value="{$token}" />
+							<input type="hidden" name="cfgid" value="{$cfgid}" />
+							<table class="ac-table-basic ac-table-basic-query" cellpadding="8" cellspacing="0">
+								<tr>
+									<th align="center">允许上传附件大小</th>
+									<td align="center"><input type="text" name="upload[upload_maxsize]" value="{if isset($upload['upload_maxsize'])}{$upload['upload_maxsize']}{/if}" id="maxsize" placeholder="允许上传附件大小" /></td>
+								</tr>
+								<tr>
+									<th align="center">允许上传附件类型</th>
+									<td><input name="upload[upload_allowext]" id="port" value="{if isset($upload['upload_allowext'])}{$upload['upload_allowext']}{/if}" type="text" placeholder="允许上传附件类型"></td>
+								</tr>
+								<tr>
+									<th align="center">GD库功能检测</th>
+									<td>
+									{if function_exists('gd_info')}
+										<font color="green">支持</font>
+									{else}
+										<font color="red">未开启</font>
+									{/if}
+									</td>
+								</tr>
+								<tr>
+									<th align="center">是否开启图片水印</th>
+									<td><label>
+											<input type="radio" name="upload[watermark_enable]" id="watermark_enable" value="1" {if isset($upload['watermark_enable']) && $upload['watermark_enable']==1}checked{/if}>
+											启用</label>
+										<label>
+											<input type="radio" name="upload[watermark_enable]" id="watermark_enable" value="0" {if isset($upload['watermark_enable']) && $upload['watermark_enable']==0}checked{/if}>
+											关闭</label></td>
+								</tr>
+								<tr>
+									<th align="center">水印添加条件</th>
+									<td> 宽：
+										<input name="upload[watermark_minwidth]" id="text" value="{if isset($upload['watermark_minwidth'])}{$upload['watermark_minwidth']}{/if}" type="text" class="w-60">
+										px
+										高：
+										<input name="upload[watermark_minheight]" id="text" value="{if isset($upload['watermark_minheight'])}{$upload['watermark_minheight']}{/if}" type="text" class="w-60">
+										px </td>
+								</tr>
+								<tr>
+									<th align="center">水印图片</th>
+									<td><input name="upload[watermark_img]" id="replayto" value="{if isset($upload['watermark_img'])}{$upload['watermark_img']}{/if}" type="text" placeholder="水印图片"></td>
+								</tr>
+								<tr>
+									<th align="center">水印透明度</th>
+									<td><input name="upload[watermark_pct]" id="watermark_pct" value="{if isset($upload['watermark_pct'])}{$upload['watermark_pct']}{/if}" type="text" placeholder="水印透明度" class="w-60"></td>
+								</tr>
+								<tr>
+									<th align="center">JPEG水印质量</th>
+									<td><input name="upload[watermark_quality]" id="watermark_quality" value="{if isset($upload['watermark_quality'])}{$upload['watermark_quality']}{/if}" type="text" placeholder="JPEG水印质量" class="w-60"></td>
+								</tr>
+								<tr>
+									<th align="left">水印位置</th>
+									<td>
+										<table style="width:520px; margin:0" class="ac-table-basic ac-table-basic-query" cellpadding="0" cellspacing="0">
+											<tr>
+												<td rowspan="3">
+													<input class="radio_style" name="setting[watermark_pos]" value="0" type="radio" {if isset($upload['watermark_pos'])==0}checked{/if}>
+													随机位置
+												</td>
+												<td><input class="radio_style" name="setting[watermark_pos]" value="1" type="radio" {if isset($upload['watermark_pos'])==1}checked{/if}>
+													顶部居左</td>
+												<td><input class="radio_style" name="setting[watermark_pos]" value="2" type="radio" {if isset($upload['watermark_pos'])==2}checked{/if}>
+													顶部居中</td>
+												<td><input class="radio_style" name="setting[watermark_pos]" value="3" type="radio" {if isset($upload['watermark_pos'])==3}checked{/if}>
+													顶部居右</td>
+											</tr>
+											<tr>
+												<td><input class="radio_style" name="setting[watermark_pos]" value="4" type="radio" {if isset($upload['watermark_pos'])==4}checked{/if}>
+													中部居中</td>
+												<td><input class="radio_style" name="setting[watermark_pos]" value="5" type="radio" {if isset($upload['watermark_pos'])==5}checked{/if}>
+													中部居左</td>
+												<td><input class="radio_style" name="setting[watermark_pos]" value="6" type="radio" {if isset($upload['watermark_pos'])==6}checked{/if}>
+													中部居右</td>
+											</tr>
+											<tr>
+												<td><input class="radio_style" name="setting[watermark_pos]" value="7" type="radio" {if isset($upload['watermark_pos'])==7}checked{/if}>
+													底部居左</td>
+												<td><input class="radio_style" name="setting[watermark_pos]" value="8" type="radio" {if isset($upload['watermark_pos'])==8}checked{/if}>
+													底部居中</td>
+												<td><input class="radio_style" name="setting[watermark_pos]" value="9" type="radio" {if isset($upload['watermark_pos'])==9}checked{/if}>
+													底部居右</td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+								<tr>
+									<th></th>
+									<td align="center"><input type="submit" value=" 确定 " class="ac-btn" />
+										<input type="reset" value=" 重填 " class="ac-btn" /></td>
+								</tr>
+							</table>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+$('#testupload').click(function(){
+	var layerHander = layer.msg('邮件发送中...', {icon:16,time: 1000*1000});
+	$.ajax({
+		url:'{U()}',
+		data:{
+			query:'test',
+			testmail:$('#test').val()
+		},
+		dataType:'json',
+		success: function(data){
+			layer.msg(data.message, {icon:1,time: 2*1000})
+		},
+		complete: function(xhr,status){
+			layer.close(layerHander);
+			if(status=='error'){
+				layer.msg('邮件发送失败', {icon:2,time: 2*1000});
+			}
+		}
+	});
+});
+</script> 
+{include file="common/footer.html"}

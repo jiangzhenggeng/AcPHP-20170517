@@ -1,0 +1,143 @@
+{include file="common/header.html"}
+<div class="ac-main">	
+	<div class="ac-warp">
+		<div class="ac-content" id="ac-content">
+			<div class="ac-nav">
+				<a href="{U('admin/index/main')}">主页</a>
+				<span>&raquo;</span>
+				<a href="{U('lists')}">科目管理</a>
+				<span>&raquo;</span>
+				<a href="{U('add')}">添加科目</a>
+			</div>
+			<div class="ac-content-inner">
+				<div class="ac-table-view">
+					<div class="ac-table-card">
+						<ul>
+							<li><a href="{U('lists')}">科目管理</a></li>
+							<li><a href="{U('add')}">添加科目</a></li>
+							<li class="on"><a href="{U('edit',array('subjectid'=>$subject['subjectid']))}">添加科目</a></li>
+						</ul>
+						<div class="ac-table-right-card">
+							<a class="btn ac-back">返回</a>
+						</div>
+					</div>
+					<div class="ac-table-search">
+						
+					</div>
+					<div class="ac-table-body">
+						<form action="{U('edit',array('query'=>'insert','subjectid'=>$subject['subjectid']))}" method="post">
+							<input type="hidden" name="query" value="insert" />
+							<input type="hidden" name="token" value="{$token}" />
+							<input type="hidden" name="subjectid" value="{$subject['subjectid']}" />
+							<table class="ac-table-basic ac-table-basic-query" cellpadding="8" cellspacing="0">
+								<tr>
+									<th align="center">科目名称</th>
+									<td align="center">
+										<input type="text" name="subject[subjectname]" value="{$subject['subjectname']}" id="subjectname" placeholder="科目名称" />
+									</td>
+								</tr>
+								<tr>
+									<th align="center">简写名称</th>
+									<td align="center">
+										<input type="text" name="subject[shortname]" value="{$subject['shortname']}" id="shortname" placeholder="简短名称" />
+									</td>
+								</tr>
+								<tr>
+									<th align="center">所属专业</th>
+									<td align="center">
+										<select name="subject[majorid]" id="majorid">
+											<option value="0">---选择所属专业---</option>
+											{loop $major $k $v}
+											<option value="{$v['majorid']}" {if $subject['majorid']==$v['majorid']}selected{/if}>{$v['majorname']}</option>
+											{/loop}
+										</select>
+									</td>
+								</tr>
+
+								<tr>
+									<th align="center">科目售价</th>
+									<td align="center">
+										<input type="text" value="{$subject['price']}" name="subject[price]" id="price" placeholder="科目售价" />
+									</td>
+								</tr>
+
+								<style>
+								#image-box{height: 40px;vertical-align: middle;margin: 0 10px;}
+								</style>
+								<tr>
+									<th align="center">封面图</th>
+									<td align="center">
+										<input type="text" name="subject[image]" id="image" value="{$subject['image']}" placeholder="封面图地址" />
+										{if $subject['image']}
+										<img id="image-box" src="{$subject['image']}" />
+										{/if}
+										<button type="button" class="ac-btn" onClick="uploadImage('image')">封面图</button>
+									</td>
+								</tr>
+
+								<tr>
+									<th align="center">APP显示图标</th>
+									<td align="center">
+										<input type="text" name="subject[icon]" id="icon" value="{$subject['icon']}" placeholder="APP显示图标" />
+									</td>
+								</tr>
+
+								<tr>
+									<th align="center">科目描述</th>
+									<td align="center">
+										<textarea name="subject[description]" id="description" placeholder="科目描述">{$subject['description']}</textarea>
+									</td>
+								</tr>
+								<tr>
+									<th align="center">科目排序</th>
+									<td align="center">
+										<input type="text" name="subject[listorder]" id="listorder" value="{$subject['listorder']}" placeholder="科目排序" />
+									</td>
+								</tr>
+								<tr>
+									<th></th>
+									<td align="center">
+										<input type="submit" value=" 确定 " class="ac-btn" />
+										<input type="reset" value=" 重填 " class="ac-btn" />
+									</td>
+								</tr>
+							</table>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+
+
+{include file="common/ueditor.html"}
+<div id="upload_ue" style="display:none"></div>
+<script>
+var _editor = UE.getEditor('upload_ue');
+_editor.ready(function () {
+	 //设置编辑器不可用
+	//_editor.setDisabled();  这个地方要注意 一定要屏蔽
+	//隐藏编辑器，因为不会用到这个编辑器实例，所以要隐藏
+	_editor.hide();
+	//侦听图片上传
+	_editor.addListener('beforeinsertimage', function (t, arg) {
+		//将地址赋值给相应的input,只去第一张图片的路径
+		var imgs;
+		for(var a in arg)imgs =arg[a].src;
+		$("#image").attr("value", imgs);
+		if( $("#image-box").length>0 ){
+			$("#image-box").attr("src", imgs);
+		}else{
+			$("#image").after('<img id="image-box" src="'+imgs+'" />');
+		}
+	})
+ });
+//弹出图片上传的对话框
+function uploadImage() {
+	 var myImage = _editor.getDialog("insertimage");
+	 myImage.open();
+}
+</script>
+{include file="common/footer.html"}

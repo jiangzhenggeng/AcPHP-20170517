@@ -1,0 +1,89 @@
+{include file="common/header.html"}
+<script type="text/javascript" src="{__ADMIN_RES_PATH__}js/Colorpicker/colorpicker.js"></script>
+<style>
+#title_colorpanel input{
+	width: auto;
+    height: auto;
+}
+#title_colorpanel td{
+	padding:0;
+}
+</style>
+<div class="ac-main">	
+	<div class="ac-warp">
+		<div class="ac-content" id="ac-content">
+			<div class="ac-nav">
+				<a href="{U('exam_area/index/main')}">主页</a>
+				<span>&raquo;</span>
+				<a href="{U('lists')}">考区管理</a>
+				<span>&raquo;</span>
+				<a href="{U('add')}">添加考区</a>
+			</div>
+			<div class="ac-content-inner">
+				<div class="ac-table-view">
+					<div class="ac-table-card">
+						<ul>
+							<li><a href="{U('lists')}">考区管理</a></li>
+							<li class="on"><a href="{U('add')}">添加考区</a></li>
+						</ul>
+						<div class="ac-table-right-card">
+							<a class="btn ac-back">返回</a>
+						</div>
+					</div>
+					<div class="ac-table-search">
+						
+					</div>
+					<div class="ac-table-body">
+						<form action="{U('add',array('query'=>'insert'))}" method="post">
+							<input type="hidden" name="query" value="insert" />
+							<input type="hidden" name="token" value="{$token}" />
+							<table class="ac-table-basic ac-table-basic-query" cellpadding="8" cellspacing="0">
+								<tr>
+									<th align="center">考区</th>
+									<td align="center">
+										<input type="text" name="exam_area[areaname]" id="title" placeholder="考区名称" />
+										<input type="hidden" name="exam_area[style_color]" id="style_color" value="">
+										<input type="hidden" name="exam_area[style_font_weight]" id="style_font_weight" value="">
+										<img src="{__ADMIN_RES_PATH__}js/Colorpicker/colour.png" width="15" height="16" onclick="colorpicker('title_colorpanel','set_title_color');" style="position: relative;cursor:pointer; top:3px;"/>
+										<img src="{__ADMIN_RES_PATH__}js/Colorpicker/bold.png" width="10" height="10" onclick="input_font_bold()" style="cursor:pointer"/>
+										<span id="title_colorpanel" style="position:absolute; z-index:200" class="colorpanel"></span>
+										<script>
+										function input_font_bold(){
+											if( $('#style_font_weight').val()=='' ){
+												$('#style_font_weight').val('font-weight:bold');
+												$('#title').css('font-weight','bold');
+											}else{
+												$('#style_font_weight').val('');
+												$('#title').css('font-weight','100');
+											}
+										}
+										function set_title_color(color) {
+											$('#title').css('color',color);
+											$('#style_color').val('color:'+color);
+										}
+										</script>
+									</td>
+								</tr>
+								<tr>
+									<th align="center">简单描述</th>
+									<td align="center">
+										<textarea name="exam_area[description]" id="description" placeholder="简单描述"></textarea>
+									</td>
+								</tr>
+								<tr>
+									<th></th>
+									<td align="center">
+										<input type="submit" value=" 确定 " class="ac-btn" />
+										<input type="reset" value=" 重填 " class="ac-btn" />
+									</td>
+								</tr>
+							</table>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+{include file="common/footer.html"}

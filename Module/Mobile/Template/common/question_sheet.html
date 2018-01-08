@@ -1,0 +1,31 @@
+<div class="m-answer-sheet">
+    <div class="mui-content">
+        <div class="mui-content-padded">
+            <div class="m-content-title">
+                {if $sheetNoSubmit}
+                <div class="m-hand-paper mui-pull-left" onClick="automaticScoring('#questionForm')">交卷</div>
+                <div class="m-hand-paper mui-pull-left" onClick="automaticScoring('#questionForm',{'auto_save':true})" style="margin-left: 10px;background: green">保存答案</div>
+                {/if}
+                <div class="m-hand-title">答题卡</div>
+                <div class="m-hand-close mui-pull-right mui-icon mui-icon-closeempty" onClick="closeSheet()"></div>
+            </div>
+
+            <div class="mui-content-inner">
+                {loop $question $k $v}
+                {php $condition = !isset($question[$k-1]) || $question[$k-1]['typeid'] != $v['typeid'];}
+                {if $condition}
+                <div class="m-answer-sheet-row">
+                    <div class="m-answer-sheet-title">{@getQuestionTypeName($v['typeid'])}</div>
+                    <div class="m-answer-sheet-list">
+                        <ul>{/if}
+                            <li class="{if isset($user_answer[$v['questionid']])}hasdone{/if}"><a onClick="positionIndex({@$k+1})">{@$k+1}</a></li>
+                            {if !isset($question[$k+1]) || $question[$k+1]['typeid'] != $v['typeid']}
+                        </ul>
+                    </div>
+                </div>
+                {/if}
+                {/loop}
+            </div>
+        </div>
+    </div>
+</div>

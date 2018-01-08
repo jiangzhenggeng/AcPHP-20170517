@@ -1,0 +1,35 @@
+{include file="common/header.html"}
+
+<header class="mui-bar mui-bar-nav">
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" href="{@U('Exam/examInit',['majorid'=>$majorid])}"></a>
+	<h1 class="mui-title m-a-left">在线做题</h1>
+	<div class="mui-pull-right">
+		<a href="{U('login/init')}" class="mui-icon mui-icon-nighttime mui-pull-left"></a>
+		<a href="{U('login/init')}" class="mui-icon mui-icon-share mui-pull-left"></a>
+	</div>
+</header>
+<div class="mui-content" id="mui-content">
+	<div class="line-practice">
+		<div class="title">在线考试</div>
+			<ul class="mui-table-view chapter-list-ul" style="margin-top:10px;">
+				{loop $synthesis_subject $k $v}
+				<li class="mui-table-view-cell mui-media">
+					<a href="javascript:;">
+						<div class="mui-media-body">
+							【{$v['subjectname']}】{$synthesis_paper['papername']}
+							<p class="mui-ellipsis">{$v['description']}</p>
+						</div>
+					</a>
+				</li>
+				{/loop}
+			</ul>
+			<div class="mui-content-padded mui-text-center">
+				<button type="button" class="mui-btn mui-btn-primary mui-icon mui-icon-compose mui-right">
+					<a href="{U('exam/getQuestionList',array('synid'=>$v['synid'],'majorid'=>$majorid))}">开始做题 </a>
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+{include file="common/footer.html"}

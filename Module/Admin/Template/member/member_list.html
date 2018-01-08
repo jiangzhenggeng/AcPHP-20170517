@@ -1,0 +1,69 @@
+{include file="common/header.html"}
+<div class="ac-main">	
+	<div class="ac-warp">
+		<div class="ac-content" id="ac-content">
+			<div class="ac-nav">
+				<a href="{U('admin/index/main')}">主页</a>
+				<span>&raquo;</span>
+				<a href="{U('lists')}">会员管理</a>
+			</div>
+			<div class="ac-content-inner">
+				<div class="ac-table-view">
+					<div class="ac-table-card">
+						<ul>
+							<li class="on"><a href="{U('lists')}">会员管理</a></li>
+							<li><a href="{U('add')}">添加会员</a></li>
+						</ul>
+						<div class="ac-table-right-card">
+							<a class="btn ac-back">返回</a>
+						</div>
+					</div>
+					<div class="ac-table-search">
+						
+					</div>
+					<div class="ac-table-body">
+						<form action="{U('listorder')}" method="post">
+							<table class="ac-table-basic" cellpadding="8" cellspacing="0">
+								<tr>
+									<th width="15" align="center"><input type="checkbox" id="chkall" onclick="selectcheckbox(this.form)" value="check"></th>
+									<th width="40" align="center">编号</th>
+									<th width="150" align="center">昵称</th>
+									<th width="100" align="center">手机号码</th>
+									<th width="150" align="center">Email</th>
+									<th width="80" align="center">会员组</th>
+									<th width="150" align="center">注册时间</th>
+									<th width="40" align="center">性别</th>
+									<th width="200" align="center">操作</th>
+								</tr>
+								{loop $member $k $v}
+								<tr>
+									<td align="center"><input type="checkbox" name="checkbox[]" value="{$v['group_id']}"></td>
+									<td align="center">{$v['memberid']}</td>
+									<td align="center">{$v['nickname']}</td>
+									<td align="center">{$v['mobile']}</td>
+									<td align="center">{$v['email']}</td>
+									<td align="center">{$v['group_name']}</td>
+									<td align="center">{date('Y-m-d H:i:s',$v['registertime'])}</td>
+									<td align="center">{if $v['sex']==0}女{elseif $v['sex']==1}男{else}未知{/if}</td>
+									<td align="center">
+										<a href="{U('detail',array('memberid'=>$v['memberid']))}">详细</a> |
+										<a href="{U('order',array('memberid'=>$v['memberid']))}">订单</a> |
+										<a href="{U('edit',array('memberid'=>$v['memberid']))}">编辑</a> |
+										<a href="{U('delete',array('memberid'=>$v['memberid']))}" data-delete>删除</a>
+									</td>
+								</tr>
+								{/loop}
+							</table>
+							<div class="ac-btn-group">
+								<input type="submit" value=" 排序 " class="ac-btn" />
+								<div class="ac-page">{$page}</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+{include file="common/footer.html"}

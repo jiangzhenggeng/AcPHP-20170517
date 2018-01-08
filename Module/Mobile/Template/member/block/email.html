@@ -1,0 +1,55 @@
+{include file="login/header.html"}
+<style>
+	.mui-content-padded {
+		margin-top:0;
+	}
+</style>
+<header class="mui-bar mui-bar-nav">
+	<a href="{U('baseinfo')}" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+	<h1 class="mui-title">完善个人邮箱</h1>
+</header>
+<div class="mui-content">
+	<div class="mui-card">
+		<form id="form-data" class="mui-input-group">
+			<div class="mui-input-row">
+				<input id="email" name="email" type="text" value="{$member['email']}" class="mui-input-clear mui-input mui-icon-locked" placeholder="个人邮箱" autocomplete="off">
+			</div>
+		</form>
+	</div>
+	<div class="mui-content-padded">
+		<button id='submit-data' type="button" class="mui-btn mui-btn-block mui-btn-primary">完善个人邮箱</button>
+	</div>
+</div>
+<script>
+$('#submit-data') .click(function(){
+	if( !/^[\d\w\-]{3,20}@[\d\w\.]{2,15}$/.test($('#email').val().toString().replace(/\s/g,'')) ){
+		dialog.toast({message:'请正确填写邮箱'});
+		return;
+	}
+	$.ajax({
+		url:"{U('',array('query'=>'insert'))}",
+		data:{query:'insert',email:$('#email').val()},
+		accepts:'json',
+		success: function(replayData,status){
+			if(replayData.status=='success'){
+				dialog.toast({message:replayData.message},function(){
+					window.location = '{U("Mobile/Member/baseinfo")}';
+				});
+			}else if(replayData.status=='error'){
+				dialog.toast({message:replayData.message});
+			}else{
+				dialog.toast({message:'系统错误'});
+			}
+		},
+		complete: function(status){
+			if(status=='timeout'){
+				dialog.toast({message:'提交数据超时'});
+			}else if(status=='error'){
+				dialog.toast({message:'系统错误'});
+			}
+		},
+		timeout:10000
+	});
+});
+</script>
+{include file="login/footer.html"}

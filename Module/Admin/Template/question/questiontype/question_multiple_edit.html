@@ -1,0 +1,184 @@
+<style>
+.ac-table-basic.ac-table-basic-query.ac-table-option th{
+	width:80px;
+}
+</style>
+<tbody id="query-option">
+	<tr data-option="option">
+		<th align="center">答案与选项</th>
+		<td align="center">
+			<div id="question-multiple-box"><!-- 增加一个子问题容器 --></div>
+			
+			<!-- 增加一个子问题按钮 -->
+			<table class="ac-table-basic ac-table-basic-query ac-table-option" cellpadding="8" cellspacing="0">
+				<th></th>
+				<td align="left">
+					<button type="button" class="ac-btn ac-add add-option" onClick="addSubQuestionBody('#question-multiple-box')">增加问题</button>
+				</td>
+			</table>
+		</td>
+	</tr>
+</tbody>
+
+<script>
+
+function addSubQuestionBody(selecter,answerData){
+	if(!answerData){
+		answerData = {analysis:'',optiontext:''};
+	}
+	var question_body_id = 'question-body-id-'+randomID();
+	var question_sub_edit_id = 'question-sub-id-'+randomID();
+	var selecter_box = $(selecter);
+	var selecter_find_sub = selecter_box.find('>table').length + 1;
+	var question_sub_index = 'question_sub_index'+randomID();
+	
+	var question_body = '\
+		<table id="'+question_body_id+'" class="ac-table-basic ac-table-basic-query ac-table-option" cellpadding="8" cellspacing="0">\
+			<tbody class="delete-or-packup-sub-question">\
+				<tr>\
+					<th align="center" data-html="问题（'+selecter_find_sub+'）"></th>\
+					<td align="left">\
+						<button onClick="deleteSubQuestion(\'#'+question_body_id+'\',this)" type="button" class="ac-btn ac-sub ac-white delete-sub-question">移除</button>\
+						<button onClick="packuoSubQuestion(\'#'+question_body_id+'\',this)" type="button" class="ac-btn ac-add add-option packup-sub-question">收起</button>\
+					</td>\
+				</tr>\
+			</tbody>\
+			<tbody class="add-sub-question">\
+				<tr>\
+					<th align="center">问题（'+selecter_find_sub+'）</th>\
+					<td align="left">\
+						<textarea name="question[sub_question]['+question_sub_index+'][sub_question]" id="'+question_sub_edit_id+'" placeholder="问题（'+selecter_find_sub+'）" style="width:700px;height:80px;">'+answerData.optiontext+'</textarea>\
+					</td>\
+				</tr>\
+			</tbody>\
+			<tbody class="add-sub-option"><!-- 选项容器 --></tbody>\
+			<tbody class="add-sub-answer">\
+				<tr id="add-option">\
+					<th align="center"></th>\
+					<td align="left">\
+						<button type="button" class="ac-btn ac-add add-option" onClick="addSubOption(\'#'+question_body_id+'\',\''+question_sub_index+'\')">增加选项</button>\
+					</td>\
+				</tr>\
+				<tr>\
+					<th align="center">答案</th>\
+					<td align="center">\
+						<section class="query-answer-select"><!-- 选项答案容器 --></section>\
+					</td>\
+				</tr>\
+				<tr>\
+					<th align="center">解析</th>\
+					<td align="center" style="white-space: inherit;">\
+						<textarea name="question[sub_question]['+question_sub_index+'][analysis]" id="'+question_body_id+'-analysis" placeholder="解析" style="width:700px;height:80px;">'+answerData.analysis+'</textarea>\
+					</td>\
+				</tr>\
+			</tbody>\
+		</table>';
+	selecter_box.append(question_body);
+	//创建编辑器
+	crateueditor(question_sub_edit_id,'simple');
+	crateueditor(question_body_id+'-analysis','simple');
+	//自动增加四个选项
+	if(typeof answerData.children!='undefined'){
+		for(var i in answerData.children) addSubOption('#'+question_body_id,question_sub_index,answerData.children[i],answerData.answer);
+	}else{
+		for(var i=0;i<4;i++) addSubOption('#'+question_body_id,question_sub_index);
+	}
+}
+
+//点击添加按钮
+function addSubOption(selecter,question_sub_index,answerDataSub,answer){
+	var subOptionBox = $(selecter).find('.add-sub-option');
+	var tr_id = 'tr-id-'+randomID();
+	if(!answerDataSub){
+		answerDataSub = {optiontext:''};
+	}
+	var option = '\
+		<tr data-option="option" id="'+tr_id+'">\
+			<th align="center">选项</th>\
+			<td align="center">\
+				<textarea class="ac-w-690">'+answerDataSub.optiontext+'</textarea>\
+				<button onClick="deleteSubQuestionOption(\'#'+tr_id+'\',\''+selecter+'\',this)" type="button" class="ac-btn ac-sub ac-white delete-option">删除</button>\
+			</td>\
+		</tr>';
+	subOptionBox.append(option);
+	changOption(selecter,question_sub_index,answer);
+}
+
+
+function changOption(selecter,question_sub_index,answer){
+	var op = $(selecter).find('.add-sub-answer .query-answer-select').html('');
+	var is_select = '';
+	$(selecter).find('.add-sub-option').find('tr').each(function(index, element) {
+		var optionTarget = String.fromCharCode('A'.charCodeAt()+index);
+		$(this).find('th').html('选项'+optionTarget);
+		$(this).find('textarea').attr({
+			'name':'question[sub_question]['+question_sub_index+'][option]['+optionTarget+']',
+			'placeholder':'试题选项'+optionTarget
+		});
+		is_select = '';
+		if(answer)if(answer.indexOf(optionTarget)!=-1) is_select = 'checked';
+		op.append('<label><input '+is_select+' name="question[sub_question]['+question_sub_index+'][answer][]" type="checkbox" value="'+optionTarget+'" />答案'+optionTarget+'</label>');
+	});
+}
+
+//点击收起按钮
+function packuoSubQuestion(selecter,self){
+	var allTbody = $(selecter).find('tbody:not(:first)');
+	var selecter = $(selecter);
+	var selecter_first = selecter.find('tbody').first().find('th');
+	if(allTbody.css('display')=='none'){
+		selecter.find('tbody:not(:first)').css('display','table-row-group');
+		$(self).val('收起').html('收起');
+		selecter_first.html('');
+	}else{
+		selecter.find('tbody:not(:first)').hide();
+		$(self).val('展开').html('展开');
+		selecter_first.html(selecter_first.attr('data-html'));
+	}
+}
+
+//点击删除按钮
+function deleteSubQuestion(selecter,self){
+	var selecter = $(selecter);
+	if(selecter.parent().find('>table').length<=1){
+		parent.layer.msg('至少有一个问题',{icon: 2});
+		return;
+	}
+	var layerAlert = parent.layer.alert('你确定删除吗', {icon: 2},function(){
+		selecter.remove();
+		parent.layer.close(layerAlert);
+	});
+}
+
+//点击删除子选项按钮
+function deleteSubQuestionOption(selecter,selecterparent,self){
+	var layerAlert = parent.layer.alert('你确定删除吗', {icon: 2},function(){
+		$(selecter).remove();
+		parent.layer.close(layerAlert);
+		changOption(selecterparent);
+	});
+}
+
+//填充答案
+var answerData = {$multiple_option};
+for(var i=0;i<answerData.length;i++){
+	addSubQuestionBody('#question-multiple-box',answerData[i]);
+}
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

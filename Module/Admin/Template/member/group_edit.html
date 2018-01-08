@@ -1,0 +1,75 @@
+{include file="common/header.html"}
+<div class="ac-main">	
+	<div class="ac-warp">
+		<div class="ac-content" id="ac-content">
+			<div class="ac-nav">
+				<a href="{U('admin/index/main')}">主页</a>
+				<span>&raquo;</span>
+				<a href="{U('lists')}">会员组管理</a>
+				<span>&raquo;</span>
+				<a href="{U()}">编辑会员组</a>
+			</div>
+			<div class="ac-content-inner">
+				<div class="ac-table-view">
+					<div class="ac-table-card">
+						<ul>
+							<li><a href="{U('lists')}">会员组管理</a></li>
+							<li><a href="{U('add')}">添加会员组</a></li>
+							<li class="on"><a href="{U()}">编辑会员组</a></li>
+						</ul>
+						<div class="ac-table-right-card">
+							<a class="btn ac-back">返回</a>
+						</div>
+					</div>
+					<div class="ac-table-search">
+						
+					</div>
+					<div class="ac-table-body">
+						<form action="{U('edit',array('groupid'=>$group['groupid'],'query'=>'insert'))}" method="post">
+							<input type="hidden" name="query" value="insert" />
+							<input type="hidden" name="token" value="{$token}" />
+							<input type="hidden" name="groupid" value="{$group['groupid']}" />
+							<table class="ac-table-basic ac-table-basic-query" cellpadding="8" cellspacing="0">
+								<tr>
+									<th align="center">组名称</th>
+									<td align="center">
+										<input type="text" name="group[group_name]" value="{$group['group_name']}" id="group_name" placeholder="会员组名称" />
+									</td>
+								</tr>
+								<tr>
+									<th align="center">简单描述</th>
+									<td align="center">
+										<textarea name="group[description]" id="description" placeholder="简单描述">{$group['description']}</textarea>
+									</td>
+								</tr>
+								<tr>
+									<th align="center">启用状态</th>
+									<td align="center">
+										<label><input type="radio" name="group[isshow]" value="1" id="isshow_yes" {if $group['isshow']==1}checked{/if} />启用</label>
+										<label><input type="radio" name="group[isshow]" value="0" id="isshow_no" {if $group['isshow']==0}checked{/if}/>禁用</label>
+									</td>
+								</tr>
+								<tr>
+									<th align="center">是否允许编辑</th>
+									<td align="center">
+										<label><input type="radio" name="group[isedit]" value="1" id="isedit_yes" {if $group['isedit']==1}checked{/if} />允许</label>
+										<label><input type="radio" name="group[isedit]" value="0" id="isedit_no" {if $group['isedit']==0}checked{/if}/>不允许</label>
+									</td>
+								</tr>
+								<tr>
+									<th></th>
+									<td align="center">
+										<input type="submit" value=" 确定 " class="ac-btn" />
+										<input type="reset" value=" 重填 " class="ac-btn" />
+									</td>
+								</tr>
+							</table>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+{include file="common/footer.html"}

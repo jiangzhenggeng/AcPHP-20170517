@@ -1,0 +1,154 @@
+{include file="common/header.html"}
+<div class="ac-main">	
+	<div class="ac-warp">
+		<div class="ac-content" id="ac-content">
+			<div class="ac-nav">
+				<a href="{U('admin/index/main')}">主页</a>
+				<span>&raquo;</span>
+				<a href="{U('lists')}">组卷规则管理</a>
+				<span>&raquo;</span>
+				<a href="{U('add')}">创建组卷规则</a>
+			</div>
+			<div class="ac-content-inner">
+				<div class="ac-table-view">
+					<div class="ac-table-card">
+						<ul>
+							<li><a href="{U('lists')}">组卷规则管理</a></li>
+							<li><a href="{U('add')}">创建组卷规则</a></li>
+							<li class="on"><a href="{U()}">编辑[{cutStr($rule['rulename'],10)}]</a></li>
+						</ul>
+						<div class="ac-table-right-card">
+							<a class="btn ac-back">返回</a>
+						</div>
+					</div>
+					<form name="searchform" action="{U(null,array('query'=>'insert'))}" method="post">
+						<input type="hidden" name="query" value="insert" />
+						<input type="hidden" name="ruleid" value="{$rule['ruleid']}" />
+						<div class="ac-table-search">
+							<input type="hidden" name="rule[info][subjectid]" value="{$subjectid}" />
+							<div class="ac-explain-col search-form">
+								<label>规则名称：<input name="rule[info][rulename]" type="text" value="{$rule['rulename']}" class="text w-200"></label>
+								<label>描述：<input name="rule[info][description]" type="text" value="{$rule['description']}" class="text w-200"></label>
+							</div>
+						</div>
+						<div class="ac-table-body">
+							<table id="menu-tree-table" class="ac-table-basic" cellpadding="8" cellspacing="0">
+								<tr>
+									<th width="40" align="center">编号</th>
+									<th width="200" align="left">
+										科目
+										<select id="subjectid">
+											{loop $subject $k $v}
+											<option {if $subjectid==$v['subjectid']}selected{/if} value="{U('add',array('subjectid'=>$v['subjectid']))}">{$v['subjectname']}</option>
+											{/loop}
+										</select>
+									</th>
+									{loop $question_type $k $v}
+										<th width="100" align="center">
+											<label>{$v['typename']}<input data-unit="{$v['modelclass']}" name="rule[rule_score][{$v['typeid']}]" value="{$rule_score[$v['typeid']]}" type="text" class="w-20"></label>
+										</th>
+									{/loop}
+								</tr>
+								{$subject_tree}
+								<tr>
+									<th></th><th></th>
+									{loop $question_type $k $v}
+									<th align="left">
+										<label><input data-total="{$v['modelclass']}" value="---" type="text" class="w-20" disabled>总分</label>
+									</th>
+									{/loop}
+								</tr>
+							</table>
+							<div class="ac-btn-group">
+								<input type="button" value="全部展开" onClick="expandAll(this,$('#menu-tree-table tr'))" flag="none" class="ac-btn" />
+								<button class="ac-btn ac-add " type="submit">提交</button>
+								<button class="ac-btn" type="button" onClick="calculateTotal('#menu-tree-table')">计算试题量</button>
+							</div>
+						</form>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<style>
+.disabled,.disabled * {
+    color: #bbb !important;
+}
+</style>
+<script>
+$('#subjectid').change(function(){
+	window.location = $(this).val();
+});
+
+clickOpenMenuTree($('#menu-tree-table'),'treeid');
+function queryTr(){
+	var arrchildid = ','+$(this).parent().parent().parent().attr('arrchildid')+',';
+	var selftreeid = ','+$(this).parent().parent().parent().attr('treeid')+',';
+	var dataType = $(this).attr('data-type')
+	var input;
+	
+	var fn = function(show){
+		trAll.each(function(index, element) {
+			var treeid = ','+$(this).attr('treeid')+',';
+			if(selftreeid!=treeid && arrchildid.indexOf(treeid)!=-1){
+				if(show){
+					input = $(this).find('input[data-type='+dataType+']').parent().parent()
+					.addClass('disabled').find('input');
+					input.attr('disabled',true);
+					input.each(function(index, element) {
+						$(this).attr('data-name',$(this).attr('name')).removeAttr('name');
+					});
+				}else{
+					input = $(this).find('input[data-type='+dataType+']').parent().parent()
+					.removeClass('disabled').find('input');
+					input.removeAttr('disabled');
+					input.each(function(index, element) {
+						$(this).attr('name',$(this).attr('data-name')).removeAttr('data-name');
+					});
+				}
+			}
+		});
+	};
+	
+	if(parseInt($(this).val())==2){
+		fn(true);
+	}else{
+		fn(false);
+	}
+	calculateTotal('#menu-tree-table');
+}
+
+var trAll = $('#menu-tree-table').find('tr');
+//选择抽题模式
+$('#menu-tree-table').on('click','input[data-class=modelselect]',queryTr);
+
+trAll.eq(1).find('td').each(function(index, element) {
+	$(this).find('input[data-class=modelselect]').eq(1)
+		.bind('click',queryTr).trigger('click').unbind('click');
+});
+
+calculateTotal('#menu-tree-table');
+$('input[type=text]:not([disabled])').change(function(){
+	calculateTotal('#menu-tree-table');
+});
+
+function calculateTotalSub($selecter,modelclass){
+	var total = 0;
+	var unit = parseInt($('input[data-unit='+modelclass+'][type=text]:not([disabled])').val());
+	$selecter.find('input[data-type='+modelclass+'][type=text]:not([disabled])')
+	.each(function(index, element) {
+		total += parseInt($(this).val()) * unit;
+	});
+	$selecter.find('input[data-total='+modelclass+'][type=text]').val(total);
+}
+
+function calculateTotal(selecter){
+	selecter = $(selecter);
+	{loop $question_type $k $v}
+	calculateTotalSub(selecter,'{$v['modelclass']}');
+	{/loop}
+}
+</script>
+{include file="common/footer.html"}

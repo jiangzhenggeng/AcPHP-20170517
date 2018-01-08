@@ -1,0 +1,91 @@
+{include file="common/header.html"}
+<div class="ac-main">	
+	<div class="ac-warp">
+		<div class="ac-content" id="ac-content">
+			<div class="ac-nav">
+				<a href="{U('admin/index/main')}">主页</a>
+				<span>&raquo;</span>
+				<a href="{U('lists')}">组权限管理</a>
+				<span>&raquo;</span>
+				<a href="{U('add')}">添加组权限</a>
+			</div>
+			<div class="ac-content-inner">
+				<div class="ac-table-view">
+					<div class="ac-table-card">
+						<ul>
+							<li><a href="{U('lists')}">组权限管理</a></li>
+							<li><a href="{U('add')}">添加组权限</a></li>
+							<li class="on"><a href="{U()}">编辑组权限</a></li>
+						</ul>
+						<div class="ac-table-right-card">
+							<a class="btn ac-back">返回</a>
+						</div>
+					</div>
+					<div class="ac-table-body">
+						<form action="{U('edit',array('query'=>'insert'))}" method="post">
+							<input type="hidden" name="query" value="insert" />
+							<input type="hidden" name="token" value="{$token}" />
+							<input type="hidden" name="priv_id" value="{$cur_member_privilege['priv_id']}" />
+							<table class="ac-table-basic ac-table-basic-query" cellpadding="8" cellspacing="0">
+								<tr>
+									<th align="center">组权限名称</th>
+									<td align="center">
+										<input type="text" value="{$cur_member_privilege['priv_name']}" name="member_privilege[priv_name]" id="priv_name" placeholder="组权限名称" />
+									</td>
+								</tr>
+								<tr>
+									<th align="center">模块</th>
+									<td align="center">
+										<input type="text" value="{$cur_member_privilege['module']}" name="member_privilege[module]" id="module" placeholder="模块" />
+									</td>
+								</tr>
+								<tr>
+									<th align="center">控制器</th>
+									<td align="center">
+										<input type="text" value="{$cur_member_privilege['controller']}" name="member_privilege[controller]" id="controller" placeholder="控制器" />
+									</td>
+								</tr>
+								<tr>
+									<th align="center">方法名</th>
+									<td align="center">
+										<input type="text" value="{$cur_member_privilege['action']}" name="member_privilege[action]" id="action" placeholder="方法名" />
+									</td>
+								</tr>
+								<tr>
+									<th align="center">附加校验数据</th>
+									<td align="center">
+										<input type="text" value="{$cur_member_privilege['data']}" name="member_privilege[data]" id="data" placeholder="附加校验数据" />
+									</td>
+								</tr>
+								<tr>
+									<th align="center">上级组权限</th>
+									<td align="center">
+										<select name="member_privilege[parentid]" id="parentid">
+											<option value="0">---选择上级组权限---</option>
+											{$member_privilege}
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th align="center">组权限描述</th>
+									<td align="center">
+										<textarea name="member_privilege[description]" id="description" placeholder="组权限描述">{$cur_member_privilege['description']}</textarea>
+									</td>
+								</tr>
+								<tr>
+									<th></th>
+									<td align="center">
+										<input type="submit" value=" 确定 " class="ac-btn" />
+										<input type="reset" value=" 重填 " class="ac-btn" />
+									</td>
+								</tr>
+							</table>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+{include file="common/footer.html"}

@@ -1,0 +1,393 @@
+{include file="common/header.html"}
+
+<div class="ac-main">	
+
+	<div class="ac-warp">
+
+		<div class="ac-content" id="ac-content">
+
+			<div class="ac-nav">
+
+				<a href="{U('admin/index/main')}">主页</a>
+
+				<span>&raquo;</span>
+
+				<a href="{U('lists')}">试题管理</a>
+
+			</div>
+
+			<div class="ac-content-inner">
+
+				<div class="ac-table-view">
+
+					<div class="ac-table-card">
+
+						<ul>
+
+						{if $recycle}
+
+							<li class="on"><a href="{U('recycle')}">试题管理[回收站]</a></li>
+
+						{else}
+
+							<li class="on"><a href="{U('lists')}">试题管理</a></li>
+
+							<li><a href="{U('add',array('query'=>'subjectselect'))}">添加试题</a></li>
+
+						{/if}
+
+						</ul>
+
+						<div class="ac-table-right-card">
+
+							<a class="btn ac-search">搜索</a>
+
+							<a class="btn ac-back">返回</a>
+
+						</div>
+
+					</div>
+
+					
+
+					<div class="ac-table-search">
+
+						<form name="searchform" action="{U()}" method="get">
+
+							<input type="hidden" name="isdelete" value="" />
+
+							<div class="ac-explain-col search-form">
+
+								科目
+
+								<select id="subjectid" name="search[subjectid]">
+
+									<option value="0" subjectid="0">全部科目</option>
+
+									{loop $subject $r $v}
+
+									<option value="{$v['subjectid']}" subjectid="{$v['subjectid']}" {if $v['subjectid']==$search['subjectid']}selected{/if}>{$v['subjectname']}</option>
+
+									{/loop}
+
+								</select>
+
+								章节
+
+								<select id="treeid" name="search[treeid]" style="width:260px;">
+
+									<option value="0">全部章节</option>
+
+									{$subject_tree}
+
+								</select>
+
+								试题
+
+								<input type="text" value="{$search['question']}" class="text w-200" name="search[question]">
+
+								用户名
+
+								<input type="text" value="{$search['admin_name']}" class="text w-100" name="search[admin_name]">
+
+								录入时间
+
+								<input type="text" value="{$search['start_addtime']}" name="search[start_addtime]" id="start_addtime" size="10" class="laydate-icon text w-100" readonly>
+
+								至
+
+								<input type="text" value="{$search['end_addtime']}" name="search[end_addtime]" id="end_addtime" size="10" class="laydate-icon text w-100" readonly>
+
+								题型
+
+								<select name="search[typeid]" class="height-25">
+
+								    <option value="0">全部题型</option>
+
+								    {loop $question_type $r $v}
+
+									<option value="{$v['typeid']}" {if isset($search['typeid']) && $v['typeid']==$search['typeid']}selected{/if}>{$v['typename']}</option>
+
+									{/loop}
+
+								</select>
+
+								星数
+
+								<select name="search[difficulty]" id="difficulty" >
+
+									<option>全部</option>
+
+									<option value="1" {if $search['difficulty']==1}selected{/if}>一颗星</option>
+
+									<option value="2" {if $search['difficulty']==2}selected{/if}>二颗星</option>
+
+									<option value="3" {if $search['difficulty']==3}selected{/if}>三颗星</option>
+
+									<option value="2" {if $search['difficulty']==4}selected{/if}>四颗星</option>
+
+									<option value="3" {if $search['difficulty']==5}selected{/if}>五颗星</option>
+
+								</select>
+
+								<em id="xingxing" style="width:<?=($search['difficulty']*12)?>px;"></em>
+
+								排序
+
+								<select name="search[order]" class="height-25">
+
+								  <option>默认</option>
+
+								  <option value="time" {if $search['order']=='time'}selected{/if}>时间</option>
+
+								  <option value="id" {if $search['order']=='id'}selected{/if}>ID</option>
+
+								</select>
+
+								{if !$recycle}
+
+								审核状态
+
+								<select name="search[ischeck]" class="height-25">
+                                  <option {if !$search['ischeck']}selected{/if}>全部</option>
+								  <option value="1" {if $search['ischeck']==1}selected{/if}>审核</option>
+								  <option value="-1" {if $search['ischeck']==-1}selected{/if}>未审核</option>
+								</select>
+
+								{/if}
+
+								ID
+
+								<input type="text" value="{$search['questionid']}" class="text w-100" name="search[questionid]">
+
+								<input type="submit" value="搜索" class="ac-btn" name="dosubmit">
+
+							</div>
+
+						</form>
+
+					</div>
+
+					
+
+					<div class="ac-table-body">
+
+						<form action="{U('listorder')}" method="post">
+
+							<table class="ac-table-basic" cellpadding="8" cellspacing="0">
+
+								<tr>
+
+									<th width="15" align="center"><input type="checkbox" id="chkall" onclick="selectcheckbox(this.form)" value="check"></th>
+
+									<th width="30">ID</th>
+
+									<th width="200" align="left">科目/章节/题目</th>
+
+									<th width="60" align="left">题型</th>
+
+									<th width="90">上传时间</th>
+
+									<th width="60">管理员</th>
+
+									<th width="40">审核</th>
+
+									<th width="120">管理操作</th>
+
+								</tr>
+
+								{loop $question $k $v}
+
+								<tr>
+
+									<td align="center"><input type="checkbox" name="checkbox[]" value="{$v['questionid']}"></td>
+
+									<td align="center">{$v['questionid']}</td>
+
+									<?php $question_title = str_replace('"',"'",strip_tags($v['question']));?>
+
+									<td align="left">[<a title="{$v['subjectname']}">{cutStr($v['subjectname'],5,'')}</a>][<a title="{$v['chaptername']}">{cutStr($v['chaptername'],5,'')}</a>]
+
+										<a title="{$question_title}">{cutStr($v['question'],35)}</a>
+
+										{if $v['classics']==1}<img src="{__IMG__}admin/jingdian.png">{/if}
+
+										{if $v['isreal']==1}<img src="{__IMG__}admin/zhenti.png">{/if}
+
+									</td>
+
+									<td align="center">{$v['typename']}</td>
+
+									<td align="center">{ac_date($v['addtime'])}</td>
+
+									<td align="center">{$v['admin_name']}</td>
+
+									<td align="center">
+
+										{if $v['ischeck']==-1}
+
+										<a onClick="ischeck(this)" data-ischeck href="javascript:void(0);" url="{U('ischeck',array('questionid'=>$v['questionid']))}" ischeck="1">审核</a>
+
+										{else}
+
+										<a onClick="ischeck(this)" data-ischeck href="javascript:void(0);" url="{U('ischeck',array('questionid'=>$v['questionid']))}" ischeck="-1">取消审核</a>
+
+										{/if}
+
+									</td>
+
+									<td align="center">
+
+										{if $recycle}
+
+											<a href="{U('recover',array('questionid'=>$v['questionid']))}" data-delete>恢复试题</a>
+
+										{else}
+
+											<a data-view href="javascript:void(0);" url="{U('view',array('questionid'=>$v['questionid'],'memory'=>'hide'))}">阅览</a> |
+
+											<a href="{U('edit',array('questionid'=>$v['questionid']))}">编辑</a> |
+
+											<a href="{U('delete',array('questionid'=>$v['questionid']))}" data-delete>删除</a>
+
+										{/if}
+
+									</td>
+
+								</tr>
+
+								{/loop}
+
+							</table>
+
+							<div class="ac-btn-group">
+
+								<div class="ac-page">{$page}</div>
+
+							</div>
+
+						</form>
+
+					</div>
+
+				</div>
+
+			</div>
+
+		</div>
+
+		
+
+	</div>
+
+</div>
+
+<script>
+
+var start = {
+
+    elem: '#start_addtime',
+
+    format: 'YYYY-MM-DD hh:mm:ss',
+
+    min: '1991-12-24 23:59:59', //设定最小日期为当前日期
+
+    max: laydate.now(), //最大日期
+
+    istime: true,
+
+    choose: function(datas){
+
+         end.min = datas; //开始日选好后，重置结束日的最小日期
+
+         end.start = datas //将结束日的初始值设定为开始日
+
+    }
+
+};
+
+var end = {
+
+    elem: '#end_addtime',
+
+    format: 'YYYY-MM-DD hh:mm:ss',
+
+    max: laydate.now(),
+
+    istime: true,
+
+    choose: function(datas){
+
+        start.max = datas; //结束日选好后，重置开始日的最大日期
+
+    }
+
+};
+
+laydate(start);
+
+laydate(end);
+
+
+
+var treeid = $('#treeid').find('option');
+
+$('#subjectid').change(function(){
+
+	var select_subjectid = $(this).val();
+
+	if(parseInt(select_subjectid)!=0){
+
+		treeid.each(function(index, element) {
+
+			if($(this).attr('subjectid')==select_subjectid || parseInt($(this).val())==0){
+
+				$(this).show();
+
+			}else{
+
+				$(this).hide();
+
+			}
+
+		});
+
+	}else{
+
+		$('#treeid').find('option:not(:first)').hide();
+
+	}
+
+}).trigger('change');
+
+
+
+/***********************************
+
+阅览试题
+
+***********************************/
+
+$('[data-view]').click(function(){
+
+	parent.layer.open({
+
+		type: 2,
+
+		title: '试题阅览器',
+
+		shadeClose: true,
+
+		shade: 0.3,
+
+		area: ['800px', '500px'],
+
+		content: $(this).attr('url')
+
+	});
+
+});
+
+</script>
+
+{include file="common/footer.html"}

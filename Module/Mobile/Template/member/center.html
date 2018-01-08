@@ -1,0 +1,93 @@
+{include file="member/header.html"}
+<header class="mui-bar mui-bar-nav">
+	<button class="mui-action-back mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+	<a href="{U('index/init')}"><span class="mui-icon mui-icon-home"></span>首页</a>
+	</button>
+	<h1 class="mui-title">个人中心</h1>
+	<a class="mui-icon mui-icon-share mui-pull-right"></a>
+</header>
+<div class="mui-content">
+	<div class="member-header mui-table-view-cell mui-media">
+		<div class="member-face mui-media-object mui-pull-left">
+			<div class="member-face-img" onclick="uploadBox({name:'facepicture','url':'{U('changefacepicture')}',self:this})">
+				<img src="{$member['facepicture']}" />
+			</div>
+		</div>
+		<div class="member-right-desc">
+			<div class="member-name">
+				<span>{@$member['nickname']?$member['nickname']:'未填写'}</span>
+				<a href="{U('member/baseinfo')}" class="m-changw-info">信息修改</a>
+			</div>
+			<div class="base-info">
+				<span class="position">{@$member['position']?$member['position']:'未填写'}</span>
+				{if in_array($member['sex'],array(1,2))}
+					<span class="sex">{$member['sex_name']}</span>
+				{/if}
+				<span class="zhiye">{$member['nickname']}</span>
+			</div>
+			<div class="member-description">{if $member['introduction']==''}未填写{else}{$member['introduction']}{/if}</div>
+		</div>
+	</div>
+	<ul class="mui-table-view mui-grid-view mui-grid-9">
+		<li class="mui-table-view-cell mui-media mui-col-xs-6 mui-col-sm-6">
+			<a href="{U('/mobile/Meerror/view')}">
+				<span class="mui-icon mui-gerenxinxi"></span>
+				<div class="mui-media-body">
+					<div class="mui-media-text">错题</div>
+					<div class="mui-media-text">{$question_error_count} 错题</div>
+				</div>
+			</a>
+		</li>
+		<li class="mui-table-view-cell mui-media mui-col-xs-6 mui-col-sm-6">
+			<a href="{U('/mobile/Favorite/view')}">
+				<span class="mui-icon mui-wodeshouchang"></span>
+				<div class="mui-media-body">
+					<div class="mui-media-text">收藏</div>
+					<div class="mui-media-text">{$question_favorite_count} 收藏</div>
+				</div>
+			</a>
+		</li>
+		<li class="mui-table-view-cell mui-media mui-col-xs-6 mui-col-sm-6">
+			<a href="{U('/mobile/Favorite/view')}">
+				<span class="mui-icon mui-icon-help"></span>
+				<div class="mui-media-body">
+					<div class="mui-media-text">提问</div>
+					<div class="mui-media-text">你有99道错题</div>
+				</div></a>
+		</li>
+		<li class="mui-table-view-cell mui-media mui-col-xs-6 mui-col-sm-6">
+			<a href="{U('/mobile/message/view')}">
+				<span class="mui-icon mui-xiaoxizhongxin"></span>
+				<div class="mui-media-body">
+					<div class="mui-media-text">消息</div>
+					<div class="mui-media-text">你有99道错题</div>
+				</div></a>
+		</li>
+		<li class="mui-table-view-cell mui-media mui-col-xs-6 mui-col-sm-6">
+			<a href="{U('/mobile/Favorite/view')}">
+				<span class="mui-icon mui-tongjizhongxin"></span>
+				<div class="mui-media-body">
+					<div class="mui-media-text">统计</div>
+					<div class="mui-media-text">你有99道错题</div>
+				</div></a>
+		</li>
+		<li class="mui-table-view-cell mui-media mui-col-xs-6 mui-col-sm-6">
+			<a href="{U('/mobile/order/view')}">
+				<span class="mui-icon mui-wodedingdan"></span>
+				<div class="mui-media-body">
+					<div class="mui-media-text">订单</div>
+					<div class="mui-media-text">你有99道错题</div>
+				</div></a>
+		</li>
+		<li class="mui-table-view-cell mui-media mui-col-xs-6 mui-col-sm-6">
+			<a href="{U('/mobile/comment/view')}">
+			<span class="mui-icon mui-icon-chatbubble"></span>
+			<div class="mui-media-body">
+				<div class="mui-media-text">评论</div>
+				<div class="mui-media-text">{$comment_count} 评论</div>
+			</div></a>
+		</li>
+	</ul>
+	<footer class="copyright">©2016 新财会 黔ICP备14000518号</footer>
+</div>
+{include file="member/footer.html"}

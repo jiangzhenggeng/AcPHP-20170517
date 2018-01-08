@@ -1,0 +1,77 @@
+{include file="common/header.html"}
+<div class="ac-main">	
+	<div class="ac-warp">
+		<div class="ac-content" id="ac-content">
+			<div class="ac-nav">
+				<a href="{U('admin/index/main')}">主页</a>
+				<span>&raquo;</span>
+				<a href="{U()}">入口面板</a>
+			</div>
+			<div class="ac-content-inner">
+				<div class="ac-table-view">
+					<div class="ac-table-body">
+						<div class="ac-main-inner">
+							<div class="ac-box-title">网站基本信息</div>
+							<table class="ac-table-basic" cellpadding="8" cellspacing="0">
+								<tr>
+									<td width="25%">URL 重写：</td>
+									<td width="25%"><strong>开启</strong></td>
+									<td width="25%">编码：</td>
+									<td width="25%"><strong>UTF-8</strong></td>
+								</tr>
+								<tr>
+									<td>站点地图：</td>
+									<td><strong>开启</strong></td>
+									<td>站点模板：</td>
+									<td><strong>default</strong></td>
+								</tr>
+								<tr>
+									<td>系统版本：</td>
+									<td><strong>v1.0 Beta1 20150928</strong></td>
+									<td>安装日期：</td>
+									<td><strong>2015-10-09</strong></td>
+								</tr>
+							</table>
+						</div>
+						<div class="ac-main-inner">
+							<div class="ac-box-title">服务器信息</div>
+							<table class="ac-table-basic" cellpadding="8" cellspacing="0">
+								<tr>
+									<td width="25%">PHP 版本：</td>
+									<td width="25%">{PHP_VERSION} </td>
+									<td width="25%">MySQL 版本：</td>
+									<td width="25%">{MYSQL_VERSION}</td>
+								</tr>
+								<tr>
+									<td>服务器操作系统：</td>
+									<td>{php_uname('s')}-{php_uname('r')}</td>
+									<td>Web 服务器：</td>
+									<td>{$_SERVER['SERVER_SOFTWARE']}</td>
+								</tr>
+								<tr>
+									<td>文件上传限制：</td>
+									<td>{ini_get('post_max_size')}</td>
+									<td>GD 库支持：</td>
+									<td>{if function_exists('gd_info')}开启{else}未开启{/if}</td>
+								</tr>
+							</table>
+						</div>
+						<!--
+						<div class="ac-main-inner">
+							<div class="ac-box-title">管理员  登录记录</div>
+							<table class="ac-table-basic" cellpadding="8" cellspacing="0">
+								<tr>
+									<th width="50%">IP地址</th>
+									<th width="50%">操作时间</th>
+								</tr>
+							</table>
+						</div>
+						-->
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+{include file="common/footer.html"}

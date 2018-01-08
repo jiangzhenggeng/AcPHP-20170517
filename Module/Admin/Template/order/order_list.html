@@ -1,0 +1,117 @@
+{include file="common/header.html"}
+<div class="ac-main">	
+	<div class="ac-warp">
+		<div class="ac-content" id="ac-content">
+			<div class="ac-nav">
+				<a href="{U('admin/index/main')}">主页</a>
+				<span>&raquo;</span>
+				<a href="{U('lists')}">所有订单</a>
+			</div>
+			<div class="ac-content-inner">
+				<div class="ac-table-view">
+					<div class="ac-table-card">
+						<ul>
+							<li {if !isset($pay_status)}class="on"{/if}><a href="{U('')}">所有订单</a></li>
+							<li {if $pay_status==1}class="on"{/if}><a href="{U('',['pay_status'=>1])}">待支付</a></li>
+							<li {if $pay_status==2}class="on"{/if}><a href="{U('',['pay_status'=>2])}">正在支付</a></li>
+							<li {if $pay_status==3}class="on"{/if}><a href="{U('',['pay_status'=>3])}">支付完成</a></li>
+							<li {if $pay_status==4}class="on"{/if}><a href="{U('',['pay_status'=>4])}">交易完成</a></li>
+						</ul>
+						<div class="ac-table-right-card">
+							<a class="btn ac-search">搜索</a>
+							<a class="btn ac-back">返回</a>
+						</div>
+					</div>
+
+					<div class="ac-table-search">
+						<form name="searchform" action="{U()}" method="get">
+							<div class="ac-explain-col search-form">
+								订单号
+								<input type="text" value="{$search['order_no']}" class="text w-200" name="search[order_no]">
+								用户名
+								<input type="text" value="{$search['username']}" class="text w-100" name="search[username]">
+								下单时间
+								<input type="text" value="{$search['start_addtime']}" name="search[start_addtime]" id="start_addtime" size="10" class="laydate-icon text w-100" readonly>
+								至
+								<input type="text" value="{$search['end_addtime']}" name="search[end_addtime]" id="end_addtime" size="10" class="laydate-icon text w-100" readonly>
+								支付方式
+								<select name="search[pay_type]" class="height-25">
+									<option value="">全部支付方式</option>
+									<option value="ali" {if $search['pay_type']=='ali'}selected{/if}>支付宝</option>
+									<option value="wx" {if $search['pay_type']=='wx'}selected{/if}>微信</option>
+								</select>
+								<input type="submit" value="搜索" class="ac-btn" name="dosubmit">
+							</div>
+						</form>
+					</div>
+
+					<div class="ac-table-body">
+						<form method="post">
+							<table class="ac-table-basic" cellpadding="8" cellspacing="0">
+								<tr>
+									<th width="15" align="center"><input type="checkbox" id="chkall" onclick="selectcheckbox(this.form)" value="check"></th>
+									<th width="100" align="center">订单号</th>
+									<th width="50" align="center">订单名称</th>
+									<th width="40" align="center">类型</th>
+									<th width="40" align="center">支付状态</th>
+									<th width="40" align="center">交易状态</th>
+									<th width="40" align="center">价格</th>
+									<th width="80" align="center">下单时间</th>
+									<th width="40" align="center">支付类型</th>
+									<th width="80" align="center">操作</th>
+								</tr>
+								{loop $order $k $v}
+								<tr>
+									<td align="center"><input type="checkbox" name="checkbox[]" value="{$v['admin_id']}"></td>
+									<td align="left">{$v['order_no']}</td>
+									<td align="left">{$v['ordername']}</td>
+									<td align="center">{@ac_order_type($v['type'])}</td>
+									<td align="center">{@ac_order_status($v['pay_status'])}</td>
+									<td align="center">{@ac_order_status($v['orderstatus'])}</td>
+									<td align="center">{$v['realprice']}</td>
+									<td align="center">{date('Y-m-d H:i:s',$v['addtime'])}</td>
+									<td align="center">{@ac_pay_type_name($v['pay_type'])}</td>
+									<td align="center">
+										<a href="{U('detail',array('orderid'=>$v['orderid']))}">详细</a> |
+										<a href="{U('edit',array('orderid'=>$v['orderid']))}">修改</a> |
+										<a href="{U('delete',array('orderid'=>$v['orderid']))}" data-delete>删除</a>
+									</td>
+								</tr>
+								{/loop}
+							</table>
+							<div class="ac-btn-group">
+								<div class="ac-page">{$page}</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+<script>
+	var start = {
+		elem: '#start_addtime',
+		format: 'YYYY-MM-DD hh:mm:ss',
+		min: '1991-12-24 23:59:59', //设定最小日期为当前日期
+		max: laydate.now(), //最大日期
+		istime: true,
+		choose: function(datas){
+			end.min = datas; //开始日选好后，重置结束日的最小日期
+			end.start = datas //将结束日的初始值设定为开始日
+		}
+	};
+	var end = {
+		elem: '#end_addtime',
+		format: 'YYYY-MM-DD hh:mm:ss',
+		max: laydate.now(),
+		istime: true,
+		choose: function(datas){
+			start.max = datas; //结束日选好后，重置开始日的最大日期
+		}
+	};
+	laydate(start);
+	laydate(end);
+</script>
+{include file="common/footer.html"}

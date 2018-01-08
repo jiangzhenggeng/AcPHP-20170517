@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>{$SEO['title']}-管理中心</title>
+<meta http-equiv="Content-Type" content="text/html; charset={__CHARSET__}" />
+<meta name="keywords" content="{$SEO['keywords']}">
+<meta name="description" content="{$SEO['description']}">
+<link rel="stylesheet" type="text/css" href="{__ADMIN_RES_PATH__}css/admin.css"/>
+<script type="text/javascript" src="{__ADMIN_RES_PATH__}js/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="{__ADMIN_RES_PATH__}js/global.js"></script>
+<script type="text/javascript" src="{__ADMIN_RES_PATH__}js/layer/layer.js"></script>
+<script type="text/javascript">
+
+if(parent.document.getElementsByTagName('div').length>0){
+	parent.window.location.reload();
+}
+/**
+ +----------------------------------------------------------
+ * 刷新验证码
+ +----------------------------------------------------------
+ */
+function refreshimage() {
+    var cap = document.getElementById('vcode');
+	{if App::getConfig('Route','url_model')!=1}
+    cap.setAttribute('src',cap.getAttribute('_src') + '?' + ~new Date());
+	{else}
+    cap.setAttribute('src',cap.getAttribute('_src') + '&' + ~new Date());
+	{/if}
+	setTimeout(function(){
+		$(cap).css('display','block');
+	},100);
+}
+$(function(){
+	refreshimage();
+	$('#vcode').click(refreshimage);
+});
+</script>
+<style>
+html,body{
+    background: #E8EBEF;
+    color: #354B66;
+}
+#login {
+	margin: auto;
+	position: relative;
+	width: 31.7em;
+	height: auto;
+	left: 50%;
+	margin-left: -15.8em;
+    top: 50%;
+    margin-top: -278px;
+}
+</style>
+</head>
+<body>
+
+<p>&nbsp;</p>
+<form id="loginForm" action="{U('admin.login.doLogin')}" method="post">
+	<input type="hidden" name="token" value="{$token}" />
+	<div id="login" style="overflow:visible;">
+		<div class="dologo"><img src="{__ADMIN_RES_PATH__}images/admin/logo.gif" height="90" /></div>
+		<div class="dologo-box">
+			<div class="danWei"><h1>{$system['organization']}</h1></div>
+			<ul>
+				<li class="inpLi"><b>用户名：</b>
+					<input name="admin[admin_name]" value="{if isset($admin['admin_name'])}{$admin['admin_name']}{/if}" id="admin_name" type="text" class="inpLogin" />
+				</li>
+				<li class="inpLi"><b>密码：</b>
+					<input name="admin[password]" value="{if isset($admin['password'])}{$admin['password']}{/if}" id="password" type="password" class="inpLogin" />
+				</li>
+				<li class="captchaPic">
+					<div class="inpLi"><b>验证码：</b>
+						<input type="text" name="admin[code]" id="code" class="captcha" />
+					</div>
+					<img id="vcode" style="display:none;" _src="{U('admin.login.code')}" alt="启用验证码" title="看不清？点击更换另一个验证码。"> </li>
+				<li>
+					<input type="submit" name="submit" class="ac-btn" value="登录">
+					<a href="javascript:layer.alert('暂未开放',{icon: 2});" style="margin-left:10px;">忘记密码或账户</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</form>
+{include file="common/footer.html"}

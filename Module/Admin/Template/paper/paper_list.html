@@ -1,0 +1,166 @@
+{include file="common/header.html"}
+<div class="ac-main">	
+	<div class="ac-warp">
+		<div class="ac-content" id="ac-content">
+			<div class="ac-nav">
+				<a href="{U('admin/index/main')}">主页</a>
+				<span>&raquo;</span>
+				<a href="{U('lists')}">试卷管理</a>
+			</div>
+			<div class="ac-content-inner">
+				<div class="ac-table-view">
+					<div class="ac-table-card">
+						<ul>
+						{if $recycle}
+							<li class="on"><a href="{U('recycle')}">试卷回收站</a></li>
+						{else}
+							<li class="on"><a href="{U('lists')}">试卷管理</a></li>
+							<li><a href="{U('add')}">创建试卷</a></li>
+							<li><a href="{U('statistics')}">重新统计</a></li>
+						{/if}
+						</ul>
+						<div class="ac-table-right-card">
+							<a class="btn ac-back">返回</a>
+						</div>
+						<div class="ac-table-right-card">
+							<a class="btn ac-search">搜索</a>
+							<a class="btn ac-back">返回</a>
+						</div>
+					</div>
+					
+					<div class="ac-table-search">
+						<form name="searchform" action="{U()}" method="get">
+							<div class="ac-explain-col search-form">
+								<div>
+								{loop $exam_area $k $v}
+									<label><input {if in_array($v['areaid'],$search['areaid'])}checked{/if} type="checkbox" name="search[areaid][]" value="{$v['areaid']}">{$v['areaname']}</label>
+								{/loop}
+								</div>
+								科目
+								<select id="subjectid" name="search[subjectid]">
+									<option value="0" subjectid="0">全部科目</option>
+									{loop $subject $r $v}
+									<option value="{$v['subjectid']}" subjectid="{$v['subjectid']}" {if $v['subjectid']==$search['subjectid']}selected{/if}>{$v['subjectname']}</option>
+									{/loop}
+								</select>
+								录入时间
+								<input type="text" value="{$search['start_time']}" name="search[start_time]" id="start_time" size="10" class="laydate-icon text w-100" readonly>
+								至
+								<input type="text" value="{$search['end_time']}" name="search[end_time]" id="end_time" size="10" class="laydate-icon text w-100" readonly>
+								
+								<input type="text" value="{$search['questionid']}" class="text w-100" name="search[questionid]">
+								<input type="submit" value="搜索" class="ac-btn" name="dosubmit">
+							</div>
+						</form>
+					</div>
+					
+					<div class="ac-table-body">
+						<form action="{U('listorder')}" method="post">
+							<table class="ac-table-basic" cellpadding="8" cellspacing="0">
+								<tr>
+									<th width="15" align="center"><input type="checkbox" id="chkall" onclick="selectcheckbox(this.form)" value="check"></th>
+									<th width="40" align="center">排序</th>
+									<th width="40" align="center">编号</th>
+									<th width="150" align="center">试卷名称</th>
+									<th width="20" align="center">总分</th>
+									<th width="40" align="center">难度</th>
+									<th width="60" align="center">考试时间</th>
+									<th width="60" align="center">抽题</th>
+									<th width="100" align="center">描述</th>
+									<th width="80" align="center">操作</th>
+								</tr>
+								{loop $paper $k $v}
+								<tr>
+									<td align="center"><input type="checkbox" name="checkbox[]" value="{$v['paperid']}"></td>
+									<td align="center"><input type="text" name="listorder[{$v['paperid']}]" value="{$v['listorder']}" class="listorder"></td>
+									<td align="center">{$v['paperid']}</td>
+									<td align="left"><a title="{$v['papername']}">{cutStr($v['papername'],30)}</a>（<span id="qustion_total{$v['paperid']}">{$v['question_total']}</span>）</td>
+									<td align="center">{$v['totalscore']}</td>
+									<td align="center">{@ac_difficulty($v['difficulty'])}</td>
+									<td align="center">{date('Y-m-d H:i:s',$v['starttime'])}</td>
+									<td align="center">{if $v['hasquestion']==0}未抽题{else}已抽题{/if}</td>
+									<td align="center">{cutStr($v['description'],10)}</td>
+									<td align="center">
+										{if $recycle}
+										<a href="{U('recover',array('paperid'=>$v['paperid']))}">恢复</a> |
+										<a href="{U('clear',array('paperid'=>$v['paperid']))}" data-delete>清除</a>
+										{else}
+										<a data-get-question="qustion_total{$v['paperid']}" href="javascript:void(0);" url="{U('getquestion',array('paperid'=>$v['paperid']))}">抽题</a> |
+										<a href="javascript:;" data-view url="{U('view',array('paperid'=>$v['paperid']))}">阅览</a> |
+										<a href="{U('edit',array('paperid'=>$v['paperid']))}">编辑</a> |
+										<a href="{U('delete',array('paperid'=>$v['paperid']))}" data-delete>删除</a>
+										{/if}
+									</td>
+								</tr>
+								{/loop}
+							</table>
+							<div class="ac-btn-group">
+								<input type="submit" value=" 排序 " class="ac-btn" />
+								<div class="ac-page">{$page}</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+<script>
+$('[data-get-question]').click(function(){
+	var url = $(this).attr('url');
+	var layerHander2 = layer.msg('加载中', {icon:16,time: 100*1000});
+	var _this = $(this);
+	$.get(url,{},function(replay){
+		layer.close(layerHander2);
+		if(replay.code==0){
+			layer.msg(replay.message, {icon:1,time: 5*1000});
+			$('#'+_this.attr('data-get-question')).html(replay.total);
+		}else{
+			layer.msg(replay.message, {icon:2});
+		}
+	},'json');
+});
+
+/***********************************
+ 阅览试题
+ ***********************************/
+$('[data-view]').click(function(){
+	parent.layer.open({
+		type: 2,
+		title: '试题阅览器',
+		shadeClose: true,
+		shade: 0.3,
+		area: ['800px', '500px'],
+		content: $(this).attr('url')
+	});
+});
+
+	
+var start = {
+    elem: '#start_time',
+    format: 'YYYY-MM-DD hh:mm:ss',
+    min: '1991-12-24 23:59:59', //设定最小日期为当前日期
+    max: laydate.now(), //最大日期
+    istime: true,
+    choose: function(datas){
+         end.min = datas; //开始日选好后，重置结束日的最小日期
+         end.start = datas //将结束日的初始值设定为开始日
+    }
+};
+
+var end = {
+    elem: '#end_time',
+    format: 'YYYY-MM-DD hh:mm:ss',
+    max: laydate.now(),
+    istime: true,
+    choose: function(datas){
+        start.max = datas; //结束日选好后，重置开始日的最大日期
+    }
+};
+
+laydate(start);
+laydate(end);
+	
+</script>
+{include file="common/footer.html"}

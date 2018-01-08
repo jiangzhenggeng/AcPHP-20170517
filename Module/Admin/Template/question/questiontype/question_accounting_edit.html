@@ -1,0 +1,221 @@
+<style>
+.ac-table-basic.ac-table-basic-query.ac-table-option th{
+	width:80px;
+}
+#question-accounting-box{
+	width: 802px;
+}
+input[type=text].w-100 ,.w-100{
+    width: 100px;
+}
+.w-200{
+    width: 200px;
+}
+#question-accounting-box > table th,
+#question-accounting-box > table tr,
+#question-accounting-box > table td {
+	background-color:#fff;
+}
+</style>
+<tbody>	
+	<tr>
+		<th align="center"></th>
+		<td align="center">
+			<button type="button" class="ac-btn ac-add add-option" onClick="addAccelements('{U('Admin.Accelements.add')}')">增加会计元素</button>
+		</td>
+	</tr>
+</tbody>
+
+<tbody>	
+	<tr>
+		<th align="center">答案</th>
+		<td align="left">
+			<div id="question-accounting-box"><!-- 分录答案容器 --></div>
+			<!-- 增加一个会计分录按钮 -->
+			<table class="ac-table-basic ac-table-basic-query ac-table-option" cellpadding="8" cellspacing="0" style="width:800px;margin: 0;">
+				<td align="left">
+					<button type="button" class="ac-btn ac-add add-option" onClick="addSubAccountingBody('#question-accounting-box')">增加分录</button>
+				</td>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<th align="center">解析</th>
+		<td align="center" style="white-space: inherit;">
+			<script name="question[analysis]" id="analysis"  placeholder="解析" type="text/plain" style="width:800px;height:200px;">{$accounting_analysis['analysis']}</script>
+		</td>
+	</tr>
+</tbody>
+<script>
+crateueditor('analysis','simple');
+
+
+function addAccelements(url){
+	var iframLayer = parent.layer.open({
+		type: 2,
+		title: ['增加会计元素', 'font-size:18px;'],
+		shade: [.5],
+		area: ['620px', '380px'],
+		time: 0, //2秒后自动关闭
+		content: [url, "no"], //iframe的url，no代表不显示滚动条
+		success: function(layero, index){
+			var acContent = parent.layer.getChildFrame('#ac-content', index);
+			$(acContent).find('.ac-nav,.ac-table-right-card').remove();
+			$(acContent).append('<style>.ac-table-card{margin-bottom: 10px;}</style>');
+			$(acContent).find('.ac-table-card li:not(.on)').remove();
+		}
+	});
+}
+
+//全局跨级要素列表
+window.accAccElementsSelectList = null;
+//会计分录的个数
+window.accAccBodyNumber = 0;
+
+function addSubAccountingBody(selecter,answerData){
+	var acc_body_id = 'acc-body-id-'+randomID();
+	
+	var accBodyText = '\
+		<table id="'+acc_body_id+'" class="ac-table-basic ac-table-basic-query ac-table-option" cellpadding="8" cellspacing="0">\
+			<tbody class="delete-or-packup-sub-question">\
+				<tr>\
+					<td align="left">\
+						<button onclick="deleteAccElementsTable(\'#'+acc_body_id+'\')" type="button" class="ac-btn ac-sub ac-white delete-sub-question">移除</button>\
+						<button onclick="packupAccElementsTable(\'#'+acc_body_id+'\',this)" type="button" class="ac-btn ac-add add-option packup-sub-question">收起</button>\
+						<button onclick="addAccElementsSubTotal(\'#'+acc_body_id+'\','+window.accAccBodyNumber+')" type="button" class="ac-btn ac-add add-option ac-right">小计</button>\
+					</td>\
+				</tr>\
+			</tbody>\
+			<tbody class="add-sub-total"><!-- 分录小计容器 --></tbody>\
+		</table>';
+		
+	var selecter_box = $(selecter);	
+	selecter_box.append(accBodyText);
+	
+	//自动增加两个小计
+	if(answerData){
+		for(var i in answerData.answer) addAccElementsSubTotal('#'+acc_body_id,window.accAccBodyNumber,answerData.answer[i]);
+	}else{
+		for(var i=0; i<2; i++)addAccElementsSubTotal('#'+acc_body_id,window.accAccBodyNumber);
+	}
+	//计数器加1
+	window.accAccBodyNumber++;
+}
+
+function addAccElementsSubTotal(selecter,countBodyNumber,answerDataSub){
+	if(!answerDataSub){
+		answerDataSub = {a:'',b:'',c:''};
+	}
+	var selecterParent = $(selecter).find('.add-sub-total'),
+		deleteBtn = '';	
+	
+	var acc_sub_total_id = 'acc-sub-total-id-'+randomID();
+	var acc_sub_select_elem_id = 'acc-sub-select-elem-id-'+randomID();
+	
+	if(selecterParent.find('tr').length>=2){
+		deleteBtn = '<button onClick="subAccElementsSubTotal(\''+selecter+'\',\'#'+acc_sub_total_id+'\')" type="button" class="ac-btn ac-sub ac-white delete-sub-total">删除</button>';
+	}
+	
+	//产生单个分录多行之间的数据
+	var acc_sub_elem_save_data_index = 'save_index_'+randomID();
+	
+	var subTotalTr = '\
+		<tr data-option="option" id="'+acc_sub_total_id+'">\
+			<td align="center">\
+				<select class="w-100" name="question[answer]['+countBodyNumber+']['+acc_sub_elem_save_data_index+'][a]">\
+					<option value="1" '+(answerDataSub.a==1?'selected':'')+'>借</option>\
+					<option value="2" '+(answerDataSub.a==2?'selected':'')+'>贷</option>\
+				</select>\
+				<select id="'+acc_sub_select_elem_id+'" class="w-200" name="question[answer]['+countBodyNumber+']['+acc_sub_elem_save_data_index+'][b]">\
+					'+window.accAccElementsSelectList+'\
+				</select>\
+				<input type="text" value="'+answerDataSub.c+'" name="question[answer]['+countBodyNumber+']['+acc_sub_elem_save_data_index+'][c]" class="text w-100">\
+				'+deleteBtn+'\
+				<button onclick="refreshAccElementsSelect(\'#'+acc_sub_select_elem_id+'\')" type="button" class="ac-btn add-option ac-white" title="添加会计元素后需点击刷新按钮才可以找到">刷新会计元素</button>\
+			</td>\
+		</tr>';
+	selecterParent.append(subTotalTr);
+	
+	//获取元素列表
+	if(window.accAccElementsSelectList==null){
+		refreshAccElementsSelect('#'+acc_sub_select_elem_id,answerDataSub.b);
+	}else{
+		//设置会计元素
+		if(answerDataSub.b) setAccSelect('#'+acc_sub_select_elem_id,answerDataSub.b);
+	}
+}
+
+function subAccElementsSubTotal(selecter,parentSelecter){
+	var layerAlert = parent.layer.alert('你确定删除吗', {icon: 2},function(){
+		$(parentSelecter).remove();
+		var selecterParentTr = $(selecter).find('.add-sub-total').find('tr');	
+		selecterParentTr.eq(0).add(selecterParentTr.eq(1)).find('.delete-sub-total').remove();
+		parent.layer.close(layerAlert);
+	});
+}
+
+function deleteAccElementsTable(selecter){
+	var selecter = $(selecter);
+	if(selecter.parent().find('>table').length<=1){
+		parent.layer.msg('至少有一个分录',{icon: 2});
+		return;
+	}
+	var layerAlert = parent.layer.alert('你确定删除吗', {icon: 2},function(){
+		selecter.remove();
+		parent.layer.close(layerAlert);
+	});
+}
+
+function packupAccElementsTable(selecter,self){
+	var allTbody = $(selecter).find('tbody:not(:first)');
+	var selecter = $(selecter);
+	if(allTbody.css('display')=='none'){
+		selecter.find('tbody:not(:first)').css('display','table-row-group');
+		$(self).val('收起').html('收起');
+	}else{
+		selecter.find('tbody:not(:first)').hide();
+		$(self).val('展开').html('展开');
+	}
+}
+
+function refreshAccElementsSelect(selecter,selecteData){
+	$.get("{U('admin/Accelements/lists')}",{
+		query:'add_get_acc_option_list'
+	},function(data){
+		window.accAccElementsSelectList = '<option value="0">---选择要素---</option>'+data;
+		$(selecter).html(window.accAccElementsSelectList);
+		if(selecteData) setAccSelect(selecter,selecteData);
+		layer.msg('刷新成功', {icon:6,time: 600});
+	});
+}
+
+function setAccSelect(selecter,selecteData){
+	//设置会计元素
+	$(selecter).find('option').each(function(index, element) {
+		if(parseInt($(this).attr('value'))==selecteData){
+			$(this).get(0).selected = true;
+			return;
+		}
+	});
+}
+
+//填充答案
+var answerData = {$accounting_answer};
+for(var i=0;i<answerData.length;i++){
+	addSubAccountingBody('#question-accounting-box',answerData[i]);
+}
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

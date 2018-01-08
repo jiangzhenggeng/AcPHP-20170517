@@ -1,0 +1,89 @@
+{include file="common/header.html"}
+<style>
+.ac-table-view{ padding:20px;}
+.ac-view-row{ padding:5px 0; font-size:14px;}
+.ac-view-row.b-line{ border-bottom:1px dotted #a3a3a3;}
+.ac-view-row label{ display:inline-block; width:80px;}
+</style>
+<div class="ac-main">
+	<div class="ac-warp">
+		<div class="ac-content" id="ac-content">
+			<div class="ac-content-inner">
+				<div class="ac-table-view">
+					<div class="ac-table-body">
+						<div class="ac-view-body">
+							{if isset($_GET['_index'])&&intval($_GET['_index'])}
+							<div class="ac-view-row b-line">
+								<div class="ac-view-col b-line">第{$_GET['_index']}题、</div>
+							</div>
+							{/if}
+							<div class="ac-view-row b-line">
+								<div class="ac-view-col b-line"><label>难度系数：</label><span id="difficulty"></span></div>
+							</div>
+							<div class="ac-view-row b-line">
+								<div class="ac-view-col"><label>科目：</label><span id="subjectname"></span></div>
+							</div>
+							<div class="ac-view-row b-line">
+								<div class="ac-view-col"><label>章节：</label><span id="chaptername"></span></div>
+							</div>
+							<div class="ac-view-row">
+								<div class="ac-view-col"><label>添加时间：</label><span id="addtime"></span></div>
+							</div>
+							<div class="ac-view-row b-line">
+								<div id="question"></div>
+							</div>
+							{php $question_tpl = 'question/questiontype/question_'.$question_type['modelclass'].'_view.html'}
+							{php include xTemplate::getInstance()->includeTpl($question_tpl)}
+							<div class="ac-view-row">
+								<div id="description" style="margin: 20px 0;"></div>
+							</div>	
+						</div>
+						<div class="ac-btn-group">
+							<a onClick="ischeck(this)" class="ac-btn" data-ischeck href="javascript:void(0);" url="{U('ischeck',array('questionid'=>$questionid))}" ischeck="1">审核</a>
+							<a onClick="ischeck(this)" class="ac-btn" data-ischeck href="javascript:void(0);" url="{U('ischeck',array('questionid'=>$questionid))}" ischeck="-1">取消审核</a>
+							<a class="ac-btn" href="{U('edit',array('questionid'=>$questionid))}" target="_blank">编辑</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+<script>
+var layerHander2 = layer.msg('加载中...', {icon:16,time: 100*1000});
+$.ajax({
+	url:'{U("admin/question/get")}',
+	data:{questionid:'{$questionid}'},
+	dataType:'json',
+	success: function(replayData){
+		if(replayData.code!=1){
+			layer.msg(replayData.message, {icon:2});
+			return;
+		}
+		var data = replayData.data;
+		$('#question').html(data.question);
+		$('#description').html(data.description);
+		$('#subjectname').html(data.subjectname);
+		$('#chaptername').html(data.chaptername);
+		$('#addtime').html(data.addtime);
+		$('#difficulty').html( (data.difficulty==1)?'简单':((data.difficulty==2)?'中难':'困难') );
+		$('[ischeck='+data.ischeck+']').hide();
+		
+		infusionAdditionData(data.addition);
+		$('.ac-main').show();
+	},
+	complete: function(xhr,status){
+		layer.close(layerHander2);
+		if(status=='error')
+			layer.msg('载入错误', {icon:2});
+	}
+});
+layer.close(window.layerHander);
+$(window).bind('mouseover',function () {
+	$("#iframe_{$_GET['questionid']}",parent.document).attr('height',$('body').height());
+	//$(window).unbind('mouseover');
+})
+</script>
+</body>
+</html>

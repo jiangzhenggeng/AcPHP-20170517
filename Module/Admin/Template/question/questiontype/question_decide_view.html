@@ -1,0 +1,13 @@
+<div class="ac-view-row">
+	<div class="ac-view-col"><label>答案：</label><span id="answer"></span></div>
+</div>
+<div class="ac-view-row">
+	<div class="ac-view-col"><label>解析：</label><span id="analysis"></span></div>
+</div>
+<script>
+function infusionAdditionData(data){
+	var answerHtml = data.answer==1?'<font color=green>&radic;</font>':'<font color=red>&chi;</font>';
+	$('#answer').html(answerHtml);
+	$('#analysis').html(data.analysis==''?'<font color=red>没有解析</font>':data.analysis);
+}
+</script>

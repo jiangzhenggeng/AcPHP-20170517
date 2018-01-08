@@ -1,0 +1,36 @@
+<div class="ac-view-row">
+	<div class="ac-view-col"><label>分录：</label></div>
+	<div class="ac-view-col" id="accounting"></div>
+</div>
+<div class="ac-view-row">
+	<div class="ac-view-col"><label>解析：</label><span id="analysis"></span></div>
+</div>
+<script id="tpl-data" type="text/html">
+<ul><% var l = 1; %>
+	<% for(var i in data){ %>
+		<li><span><%=l%>、</span>
+			<table class="ac-table-basic" cellpadding="8" cellspacing="0">
+			<% for(var k in data[i].answer){ %>
+				<tr>
+					<td width="60">
+						<% if(data[i].answer[k].a==1){%>借：<% } %>
+						<% if(data[i].answer[k].a==2){%>　贷：<% } %>
+					</td>
+					<td><%=data[i].answer[k].accelementsname%>（<%=data[i].answer[k].number%>）</td>
+					<td width="200"><%=data[i].answer[k].c%></td>
+				</tr>
+			<% } %>
+			<% l++; %>
+			</table>
+		</li>
+	<% } %>
+</ul>
+</script>
+<script>
+var tplFunction = newTplEngine($('#tpl-data').html());
+
+function infusionAdditionData(data){
+	$('#accounting').html(tplFunction({data:data.accounting}));
+	$('#analysis').html(data.analysis==''?'<font color=red>没有解析</font>':data.analysis);
+}
+</script>

@@ -1,0 +1,28 @@
+<div class="ac-view-row">
+	<div class="ac-view-col"><label>选项：</label></div>
+	<div class="ac-view-col" id="optios"></div>
+</div>
+<script id="tpl-data" type="text/html">
+<ul>
+	<% for(var i in data){ %>
+		<li><span><%=data[i].optionname%>、<%=data[i].optiontext%></span>
+			<% var l = 0; %>
+			<table class="ac-table-basic" cellpadding="8" cellspacing="0">
+				<% for(var k in data[i].children){ %>
+					<tr><td><span>（<%=data[i].children[k].optionname%>）</span><%=data[i].children[k].optiontext%></td></tr>
+				<% } %>
+				<tr><td><div><span>答案：</span><%=data[i].answer%></div></td></tr>
+				<tr><td><div><span>解析：</span><%=data[i].analysis==''?'<font color=red>没有解析</font>':data[i].analysis%></div></td></tr>
+			</table>
+		</li>
+	<% } %>
+</ul>
+</script>
+<script>
+var tplFunction = newTplEngine($('#tpl-data').html());
+
+function infusionAdditionData(data){
+	$('#optios').html(tplFunction({data:data}));
+	$('#analysis').html();
+}
+</script>

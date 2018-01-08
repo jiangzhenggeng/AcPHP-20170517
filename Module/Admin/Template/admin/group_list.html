@@ -1,0 +1,66 @@
+{include file="common/header.html"}
+<div class="ac-main">	
+	<div class="ac-warp">
+		<div class="ac-content" id="ac-content">
+			<div class="ac-nav">
+				<a href="{U('admin/index/main')}">主页</a>
+				<span>&raquo;</span>
+				<a href="{U('admin/group/lists')}">管理员组管理</a>
+			</div>
+			<div class="ac-content-inner">
+				<div class="ac-table-view">
+					<div class="ac-table-card">
+						<ul>
+							<li class="on"><a href="{U('lists')}">管理员组管理</a></li>
+							<li><a href="{U('add')}">添加管理员组</a></li>
+						</ul>
+						<div class="ac-table-right-card">
+							<a class="btn ac-back">返回</a>
+						</div>
+					</div>
+					<div class="ac-table-search">
+						
+					</div>
+					<div class="ac-table-body">
+						<form action="{U('listorder')}" method="post">
+							<table class="ac-table-basic" cellpadding="8" cellspacing="0">
+								<tr>
+									<th width="15" align="center"><input type="checkbox" id="chkall" onclick="selectcheckbox(this.form)" value="check"></th>
+									<th width="40" align="center">排序</th>
+									<th width="40" align="center">编号</th>
+									<th width="40" align="center">组名称</th>
+									<th width="20" align="center">状态</th>
+									<th width="60" align="center">是否允许编辑</th>
+									<th width="150" align="center">描述</th>
+									<th width="80" align="center">操作</th>
+								</tr>
+								{loop $group $k $v}
+								<tr>
+									<td align="center"><input type="checkbox" name="checkbox[]" value="{$v['group_id']}"></td>
+									<td align="center"><input type="text" name="listorder[{$v['group_id']}]" value="{$v['listorder']}" class="listorder"></td>
+									<td align="center">{$v['group_id']}</td>
+									<td align="left">{$v['group_name']}</td>
+									<td align="center">{if $v['isshow']}启用{else}禁用{/if}</td>
+									<td align="center">{if $v['isedit']}允许{else}不允许{/if}</td>
+									<td align="left">{cutStr($v['description'])}</td>
+									<td align="center">
+										<a href="{U('admin/group/privSetting',array('group_id'=>$v['group_id']))}">权限分配</a> |
+										<a href="{U('admin/group/edit',array('group_id'=>$v['group_id']))}">编辑</a> |
+										<a href="{U('admin/group/delete',array('group_id'=>$v['group_id']))}" data-delete>删除</a>
+									</td>
+								</tr>
+								{/loop}
+							</table>
+							<div class="ac-btn-group">
+								<input type="submit" value=" 排序 " class="ac-btn" />
+								<div class="ac-page">{$page}</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+{include file="common/footer.html"}

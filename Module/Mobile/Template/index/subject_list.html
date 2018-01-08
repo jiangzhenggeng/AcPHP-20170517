@@ -1,0 +1,75 @@
+{include file="common/header.html"}
+<link href="{__PUBLIC__}Mobile/css/home.css" rel="stylesheet" />
+<div id="offCanvasWrapper" class="mui-off-canvas-wrap mui-draggable">
+	<div class="mui-inner-wrap">
+		<!-- off-canvas backdrop -->
+		<div class="mui-off-canvas-backdrop"></div>
+		
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" href="{U('/mobile/index/init')}"></a>
+			<h1 class="mui-title">{$major['majorname']}</h1>
+			{if ac_login()}
+			<a href="{U('login/login')}" class="mui-icon mui-icon-member mui-pull-right"></a>
+			{else}
+			<button class="mui-action-back mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-right">
+				<a href="{U('/Mobile/Member/area')}"><span class="mui-icon mui-icon-location"></span>{@get_position()}</a></button>
+			{/if}
+		</header>
+		<div class="offCanvasContentScroll">
+			<div class="m-body-box">
+				<div class="mui-content">
+
+					<div class="line-practice">
+						<div class="title">章节练习</div>
+						<a href="{U('')}">我的记录</a>
+						<ul class="mui-table-view chapter-list-ul" style="margin-top:10px;">
+							{loop $subject $k $v}
+							<li class="mui-table-view-cell mui-media">
+								<a class="" data-url="{U('index/chapter',['subjectid'=>$v['subjectid']])}">
+									<img class="mui-media-object mui-pull-left" src="{ac_thumb($v['image'],42,42)}">
+									<div class="mui-media-body">
+										{$v['subjectname']}
+										<p class="mui-ellipsis">{$v['description']}</p>
+									</div>
+								</a>
+								<div class="chapter-list"></div>
+							</li>
+							{/loop}
+						</ul>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		{include file="index/bottom_bar.html"}
+	</div>
+	
+	{include file="common/menu.html"}
+	
+</div>
+<script>
+$('.chapter-list-ul').on('click','[data-url]',function(){
+	if($(this).attr('href')!=undefined) return;
+	
+	var dataUrl = $(this).attr('data-url');
+	var _this = $(this);
+	
+	var loadToast = dialog.toast({message:'加载中...',time:99999});
+	$.get(dataUrl,function(replayData){
+		var _html = '';
+		for(var i in replayData){
+			_html += '<div class="chapter-view-row chapter-has-child">\
+						<div class="chapter-even">\
+							<span class="chapter-title mui-ellipsis">'+replayData[i].chaptername+'</span>\
+							<a href="'+replayData[i].doquestion_url+'" class="mui-icon mui-icon-compose"></a>\
+						</div>\
+						<span data-url-2="'+replayData[i].url+'"></span>\
+						<div class="chapter-list"></div>\
+					</div>';
+		}
+		_this.next('.chapter-list').html(_html);
+		dialog.closeToast(loadToast);
+	},'json');
+});
+</script>
+{include file="common/footer.html"}

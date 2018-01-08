@@ -1,0 +1,82 @@
+{include file="common/header.html"}
+<div class="ac-main">	
+	<div class="ac-warp">
+		<div class="ac-content" id="ac-content">
+			<div class="ac-nav">
+				<a href="{U('admin/index/main')}">主页</a>
+				<span>&raquo;</span>
+				<a href="{U('lists')}">科目管理</a>
+			</div>
+			<div class="ac-content-inner">
+				<div class="ac-table-view">
+					<div class="ac-table-card">
+						<ul>
+							<li class="on"><a href="{U()}">科目管理</a></li>
+							<li><a href="{U('add')}">添加科目</a></li>
+						</ul>
+						<div class="ac-table-right-card">
+							<a class="btn ac-search">搜索</a>
+							<a class="btn ac-back">返回</a>
+						</div>
+					</div>
+
+
+					<div class="ac-table-search">
+						<form name="searchform" action="{U()}" method="get">
+							<div class="ac-explain-col search-form">
+								专业
+								<select id="subjectid" name="search[majorid]" onchange="$('form[name=searchform]').submit()">
+									<option value="0">全部科目</option>
+									{loop $major $r $v}
+									<option value="{$v['majorid']}" {if $v['majorid']==$search['majorid']}selected{/if}>{$v['majorname']}</option>
+									{/loop}
+								</select>
+								<input type="submit" value="搜索" class="ac-btn" name="dosubmit">
+							</div>
+						</form>
+					</div>
+
+					<div class="ac-table-body">
+						<form action="{U('listorder')}" method="post">
+							<table class="ac-table-basic" cellpadding="8" cellspacing="0">
+								<tr>
+									<th width="15" align="center"><input type="checkbox" id="chkall" onclick="selectcheckbox(this.form)" value="check"></th>
+									<th width="40" align="center">排序</th>
+									<th width="40" align="center">编号</th>
+									<th width="280" align="center">科目名称</th>
+									<th width="80" align="center">简短名称</th>
+									<th width="80" align="center">售价</th>
+									<th align="center">科目描述</th>
+									<th width="250" align="center">操作</th>
+								</tr>
+								{loop $subject $k $v}
+								<tr>
+									<td align="center"><input type="checkbox" name="checkbox[]" value="{$v['subjectid']}"></td>
+									<td align="center"><input type="text" name="listorder[{$v['subjectid']}]" value="{$v['listorder']}" class="listorder"></td>
+									<td align="center">{$v['subjectid']}</td>
+									<td align="left">{$v['subjectname']}（<a title="{$v['majorname']}">{cutStr($v['majorname'],10)}</a>）</td>
+									<td align="left">{$v['shortname']}</td>
+									<td align="left">{$v['price']}</td>
+									<td align="left">{cutStr($v['description'],20)}</td>
+									<td align="center">
+										<a href="{U('chapter/lists',array('subjectid'=>$v['subjectid']))}">管理章节</a> |
+										<a href="{U('settingquestiontype',array('subjectid'=>$v['subjectid']))}">配置题型</a> |
+										<a href="{U('edit',array('subjectid'=>$v['subjectid']))}">编辑</a> |
+										<a href="{U('delete',array('subjectid'=>$v['subjectid']))}" data-delete>删除</a>
+									</td>
+								</tr>
+								{/loop}
+							</table>
+							<div class="ac-btn-group">
+								<input type="submit" value=" 排序 " class="ac-btn" />
+								<div class="ac-page">{$page}</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+{include file="common/footer.html"}

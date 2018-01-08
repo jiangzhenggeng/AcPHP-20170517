@@ -1,0 +1,98 @@
+{include file="login/header.html"}
+<header class="mui-bar mui-bar-nav">
+	<button class="mui-action-back mui-btn mui-btn-blue mui-btn-link mui-btn-nav mui-pull-left">
+	<a href="{U('index/init')}"><span class="mui-icon mui-icon-home"></span>首页</a>
+	</button>
+	<h1 class="mui-title">新财会题库登录</h1>
+	<button class="mui-btn mui-btn-blue mui-btn-link mui-pull-right">
+	<a href="{U('forgetpassword')}">忘记密码</a>
+	</button>
+</header>
+<div class="mui-content" style=" position:relative;">
+	<div class="mui-card">
+		<form id='form-data' class="mui-input-group">
+			<input type="hidden" name="query" value="insert" />
+			<div class="mui-input-row">
+				<input style="display:none" />
+				<input id='mobile' name="user[mobile]" type="text" class="mui-input-clear mui-input mui-icon-locked" placeholder="手机/账号/邮箱" autocomplete="off">
+			</div>
+			<div class="mui-input-row">
+				<input style="display:none" />
+				<input id='password' name="user[password]" type="password" class="mui-input-clear mui-input" placeholder="密码" autocomplete="off">
+			</div>
+			<ul class="mui-table-view mui-table-view-chevron">
+				<li class="mui-table-view-cell">
+					<p>自动登录</p>
+					<div id="autoLogin" class="mui-switch">
+						<input type="hidden" id="autologin" name="autologin" />
+						<div class="mui-switch-handle"></div>
+					</div>
+				</li>
+			</ul>
+		</form>
+	</div>
+	<div class="mui-content-padded">
+		<button id='login' class="mui-btn mui-btn-block mui-btn-primary" type="button">登录</button>
+		<button class="mui-btn mui-btn-block zhuce" type="button"><a href="{U('register')}">免费注册</a></button>
+	</div>
+	<div class="mui-content-padded oauth-area">
+		<div class="other-login-type" id="login-type">
+			<ul class="mod-fast-login clearfix">
+				<li><a href="{U('qqlogin')}"><span class="mui-icon mui-icon-qq"></span>QQ</a> </li>
+				<li><a href="{U('weibologin')}"><span class="mui-icon mui-icon-weibo"></span>新浪微博</a> </li>
+				<li><a href="#{U('weixinlogin')}" style="color: #bbb;"><span class="mui-icon mui-icon-weixin"></span>微信</a> </li>
+			</ul>
+		</div>
+	</div>
+</div>
+<script>
+$(function(){
+	$('.mui-switch').on('click',this,function(){
+		if($(this).hasClass('mui-active')){
+			$(this).removeClass('mui-active');
+			$('#autologin').val('false');
+		}else{
+			$(this).addClass('mui-active');
+			$('#autologin').val('true');
+		}
+	});
+});
+
+$('#login-type').find('li').click(function(){
+	if( $(this).find('a').attr('href').substr(0,1)=='#' ){
+		dialog.toast({message:'该接口暂未开通'});
+	}
+});
+
+$('#login').click(function(){
+
+	if(!vMobile($('#mobile').val())){
+		dialog.alert({message:'手机号码不正确'});
+		return;
+	}
+	
+	if( ! vPassword($('#password').val()) ){
+		dialog.alert({message:'密码格式不正确'});
+		return;
+	}
+	
+	var toast = dialog.toast({message:'正在登录中'});
+	var formData = $('#form-data').serialize();
+	$.ajax({
+		url:"{U('mobile/login/login')}",
+		data:formData,
+		accepts:'json',
+		success: function(replayData,status){
+			if(replayData.status=='success'){
+				window.location = "{U('mobile/member/center')}";
+				return;
+			}
+			dialog.alert({message:replayData.message});
+		},
+		complete: function(){
+			dialog.closeToast(toast);
+		}
+	});
+});
+</script> 
+{include file="login/footer.html"}

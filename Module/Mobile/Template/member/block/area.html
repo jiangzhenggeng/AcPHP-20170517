@@ -1,0 +1,116 @@
+{include file="login/header.html"}
+<link href="{__PUBLIC__}Mobile/css/mui.indexedlist.css" rel="stylesheet" />
+<script src="{__PUBLIC__}Mobile/js/mui.min.js"></script>
+<script src="{__PUBLIC__}Mobile/js/mui.indexedlist.js"></script>
+<style>
+html,
+body {
+	height: 100%;
+	overflow: hidden;
+}
+.mui-bar {
+	-webkit-box-shadow: none;
+	box-shadow: none;
+}
+#done.mui-disabled{
+	color: gray;
+}
+.mui-bar {
+    background-color: #0081E2;
+    box-shadow: none;
+}
+.mui-bar * {
+    color: #fff !important;
+}
+.mui-bar-nav~.mui-content {
+    padding-bottom: 0px;
+}
+input[type=search] {
+    height: 34px;
+}
+
+.mui-radio:nth-child(1) input[type=radio]:after, .mui-checkbox:nth-child(1) input[type=checkbox]:after,
+.mui-radio:nth-child(2) input[type=radio]:after, .mui-checkbox:nth-child(2) input[type=checkbox]:after,
+.mui-radio:nth-child(3) input[type=radio]:after, .mui-checkbox:nth-child(3) input[type=checkbox]:after,
+.mui-radio:nth-child(4) input[type=radio]:after, .mui-checkbox:nth-child(4) input[type=checkbox]:after,
+.mui-radio:nth-child(5) input[type=radio]:after, .mui-checkbox:nth-child(5) input[type=checkbox]:after,
+.mui-radio:nth-child(6) input[type=radio]:after, .mui-checkbox:nth-child(6) input[type=checkbox]:after,
+.mui-radio:nth-child(7) input[type=radio]:after, .mui-checkbox:nth-child(7) input[type=checkbox]:after ,
+.mui-radio:nth-child(4) input[type=radio]:after, .mui-checkbox:nth-child(4) input[type=checkbox]:after {
+	display:none;
+	content:normal;
+}
+</style>
+
+<header class="mui-bar mui-bar-nav">
+	<a href="{U('baseinfo')}" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+	<h1 class="mui-title">选择所在考区</h1>
+	<a id='done' class="mui-btn mui-btn-link mui-pull-right mui-btn-blue mui-disabled">确认</a>
+	<input type="hidden" id="areaid" name="areaid" />
+</header>
+<div class="mui-content">
+	<div id='list' class="mui-indexed-list">
+		<div class="mui-indexed-list-search mui-input-row mui-search">
+			<input type="search" class="mui-input-clear mui-indexed-list-search-input" placeholder="搜索机场">
+		</div>
+		<div class="mui-indexed-list-bar">
+		{for $i=1;$i<=26;$i++}
+			<a>{@chr($i+64)}</a>
+		{/for}
+		</div>
+		<div class="mui-indexed-list-alert"></div>
+		<div class="mui-indexed-list-inner">
+			<div class="mui-indexed-list-empty-alert">没有数据</div>
+			<ul class="mui-table-view">
+			{php $count=count($exam_area)}
+			{loop $exam_area $k $v}
+				{if !isset($exam_area[$k-1]) OR substr($v['letter'],0,1)!=substr($exam_area[$k-1]['letter'],0,1)}
+					<li data-group="{@strtoupper(substr($v['letter'],0,1))}" class="mui-table-view-divider mui-indexed-list-group">{@strtoupper(substr($v['letter'],0,1))}</li>
+				{/if}
+				<li data-value="{$v['letter']}" data-tags="{$v['letter']}" class="mui-table-view-cell mui-indexed-list-item mui-checkbox mui-left">
+					<label style="margin:0;padding:0"><input value="{$v['areaid']}" type="checkbox" {if isset($areaid) && $areaid==$v['areaid']}checked{/if} />{$v['areaname']}</label></li>
+			{/loop}
+			</ul>
+		</div>
+	</div>
+</div>
+<script type="text/javascript" charset="utf-8">
+mui.init();
+mui.ready(function() {
+	var header = document.querySelector('header.mui-bar');
+	var list = document.getElementById('list');
+	var done = document.getElementById('done');
+	//calc hieght
+	list.style.height = (document.body.offsetHeight - header.offsetHeight) + 'px';
+	//create
+	window.indexedList = new mui.IndexedList(list);
+
+	//done event
+	done.addEventListener('tap', function() {
+		$.ajax({
+			url:"{U('mobile/member/area')}",
+			data:{areaid:$('#areaid').val(),'query':'insert'},
+			accepts:'json',
+			success: function(replayData,status){
+				if(replayData.status=='success'){
+					dialog.toast({message:replayData.message},function(){
+						window.location = '{U("Mobile/Member/baseinfo")}';
+					});
+					return;
+				}
+				dialog.alert({message:replayData.message});
+			}
+		});
+	}, false);
+	
+	mui('.mui-indexed-list-inner').on('change', 'input', function() {
+		$('.mui-indexed-list-inner').find('input[type="checkbox"]:checked').each(function(index, element) {
+			$(this).prop('checked',false);
+		});
+		$(this).prop('checked',true);
+		done.classList.remove("mui-disabled");
+		$('#areaid').val($(this).val());
+	});
+});
+</script>
+{include file="login/footer.html"}

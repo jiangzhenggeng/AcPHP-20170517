@@ -1,0 +1,60 @@
+{include file="common/header.html"}
+<div class="pc-login-header">
+    <div class="pc-main pc-login pc-clear">
+        <div class="pc-login-logo pc-left">
+            <img src="{__IMG__}admin/logo.gif">
+        </div>
+        <div class="pc-login-header-right pc-right pc-pos-re">
+            <div class="pc-right pc-login-right-inner pc-pos-ab">
+                <div class="pc-login-help pc-left">
+                    <a href="tel:15727321578">资讯电话:15727321578</a>
+                </div>
+                <div class="pc-login-help pc-left">
+                    <a href="#">帮助中心</a>
+                </div>
+                <div class="pc-btn-group pc-left">
+                    <a class="pc-btn ac-withe" href="#">注 册</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="pc-banner">
+    <div class="pc-banner-inner pc-pos-re pc-main pc-login">
+        <div class="pc-login-input-warp pc-pos-ab">
+            <div class="pc-login-frame">
+                <h3 class="pc-login-title">登录</h3>
+                <div class="pc-login-err-panel" id="err"> </div>
+                <form class="pc-login-form" id="loginForm" autocomplete="off">
+                    <input type="hidden" name="query" value="insert">
+                    <div class="pc-login-input-panel" id="js_mainContent">
+                        <div class="pc-login-input-row">
+                            <i class="pc-icon pc-icon-account"> </i>
+                            <input type="text" id="mobile" name="user[mobile]" placeholder="手机/账号" class="pc-input-text" autocomplete="off">
+                        </div>
+                        <div class="pc-login-input-row">
+                            <i class="pc-icon pc-icon-password"> </i>
+                            <input type="password" id="password" name="user[password]" placeholder="密码" class="pc-input-text" autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="login-help-panel pc-mt-10">
+                        <label class="frm_checkbox_label" for="rememberCheck">
+                            <i class="icon_checkbox"></i>
+                            <label>
+                            <input type="checkbox" id="autologin" class="frm_checkbox"  name="autologin">
+                            记住帐号</label>
+                        </label>
+                        <a class="login_forget_pwd" href="#">忘记密码？</a>
+                    </div>
+                    <div class="login_btn_panel">
+                        <a class="pc-btn w-100-100" id="login" href="javascript:">登录</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="{__JS__}login.js"></script>
+{include file="common/footer.html"}

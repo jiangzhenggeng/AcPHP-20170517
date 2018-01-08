@@ -1,0 +1,53 @@
+<script>
+if(typeof(window.MyURL)=='undefined')window.URL = {};
+
+//允许重新做题，主要用在查看个人错题
+window.URL['allowDo'] = "{@App::getConfig('exam','allowDo',false)}";
+//是否是考试模式
+window.URL['examModel'] = "{@App::getConfig('exam','examModel',false)}";
+//做出选择之后是否开启自动下一题
+window.URL['autoNext'] = "{@App::getConfig('exam','autoNext',true)}";
+window.URL['autoNextTime'] = "{@App::getConfig('exam','autoNextTime',230)}";
+//不定项选这题题目显示模式
+window.URL['caseShowModel'] = "{@App::getConfig('exam','caseShowModel',2)}";
+//是否允许显示答案
+window.URL['allowShowAnswer'] = "{@App::getConfig('exam','allowShowAnswer',true)}";
+//是否允许自动显示答案
+window.URL['allowAutoShowAnswer'] = "{@App::getConfig('exam','allowAutoShowAnswer',true)}";
+//是否允许评论
+window.URL['allowComment'] = "{@App::getConfig('exam','allowComment',true)}";
+//是否允许收藏
+window.URL['allowLinkezan'] = "{@App::getConfig('exam','allowLinkezan',true)}";
+//是否允许收藏
+window.URL['allowShowFavorite'] = "{@App::getConfig('exam','allowShowFavorite',true)}";
+
+//获取试题地址
+window.URL['question'] = "{@App::getConfig('exam','getQuestionUrl',U('/Mobile/Doquestion/init'))}";
+
+//获取会计元素列表
+window.URL['getAccelements'] = '{U("/Mobile/Accelements/get")}';
+//获取会计元素借贷方法
+window.URL['getAccelementsType'] = '{U("/Mobile/Accelements/getType")}';
+
+//收藏试题的地址
+window.URL['favoriteQuestion'] = '{U("/Mobile/Favorite/favorite")}';
+//查看试题是否已经收藏
+window.URL['isFavoriteQuestion'] = '{U("/Mobile/Favorite/isfavorite")}';
+//获取评论的地址
+window.URL['getComment'] = '{U("/Mobile/Comment/getComment")}';
+//发表评论的地址
+window.URL['sendComment'] = '{U("/Mobile/Comment/sendComment")}';
+//评论点赞地址
+window.URL['commentLikezan'] = '{U("/Mobile/Comment/commentLikezan")}';
+//评论发表地址
+window.URL['commentReplay'] = '{U("/Mobile/Comment/commentReplay")}';
+
+//当前科目id
+window.URL['currSubjectid'] = '{php echo isset($subjectid)?$subjectid:xInput::request("subjectid",0)}';
+
+//不允许选答案，主要在提交试卷然后获取未做的试题生效
+window['URL'].disabledAnser = "{@App::getConfig('exam','disabledAnser',false)}";
+//+++===================+++//
+window.meid = '{$meid}';
+window.mesuid = '{$mesuid}';
+</script>

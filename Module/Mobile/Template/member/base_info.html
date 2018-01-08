@@ -1,0 +1,52 @@
+{include file="member/header.html"}
+<header class="mui-bar mui-bar-nav">
+	<button class="mui-btn mui-btn-blue mui-btn-link mui-pull-left">
+		<a href="{U('member/center')}">取消</a>
+	</button>
+	<h1 class="mui-title">信息修改</h1>
+	<button class="mui-btn mui-btn-blue mui-btn-link mui-pull-right">
+		<a href="{U('member/center')}">确定</a>
+	</button>
+</header>
+
+<div class="mui-content member-base-info">
+	<ul class="mui-table-view mui-table-view-chevron">
+		<li class="mui-table-view-cell">
+			<a id="head" class="mui-navigate-right">头像
+				<span class="mui-pull-right head">
+					<img class="head-img mui-action-preview" onclick="uploadBox({name:'facepicture','url':'{U('changefacepicture')}',self:this})" id="head-img1" src="{@get_face()}">
+				</span>
+			</a>
+		</li>
+		<li class="mui-table-view-cell">
+			<a class="mui-navigate-right" href="{U('mobile')}">手机<i class="mui-pull-right update">{@$member['mobile']?$member['mobile']:'未绑定'}</i></a>
+		</li>
+		<li class="mui-table-view-cell">
+			<a class="mui-navigate-right" href="{U('nickname')}">昵称<i class="mui-pull-right update">{if $member['nickname']==''}<font color="#fe5341">未填写</font>{else}{$member['nickname']}{/if}</i></a>
+		</li>
+		<li class="mui-table-view-cell">
+			<a class="mui-navigate-right" href="{U('sex')}">性别<i class="mui-pull-right update">{@$member['sex_name']}</i></a>
+		</li>
+		<li class="mui-table-view-cell">
+			<a class="mui-navigate-right" href="{U('email')}">邮箱<i class="mui-pull-right update">{if $member['email']==''}<font color="#fe5341">未填写</font>{else}{$member['email']}{/if}</i></a>
+		</li>
+		<li class="mui-table-view-cell">
+			<a class="mui-navigate-right" href="{U('introduction')}">个人简介<i class="mui-pull-right update">{if $member['introduction']==''}<font color="#fe5341">未填写</font>{else}已完善{/if}</i></a>
+		</li>
+	</ul>
+	<ul class="mui-table-view mui-table-view-chevron">
+		<li class="mui-table-view-cell">
+			<a class="mui-navigate-right" href="{U('area')}">考区<i class="mui-pull-right update">{@get_position()}</i></a>
+		</li>
+		<li class="mui-table-view-cell">
+			<a class="mui-navigate-right" href="{U('bind')}">账号绑定<i class="mui-pull-right update">进入绑定</i></a>
+		</li>
+	</ul>
+	<ul class="mui-table-view" id="member-menu-list-bix">
+		<li data-url="{U('mobile/login/loginout')}" class="mui-table-view-cell" style="text-align: center;">
+			<a><font color="#fe5341">退出登录</font></a>
+		</li>
+	</ul>
+</div>
+
+{include file="member/footer.html"}

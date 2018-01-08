@@ -1,0 +1,252 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>{$SEO['title']}-管理中心</title>
+	<meta http-equiv="Content-Type" content="text/html; charset={__CHARSET__}" />
+	<meta name="keywords" content="{$SEO['keywords']}">
+	<meta name="description" content="{$SEO['description']}">
+	<link rel="stylesheet" type="text/css" href="{__ADMIN_RES_PATH__}css/admin.css"/>
+	<script type="text/javascript" src="{__ADMIN_RES_PATH__}js/jquery-1.11.3.min.js"></script>
+	<script type="text/javascript" src="{__ADMIN_RES_PATH__}js/jquery.cookie.js"></script>
+	<script type="text/javascript" src="{__ADMIN_RES_PATH__}js/layer/layer.js"></script>
+	<script type="text/javascript" src="{__ADMIN_RES_PATH__}js/global.js"></script>
+	<link rel="stylesheet" type="text/css" href="{__ADMIN_RES_PATH__}js/mCustomScrollbar/jquery.mCustomScrollbar.min.css"/>
+	<script type="text/javascript" src="{__ADMIN_RES_PATH__}js/mCustomScrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
+</head>
+
+<body style="min-width:1200px;">
+<div class="ac-main">
+	<div class="ac-header">
+		<div class="ac-logo ac-left">
+			<a href="{__ROOT__}" target="_blank"><img src="{__ADMIN_RES_PATH__}images/admin/logo.png" /></a>
+		</div>
+		<div class="ac-header-top ac-left">
+			<div class="ac-top-menu">
+				<ul id="ac-top-menu-ul">
+				{loop $top_menu $k $v}
+					{php $url = U('admin/menu/listsmenu',array('priv_id'=>$v['priv_id'],'data'=>$v['priv_id']));}
+					{php $condition = strtolower($v['controller'])=='menu' && strtolower($v['action'])=='listsmenu';}
+					{if $condition && $v['data']==10}
+						{php $class='system-setting';}
+					{elseif $condition && $v['data']==1}
+						{php $class='admin-manage';}
+					{elseif $condition && $v['data']==15}
+						{php $class='article-manage';}
+					{elseif $condition && $v['data']==16}
+						{php $class='question-manage';}
+					{elseif $condition && $v['data']==17}
+						{php $class='exam-manage';}
+					{elseif $condition && $v['data']==18}
+						{php $class='xueyuan-manage';}
+					{elseif $condition && $v['data']==19}
+						{php $class='order-manage';}
+					{elseif $condition && $v['data']==20}
+						{php $class='plus-manage';}
+					{elseif $condition && $v['data']==25}
+						{php $class='plus-course';}
+					{/if}
+					<li data-order="{$k}" class="{$class}"><a cache-id="id-{$v['priv_id']}" href="{$url}"><i></i><span>{$v['priv_name']}</span></a></li>
+				{/loop}
+				</ul>
+			</div>
+		</div>
+		<div class="ac-header-top ac-right">
+			<div class="ac-admin-main">
+				<div class="ac-admin-user-inner-1">
+					<div class="ac-admin-user-inner">
+						<p>欢迎-{php echo xSession::get('admin.admin_name')} 登录系统</p>
+						<p><a href="{U('Admin/Admin/selfedit')}" target="iframeMain">{php echo xSession::get('admin.realname')}</a>[<font color="fe5341">{php echo xSession::get('admin.group_name')}</font>]<a class="ac-right" href="{U('admin/login/doLogout')}">退出系统</a></p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="ac-warp">
+	
+		<div class="ac-menu ac-left" id="ac-menu">
+			<div class="ac-menu-inner" id="ac-menu-inner"></div>
+		</div>
+		<div class="ac-content" id="ac-content" style="margin-left:151px;">
+			<div class="ac-content-inner">
+				<iframe src="{U('admin/index/main')}" name="iframeMain" id="iframeMain" frameborder="0"></iframe>
+				<div class="ac-footer">
+					<div id="footer">
+						<div class="line"></div>
+						<ul>
+							<li><a href="http://www.tdall.net" target="_blank">版权所有 © 2013-2015 贵州天岛在线科技有限公司，并保留所有权利。</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+
+<script type="text/html" id="ac-menu-inner-tpl">
+<div class="ac-menu-list">
+	<ul>
+	<% for( var i in data ){ %>
+		<li data-order="<%=data[0].cacheId%><%=i%>"><a href="<%=data[i].url%>" target="iframeMain"><%=data[i].menuname%></a></li>
+		<% if(typeof(data[parseInt(i)+1])!='undefined' && data[i].group!=data[parseInt(i)+1].group){ %>
+			</ul></div><div class="ac-menu-list"><ul>
+		<% } %>
+	<% } %>
+	</ul>
+</div>
+</script>
+
+<script>
+
+/**
+ +----------------------------------------------------------
+ * 绑定自适应屏幕大小事件
+ +----------------------------------------------------------
+ */
+acMenu();
+$(window).resize(function(){
+	acMenu();
+});
+
+/**
+ +----------------------------------------------------------
+ * 绑定左侧菜单点击事件
+ +----------------------------------------------------------
+ */
+$('.ac-menu-inner').on('click','a',function(){
+	$('.ac-menu-list li').removeClass('on');
+	$(this).parent().addClass('on');
+	$.cookie('ac_left_menu_ul_a',$(this).parent().attr('data-order'),{expires:(+new Date())+99999999});
+});
+/**
+ +----------------------------------------------------------
+ * 菜单过多使用滚动
+ +----------------------------------------------------------
+ */
+(function($){
+	$("#ac-menu").mCustomScrollbar({
+		scrollButtons:{enable:true,scrollSpeed:8 },
+		theme:"light",
+		scrollbarPosition:"outside",
+		scrollInertia:12
+	});
+})(jQuery);
+
+/**
+ +----------------------------------------------------------
+ * 绑定后台顶部菜单点击操作
+ * ajax获取二级菜单列表
+ +----------------------------------------------------------
+ */
+$(function(){
+	var ac_top_menu_ul = $('#ac-top-menu-ul');
+	if(ac_top_menu_ul.length<=0) return true;
+	//获取菜单模板缓存函数
+	var cacheTplFunc = newTplEngine($('#ac-menu-inner-tpl').html());
+	var ac_menu_inner_box = $('#ac-menu-inner');
+	ac_top_menu_ul.on('click','a',function(e){
+		$.cookie('ac_top_menu_ul_a',$(this).parent().attr('data-order'),{expires:(+new Date())+99999999});
+		e.preventDefault();
+		var self = $(this);
+		var cache_id = ac_menu_inner_box.find('#'+$(this).attr('cache-id'));
+
+		if( cache_id.length>0 ){
+			ac_menu_inner_box.find('>*').css('display','none');
+			cache_id.css('display','block');
+
+			var 	url = '',
+					ac_left_menu_ul_a_val = $.cookie('ac_left_menu_ul_a'),
+					triggerClick = false;
+
+			cache_id.find('li').each(function () {
+				if($(this).attr('data-order')==ac_left_menu_ul_a_val){
+					$(this).find('a').trigger('click');
+					triggerClick = true;
+					url = $(this).find('a').attr('href');
+					return;
+				}
+			});
+			if(!triggerClick){
+				cache_id.find('a').eq(0).trigger('click');
+				url = cache_id.find('a').eq(0).attr('href');
+			}
+			$('#iframeMain').attr('src',url);
+			return true;
+		}
+		var _this = $(this);
+		//不存在缓存则获取菜单
+		var href = $(this).attr('href');
+		//加载层-默认风格
+		var layerLoading = layer.load(0/*,{shade:0.5,shadeClose:true}*/);
+		$.get(href,{'query':'listsmenu'},function(data){
+			layer.close(layerLoading);
+			if( typeof(data.status)!='undefined' && data.status == 'error' ){
+				layer.alert(data.message, {icon: 2});
+				return false;
+			}else if(typeof(data.status)!='undefined' && data.status == 'reload'){
+				window.location.reload();
+			}
+			data[0].cacheId = _this.attr('cache-id');
+			ac_menu_inner_box.find('>*').css('display','none');
+			ac_menu_inner_box.append('<div id="'+self.attr('cache-id')+'">'+cacheTplFunc({data:data})+'</div>');
+
+			var cache_id = ac_menu_inner_box.find('#'+_this.attr('cache-id'));
+
+			var 	url = '',
+					ac_left_menu_ul_a_val = $.cookie('ac_left_menu_ul_a'),
+					triggerClick = false;
+
+			cache_id.find('li').each(function () {
+				if($(this).attr('data-order')==ac_left_menu_ul_a_val){
+					$(this).find('a').trigger('click');
+					triggerClick = true;
+					url = $(this).find('a').attr('href');
+					return;
+				}
+			});
+			if(!triggerClick){
+				cache_id.find('a').eq(0).trigger('click');
+				url = cache_id.find('a').eq(0).attr('href');
+			}
+			$('#iframeMain').attr('src',url);
+		},'json');
+	});
+	//第一次加载模拟点击第一个按钮事件
+	var ac_top_menu_ul_a_val = $.cookie('ac_top_menu_ul_a'),triggerClick = false;
+	ac_top_menu_ul.find('li').each(function () {
+		if($(this).attr('data-order')==ac_top_menu_ul_a_val){
+			$(this).find('a').trigger('click');
+			triggerClick = true;
+			return;
+		}
+	});
+	if(!triggerClick){
+		ac_top_menu_ul.find('li a').eq(0).trigger('click');
+	}
+});
+/**
+ +----------------------------------------------------------
+ * 保存在线状态
+ +----------------------------------------------------------
+ */
+$(function(){
+	var time = null;
+	var isOnline = function(){
+		$.get("{U('Admin/Index/init')}",{'query':'isonline'},function(data){
+			if(data.status=='offline' || data.status=='error'){
+				clearTimeout(time);
+				layer.alert(data.message, {icon: 2},function(){
+					window.location="{U('admin/login/doLogout')}";
+				});
+			}
+		},'json');
+		time = setTimeout(function(){
+			isOnline();
+		},3000);
+	};
+	isOnline();
+});
+</script>
+</body>
+</html>

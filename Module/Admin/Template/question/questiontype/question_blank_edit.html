@@ -1,0 +1,81 @@
+
+<style>
+.question-blank-answer{
+	margin:10px 5px;
+}
+#question-blank-box{
+	width: 802px;
+}
+.blank-title-targe{
+	font:15px !important;
+	color:#444444 !important;
+}
+</style>
+<tbody>	
+	<tr>
+		<th align="center">答案</th>
+		<td align="center">
+			<div id="question-blank-box">
+				<!-- 增加一个子问题容器 -->
+				<table class="ac-table-basic ac-table-basic-query ac-table-option" cellpadding="8" cellspacing="0"></table>
+			</div>
+			<!-- 增加一个子问题按钮 -->
+			<table class="ac-table-basic ac-table-basic-query ac-table-option" cellpadding="8" cellspacing="0">
+				<td align="left">
+					<button type="button" class="ac-btn ac-add add-option" onClick="addSubQuestionBlanAnswer('#question-blank-box > table')">增加填空</button>
+				</td>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<th align="center">解析</th>
+		<td align="center" style="white-space: inherit;">
+			<script name="question[analysis]" id="analysis"  placeholder="解析" type="text/plain" style="width:800px;height:200px;">{$blank_analysis['analysis']}</script>
+		</td>
+	</tr>
+</tbody>
+<script>
+//删除填空
+function delectSubBlankAnswer(selecter,parentBox){
+	var selecter = $(selecter),
+		parentBox = $(parentBox);
+	if(parentBox.find('tr').length<=1){
+		parent.layer.msg('至少有一个填空',{icon: 2});
+		return;
+	}
+	var layerAlert = parent.layer.alert('你确定删除吗', {icon: 2},function(){
+		selecter.remove();
+		parent.layer.close(layerAlert);
+		parentBox.find('tr').find('span.blank-title-targe').each(function(index, element) {
+			$(this).html(index + 1 + '、');
+		});
+	});
+}
+
+function addSubQuestionBlanAnswer(selecter,fillData){
+	var blank_sub_answer = 'blank-sub-answer-'+randomID();
+	var selecterObj = $(selecter);
+	var selecter_len = selecterObj.find('tr').length + 1;
+	fillData = fillData || '';
+	
+	var blankAnswer = '\
+		<tr id="'+blank_sub_answer+'">\
+			<td><div class="question-blank-answer">\
+				<label><span class="blank-title-targe">'+selecter_len+'、</span>\
+				<input name="question[answer][]" type="text" value="'+fillData+'" /></label>\
+				<button onclick="delectSubBlankAnswer(\'#'+blank_sub_answer+'\',\''+selecter+'\')" type="button" class="ac-btn ac-sub ac-white">移除</button>\
+			</div>\
+			</td>\
+		</tr>';
+	selecterObj.append(blankAnswer);
+}
+//填充答案
+var answerData = {$blank_answer};
+
+for(var i=0;i<answerData.length;i++){
+	addSubQuestionBlanAnswer('#question-blank-box > table',answerData[i].answer);
+}
+
+crateueditor('analysis','simple');
+
+</script>

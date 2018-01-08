@@ -1,0 +1,24 @@
+<div class="ac-view-row">
+	<div class="ac-view-col"><label>答案：</label></div>
+	<div class="ac-view-col" id="answer"></div>
+</div>
+<div class="ac-view-row">
+	<div class="ac-view-col"><label>得分点：</label><span id="pointer"></span></div>
+</div>
+<div class="ac-view-row">
+	<div class="ac-view-col"><label>解析：</label><span id="analysis"></span></div>
+</div>
+<script id="tpl-data" type="text/html">
+<% var l = 0; %>
+<% for(var i in data){ %>
+	<span><%=data[i]%>、</span>
+<% } %>
+</script>
+<script>
+var tplFunction = newTplEngine($('#tpl-data').html());
+function infusionAdditionData(data){
+	$('#answer').html(data.answer);
+	$('#pointer').html(tplFunction({data:data.pointer}));
+	$('#analysis').html(data.analysis==''?'<font color=red>没有解析</font>':data.analysis);
+}
+</script>

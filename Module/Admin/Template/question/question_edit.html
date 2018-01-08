@@ -1,0 +1,154 @@
+{include file="common/header.html"}
+{include file="common/ueditor.html"}
+<style>
+.query-answer-select label{
+	display:inline-block;
+	margin-right:20px;
+	padding: 10px 0;
+	font-size:16px;
+}
+textarea{width: 790px;}
+.ac-subject-list-box label{
+	color:#999;
+}
+</style>
+<div class="ac-main">	
+	<div class="ac-warp">
+		<div class="ac-content" id="ac-content">
+			<div class="ac-nav">
+				<a href="{U('admin/index/main')}">主页</a>
+				<span>&raquo;</span>
+				<a href="{U('lists')}">试题管理</a>
+				<span>&raquo;</span>
+				<a href="{U('add',array('query'=>'subjectselect'))}">选择科目</a>
+				<span>&raquo;</span>
+				<a href="{U()}">修改试题[{cutStr($subject['subjectname'])}]</a>
+			</div>
+			<div class="ac-content-inner">
+				<div class="ac-table-view">
+					<div class="ac-table-card">
+						<ul>
+							<li><a href="{U('lists')}">试题管理</a></li>
+							<li class="on"><a href="{U()}">修改试题[{cutStr($subject['subjectname'])}]</a></li>
+							<li><a href="{U('add',array('query'=>'subjectselect'))}">选择科目</a></li>
+						</ul>
+						<div class="ac-table-right-card">
+							<a class="btn ac-back">返回</a>
+						</div>
+					</div>
+					<div class="ac-table-search">
+						
+					</div>
+					<div class="ac-table-body">
+						<form action="{U('edit',array('query'=>'insert'))}" method="post">
+							<input type="hidden" name="query" value="insert" />
+							<input type="hidden" name="token" value="{$token}" />
+							<input type="hidden" name="typeid" value="{$question['typeid']}" />
+							<input type="hidden" name="questionid" value="{$question['questionid']}" />
+							<table class="ac-table-basic ac-table-basic-query" cellpadding="8" cellspacing="0">
+								<tr>
+									<th align="center">选择添加题型</th>
+									<td align="center">
+										<section class="ac-subject-list-box">
+											<section>
+												{loop $subject_question_type $k $v}
+												<label><input disabled name="__question[typeid]" type="radio" value="{$v['typeid']}" {if $typeid==$v['typeid']}checked select="yes"{/if} />{$v['typename']}</label>
+												{/loop}
+											</section>
+										</section>									
+									</td>
+								</tr>
+								<tr>
+									<th align="center">选择章节</th>
+									<td align="center">
+										<select name="question[treeid]" id="treeid">
+											<option value="0">---选择上级章节---</option>
+											{$subject_tree}
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th align="center">难易程度</th>
+									<td align="center">
+										<select name="question[difficulty]" id="difficulty">
+											<option value="1" {if $question['difficulty']==1}selected{/if}>简单</option>
+											<option value="2" {if $question['difficulty']==2}selected{/if}>易</option>
+											<option value="3" {if $question['difficulty']==3}selected{/if}>中难</option>
+											<option value="4" {if $question['difficulty']==4}selected{/if}>难</option>
+											<option value="5" {if $question['difficulty']==5}selected{/if}>困难</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th align="center">试题</th>
+									<td align="center" style="white-space: inherit;">
+										<textarea name="question[question]" id="question"  placeholder="试题" style="width:800px;height:200px;">{$question['question']}</textarea>
+									</td>
+								</tr>
+								{php $question_tpl = 'question/questiontype/question_'.$question_type['modelclass'].'_edit.html'}
+								{php include xTemplate::getInstance()->includeTpl($question_tpl)}
+
+								<tr>
+									<th align="center">经典试题</th>
+									<td align="center">
+										<select name="question[classics]" id="classics">
+											<option value="0" {if $question['classics']==0}selected{/if}>非经典试题</option>
+											<option value="1" {if $question['classics']==1}selected{/if}>是经典试题</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th align="center">是否真题</th>
+									<td align="center">
+										<select name="question[isreal]" id="isreal">
+											<option value="0" {if $question['isreal']==0}selected{/if}>非真题</option>
+											<option value="1" {if $question['isreal']==1}selected{/if}>是真题</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th align="center">附加备注</th>
+									<td align="center">
+										<textarea name="question[description]" id="description" placeholder="附加备注">{$question['description']}</textarea>
+									</td>
+								</tr>
+								<tr>
+									<th align="center">审核</th>
+									<td align="center">
+									{if $question['ischeck']==0}
+										<a onClick="ischeck(this)" class="ac-btn" data-ischeck href="javascript:void(0);" url="{U('ischeck',array('questionid'=>$question['questionid']))}" ischeck="1">审核</a>
+									{else}
+										<a onClick="ischeck(this)" class="ac-btn" data-ischeck href="javascript:void(0);" url="{U('ischeck',array('questionid'=>$question['questionid']))}" ischeck="0">取消审核</a>
+									{/if}
+									</td>
+								</tr>
+								<tr>
+									<th></th>
+									<td align="center">
+										<input type="submit" value=" 确定 " class="ac-btn" />
+										<input type="reset" value=" 重填 " class="ac-btn" />
+									</td>
+								</tr>
+							</table>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+<script>
+var o = $('.ac-subject-list-box');
+o.on('click','input',function(){
+	if($(this).attr('select')!='yes'){
+		layer.load(0);
+		window.location = '{U("",array("query"=>"showaddpage","subjectid"=>$subjectid,"typeid"=>"\'+$(this).val()+\'","treeid"=>"\'+$(\'#treeid\').val()+\'"))}';
+	}
+});
+
+//创建编辑器
+crateueditor('question');
+
+</script>
+{include file="common/footer.html"}

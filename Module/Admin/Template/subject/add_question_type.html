@@ -1,0 +1,57 @@
+{include file="common/header.html"}
+<div class="ac-main">	
+	<div class="ac-warp">
+		<div class="ac-content" id="ac-content">
+			<div class="ac-nav">
+				<a href="{U('admin/index/main')}">主页</a>
+				<span>&raquo;</span>
+				<a href="{U('lists')}">科目管理</a>
+				<span>&raquo;</span>
+				<a href="{U('settingquestiontype',array('subjectid'=>$subject['subjectid']))}">{$subject['subjectname']}</a>
+			</div>
+			<div class="ac-content-inner">
+				<div class="ac-table-view">
+					<div class="ac-table-card">
+						<ul>
+							<li><a href="{U('settingquestiontype',array('subjectid'=>$subject['subjectid']))}">题型({$subject['subjectname']})</a></li>
+							<li class="on"><a href="{U('addquestiontype',array('subjectid'=>$subject['subjectid']))}">添加题型</a></li>
+						</ul>
+						<div class="ac-table-right-card">
+							<a class="btn ac-back">返回</a>
+						</div>
+					</div>
+					<div class="ac-table-search">
+						
+					</div>
+					<div class="ac-table-body">
+						<form action="{U('addquestiontype',array('subjectid'=>$subject['subjectid'],'query'=>'insert'))}" method="post">
+							<input type="hidden" name="query" value="insert" />
+							<input type="hidden" name="token" value="{$token}" />
+							<table class="ac-table-basic" cellpadding="8" cellspacing="0">
+								<tr>
+									<th width="15" align="center"><input type="checkbox" id="chkall" onclick="selectcheckbox(this.form)" value="check"></th>
+									<th width="40" align="center">编号</th>
+									<th width="200" align="center">题型名称</th>
+									<th align="center">题型描述</th>
+								</tr>
+								{loop $question_type $k $v}
+								<tr>
+									<td align="center"><input type="checkbox" name="question[]" value="{$v['typeid']}" {if in_array($v['typeid'],$subjectType)}checked{/if}></td>
+									<td align="center">{$v['typeid']}</td>
+									<td align="left">{$v['typename']}</td>
+									<td align="center">{cutStr($v['description'],20)}</td>
+								</tr>
+								{/loop}
+							</table>
+							<div class="ac-btn-group">
+								<input type="submit" value=" 添加 " class="ac-btn" />
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+{include file="common/footer.html"}
